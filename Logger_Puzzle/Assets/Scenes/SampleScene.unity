@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  mapChipDistance: 1
+  mapChipDistance: 0.64
 --- !u!212 &602283799
 SpriteRenderer:
   m_ObjectHideFlags: 0
