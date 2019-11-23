@@ -17,6 +17,16 @@ public class Player : MonoBehaviour
     private Vector3 moveTargetPosition;
     private Vector3 movePreviousPosition;
 
+    enum Direction
+    {
+        Up,
+        Down,
+        Right,
+        Left
+    }
+    [SerializeField]
+    private Direction direction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +34,7 @@ public class Player : MonoBehaviour
         moveY = new Vector3(0, mapChipDistance, 0);
 
         moveTargetPosition = transform.position;
+        direction = Direction.Up;
     }
 
     // Update is called once per frame
@@ -44,21 +55,25 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             moveTargetPosition = transform.position + moveY;
+            direction = Direction.Up;
             return;
         }
         if(Input.GetKeyDown(KeyCode.DownArrow))
         {
             moveTargetPosition = transform.position - moveY;
+            direction = Direction.Down;
             return;
         }
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
             moveTargetPosition = transform.position + moveX;
+            direction = Direction.Right;
             return;
         }
         if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
             moveTargetPosition = transform.position - moveX;
+            direction = Direction.Left;
             return;
         }
     }
