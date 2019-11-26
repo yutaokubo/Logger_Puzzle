@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class MapChip : MonoBehaviour
 {
-    private int[,] mapPosition;//マップ上での位置
+    private Vector2 mapPosition;//マップ上での位置
+
+    [SerializeField]
+    private float mapSizeX;
+    [SerializeField]
+    private float mapSizeY;
 
 
     enum MapChipType//マップチップのタイプ
@@ -21,7 +26,7 @@ public class MapChip : MonoBehaviour
     private bool isCanPlayerAutoEnter;//プレイヤーが自動的に侵入できるか
     private bool isGrowingTree;//木が生えているか
     private bool isOnWood;//丸太が乗っているか
-    private bool isCanWoodEnter;
+    private bool isCanWoodEnter;//丸太が侵入できるか
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +44,7 @@ public class MapChip : MonoBehaviour
     /// どこのマス目か設定
     /// </summary>
     /// <param name="pos">マップ上の位置</param>
-    public void SetMapPosition(int[,] pos)
+    public void SetMapPosition(Vector2 pos)
     {
         mapPosition = pos;
     }
@@ -59,5 +64,10 @@ public class MapChip : MonoBehaviour
                 isCanWoodEnter = true;
                 break;
         }
+    }
+
+    public void Positioning()
+    {
+        transform.position = new Vector3(mapPosition.x * mapSizeX, mapPosition.y * -mapSizeY, 0);
     }
 }
