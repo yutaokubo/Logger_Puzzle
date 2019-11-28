@@ -47,7 +47,6 @@ public class MapManager : MonoBehaviour
         {
             for (int t = 0; t < mapWidth; t++)
             {
-                Debug.Log(mapReader.GetMapNumber(i, t));
                 mapNumbers[i, t] = int.Parse(mapReader.GetMapNumber(i, t));
                 MapChipCreate(t, i);
             }

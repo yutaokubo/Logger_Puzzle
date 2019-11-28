@@ -22,8 +22,17 @@ public class MapChip : MonoBehaviour
 
     MapChipType nowMapChipType;//現在のマップチップのタイプ
 
-    private bool isCanPlayerEnter;//プレイヤーが意図的に侵入できるか
-    private bool isCanPlayerAutoEnter;//プレイヤーが自動的に侵入できるか
+    enum PlayerEnterType//プレイヤーがどのように侵入できるか
+    {
+        All,//どの方向でも侵入できる
+        AutoOnlyAll,//プレイヤーが自動的に移動する時のみ全方向から侵入できる
+        VerticalOnly,//縦方向からのみプレイヤーが侵入できる
+        HorizontalOnly,//横方向からのみプレイヤーが侵入できる
+        None,//プレイヤーが侵入できない
+    }
+
+    private PlayerEnterType nowPlayerEnterType;
+    
     private bool isGrowingTree;//木が生えているか
     private bool isOnWood;//丸太が乗っているか
     private bool isCanWoodEnter;//丸太が侵入できるか
@@ -59,8 +68,7 @@ public class MapChip : MonoBehaviour
         {
             case 0://通常地形
                 nowMapChipType = MapChipType.Nomal;
-                isCanPlayerEnter = true;
-                isCanPlayerAutoEnter = true;
+                nowPlayerEnterType = PlayerEnterType.All;
                 isCanWoodEnter = true;
                 break;
         }
