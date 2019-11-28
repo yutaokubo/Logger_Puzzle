@@ -11,6 +11,17 @@ public class MapChip : MonoBehaviour
     [SerializeField]
     private float mapSizeY;
 
+    private MapChipSpriteSelecter spriteSelecter;
+
+    enum MapChipSprite//マップチップの絵
+    {
+        Nomal,//通常の草原
+        Rock,//岩
+    }
+
+    private MapChipSprite nowSprite;//画像変更用
+    private SpriteRenderer renderer;//画像変更
+
 
     enum MapChipType//マップチップのタイプ
     {
@@ -40,7 +51,7 @@ public class MapChip : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        MapChipSelecterSetting();
     }
 
     // Update is called once per frame
@@ -64,18 +75,48 @@ public class MapChip : MonoBehaviour
     /// <param name="num"></param>
     public void SetMapChipType(int num)
     {
-        switch(num)
+        MapChipSelecterSetting();
+        switch (num)
         {
             case 0://通常地形
                 nowMapChipType = MapChipType.Nomal;
                 nowPlayerEnterType = PlayerEnterType.All;
                 isCanWoodEnter = true;
+                nowSprite = MapChipSprite.Nomal;
+                ChangeSprite();
+                break;
+            case 1:
+                nowMapChipType = MapChipType.Rock;
+                nowPlayerEnterType = PlayerEnterType.None;
+                isCanWoodEnter = false;
+                nowSprite = MapChipSprite.Rock;
+                ChangeSprite();
                 break;
         }
     }
 
+    /// <summary>
+    /// 自分のの位置に移動
+    /// </summary>
     public void Positioning()
     {
         transform.position = new Vector3(mapPosition.x * mapSizeX, mapPosition.y * -mapSizeY, 0);
+    }
+
+
+    private void ChangeSprite()
+    {
+        renderer.sprite = spriteSelecter.GetMapChipSprite((int)nowSprite);
+    }
+    /// <summary>
+    /// スプライトを変える準備ができていなければ準備
+    /// </summary>
+    private void MapChipSelecterSetting()
+    {
+        if(renderer == null)
+        {
+            renderer = gameObject.GetComponent<SpriteRenderer>();
+            spriteSelecter = gameObject.GetComponent<MapChipSpriteSelecter>();
+        }
     }
 }
