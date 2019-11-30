@@ -46,7 +46,9 @@ public class Player : MonoBehaviour
         }
         Move();
     }
-
+    /// <summary>
+    /// 移動先設定
+    /// </summary>
     private void SetTargetPosition()
     {
         movePreviousPosition = moveTargetPosition;
@@ -78,8 +80,22 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 移動処理
+    /// </summary>
     private void Move()
     {
         transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
+    }
+
+    /// <summary>
+    /// 初期位置設定用
+    /// </summary>
+    /// <param name="x">横</param>
+    /// <param name="y">縦</param>
+    public void SetStartPosition(int x,int y)
+    {
+        transform.position = new Vector3(x * moveX.x, y * -moveY.y, 0);
+        moveTargetPosition = transform.position;
     }
 }

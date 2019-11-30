@@ -343,6 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapChip: {fileID: 2633950734567923778, guid: 5a1177a6980a97b428f041c385b55e5b, type: 3}
   mapReader: {fileID: 1931562086}
+  player: {fileID: 602283798}
 --- !u!4 &1931562088
 Transform:
   m_ObjectHideFlags: 0

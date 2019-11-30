@@ -85,11 +85,20 @@ public class MapChip : MonoBehaviour
                 nowSprite = MapChipSprite.Nomal;
                 ChangeSprite();
                 break;
-            case 1:
+
+            case 1://壁用
                 nowMapChipType = MapChipType.Rock;
                 nowPlayerEnterType = PlayerEnterType.None;
                 isCanWoodEnter = false;
                 nowSprite = MapChipSprite.Rock;
+                ChangeSprite();
+                break;
+
+            case 3://スタート位置
+                nowMapChipType = MapChipType.Nomal;
+                nowPlayerEnterType = PlayerEnterType.All;
+                isCanWoodEnter = true;
+                nowSprite = MapChipSprite.Nomal;
                 ChangeSprite();
                 break;
         }
