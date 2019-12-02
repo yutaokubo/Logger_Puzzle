@@ -19,8 +19,14 @@ public class PlayerManager : MonoBehaviour
         
     }
 
-    public Player GetPlayer()
+
+    /// <summary>
+    /// プレイヤーの位置を変更、現在の移動ターゲットもその位置へ
+    /// </summary>
+    /// <param name="pos">位置</param>
+    public void SetPlayerPosition(Vector3 pos)
     {
-        return player;
+        player.transform.position = pos;
+        player.SetTargetPosition(pos);
     }
 }

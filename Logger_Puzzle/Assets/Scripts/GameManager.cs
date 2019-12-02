@@ -12,8 +12,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mapManager.SetPlayer(playerManager.GetPlayer());
+        //mapManager.SetPlayer(playerManager.GetPlayer());
         mapManager.MapCreate();
+        playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());
     }
 
     // Update is called once per frame

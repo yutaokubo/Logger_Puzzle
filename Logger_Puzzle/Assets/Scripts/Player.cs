@@ -89,16 +89,11 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// 初期位置設定用
+    /// 外部から移動先を設定
     /// </summary>
-    /// <param name="x">横</param>
-    /// <param name="y">縦</param>
-    public void SetStartPosition(int x,int y)
+    /// <param name="target"></param>
+    public void SetTargetPosition(Vector3 target)
     {
-        moveX.x = mapChipDistance;
-        moveY.y = mapChipDistance;
-
-        transform.position = new Vector3(x * moveX.x, y * -moveY.y, 0);
-        moveTargetPosition = transform.position;
+        moveTargetPosition = target;
     }
 }

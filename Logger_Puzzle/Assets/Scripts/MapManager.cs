@@ -18,9 +18,13 @@ public class MapManager : MonoBehaviour
     private MapChip mapChip;//マップチップ
 
     [SerializeField]
+    private Vector2 mapChipSize;
+
+    [SerializeField]
     private MapReader mapReader;//マップ読み込み用
-    
-    private Player player;//プレイヤー　スタート地点設定用
+
+    //private Player player;//プレイヤー　スタート地点設定用
+    private Vector3 playerStartPosition;
     private bool isPlayerSettingStartPosision;//プレイヤーがスタート位置に設定されているか
 
     // Start is called before the first frame update
@@ -64,7 +68,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     /// <param name="posX">X位置</param>
     /// <param name="posY">Y位置</param>
-    private void MapChipCreate(int posX,int posY)
+    private void MapChipCreate(int posX, int posY)
     {
         MapChip mc = Instantiate(mapChip);
         mc.SetMapPosition(new Vector2(posX, posY));
@@ -74,28 +78,29 @@ public class MapManager : MonoBehaviour
         mapChips[posX, posY] = mc;
     }
 
-    /// <summary>
-    /// プレイヤー取得
-    /// </summary>
-    /// <param name="player"></param>
-    public void SetPlayer(Player player)
-    {
-        this.player = player;
-    }
 
     /// <summary>
     /// プレイヤーの初期位置を設定
     /// </summary>
     /// <param name="posX">横</param>
     /// <param name="posY">縦</param>
-    private void SetPlayerPosition(int posX,int posY)
+    private void SetPlayerPosition(int posX, int posY)
     {
         if (isPlayerSettingStartPosision)
             return;
-        if((mapNumbers[posY, posX] == 3))
+        if ((mapNumbers[posY, posX] == 3))
         {
-            player.SetStartPosition(posX, posY);
+            playerStartPosition = new Vector3(posX * mapChipSize.x, -posY * mapChipSize.y, 0);
             isPlayerSettingStartPosision = true;
         }
+    }
+
+    /// <summary>
+    /// プレイヤーのスタート位置を返す
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetPlayerStartPosition()
+    {
+        return playerStartPosition;
     }
 }
