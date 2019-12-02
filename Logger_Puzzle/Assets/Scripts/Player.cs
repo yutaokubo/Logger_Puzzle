@@ -7,9 +7,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float moveSpeed;
-
-    [SerializeField]
-    private float mapChipDistance;
+    
+    private Vector2 mapChipDistance;
 
     private Vector3 moveX;
     private Vector3 moveY;
@@ -30,8 +29,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveX = new Vector3(mapChipDistance, 0, 0);
-        moveY = new Vector3(0, mapChipDistance, 0);
 
         moveTargetPosition = transform.position;
         direction = Direction.Up;
@@ -95,5 +92,12 @@ public class Player : MonoBehaviour
     public void SetTargetPosition(Vector3 target)
     {
         moveTargetPosition = target;
+    }
+
+    public void SetMoveDistance(Vector2 distance)
+    {
+        mapChipDistance = distance;
+        moveX = new Vector3(mapChipDistance.x, 0, 0);
+        moveY = new Vector3(0, mapChipDistance.y, 0);
     }
 }

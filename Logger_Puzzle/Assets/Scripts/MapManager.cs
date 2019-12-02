@@ -18,7 +18,7 @@ public class MapManager : MonoBehaviour
     private MapChip mapChip;//マップチップ
 
     [SerializeField]
-    private Vector2 mapChipSize;
+    private Vector2 mapChipSize;//マップチップ1つ分のサイズ
 
     [SerializeField]
     private MapReader mapReader;//マップ読み込み用
@@ -102,5 +102,10 @@ public class MapManager : MonoBehaviour
     public Vector3 GetPlayerStartPosition()
     {
         return playerStartPosition;
+    }
+
+    public Vector2 GetMapChipSize()
+    {
+        return mapChipSize;
     }
 }

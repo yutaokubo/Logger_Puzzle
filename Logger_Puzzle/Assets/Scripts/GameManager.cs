@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
         //mapManager.SetPlayer(playerManager.GetPlayer());
         mapManager.MapCreate();
         playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());
+        playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());
     }
 
     // Update is called once per frame

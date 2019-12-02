@@ -29,4 +29,9 @@ public class PlayerManager : MonoBehaviour
         player.transform.position = pos;
         player.SetTargetPosition(pos);
     }
+
+    public void SetPlayerMoveDistance(Vector2 distance)
+    {
+        player.SetMoveDistance(distance);
+    }
 }
