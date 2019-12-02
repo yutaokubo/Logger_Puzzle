@@ -105,7 +105,7 @@ public class MapChip : MonoBehaviour
     }
 
     /// <summary>
-    /// 自分のの位置に移動
+    /// 自分の位置に移動
     /// </summary>
     public void Positioning()
     {

@@ -19,15 +19,14 @@ public class MapManager : MonoBehaviour
 
     [SerializeField]
     private MapReader mapReader;//マップ読み込み用
-
-    [SerializeField]
+    
     private Player player;//プレイヤー　スタート地点設定用
     private bool isPlayerSettingStartPosision;//プレイヤーがスタート位置に設定されているか
 
     // Start is called before the first frame update
     void Start()
     {
-        MapCreate();
+
     }
 
     // Update is called once per frame
@@ -39,7 +38,7 @@ public class MapManager : MonoBehaviour
     /// <summary>
     /// マップ作成
     /// </summary>
-    private void MapCreate()
+    public void MapCreate()
     {
         isPlayerSettingStartPosision = false;
 
@@ -71,8 +70,17 @@ public class MapManager : MonoBehaviour
         mc.SetMapPosition(new Vector2(posX, posY));
         mc.SetMapChipType(mapNumbers[posY, posX]);
         mc.Positioning();
-        PlayerSet(posX, posY);
+        SetPlayerPosition(posX, posY);
         mapChips[posX, posY] = mc;
+    }
+
+    /// <summary>
+    /// プレイヤー取得
+    /// </summary>
+    /// <param name="player"></param>
+    public void SetPlayer(Player player)
+    {
+        this.player = player;
     }
 
     /// <summary>
@@ -80,7 +88,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     /// <param name="posX">横</param>
     /// <param name="posY">縦</param>
-    private void PlayerSet(int posX,int posY)
+    private void SetPlayerPosition(int posX,int posY)
     {
         if (isPlayerSettingStartPosision)
             return;

@@ -95,6 +95,9 @@ public class Player : MonoBehaviour
     /// <param name="y">縦</param>
     public void SetStartPosition(int x,int y)
     {
+        moveX.x = mapChipDistance;
+        moveY.y = mapChipDistance;
+
         transform.position = new Vector3(x * moveX.x, y * -moveY.y, 0);
         moveTargetPosition = transform.position;
     }
