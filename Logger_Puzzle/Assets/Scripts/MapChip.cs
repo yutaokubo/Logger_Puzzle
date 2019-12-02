@@ -5,10 +5,8 @@ using UnityEngine;
 public class MapChip : MonoBehaviour
 {
     private Vector2 mapPosition;//マップ上での位置
-
-    [SerializeField]
+    
     private float mapSizeX;
-    [SerializeField]
     private float mapSizeY;
 
     private MapChipSpriteSelecter spriteSelecter;
@@ -107,8 +105,11 @@ public class MapChip : MonoBehaviour
     /// <summary>
     /// 自分の位置に移動
     /// </summary>
-    public void Positioning()
+    public void Positioning(Vector2 mapSize)
     {
+        mapSizeX = mapSize.x;
+        mapSizeY = mapSize.y;
+
         transform.position = new Vector3(mapPosition.x * mapSizeX, mapPosition.y * -mapSizeY, 0);
     }
 

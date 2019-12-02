@@ -73,7 +73,7 @@ public class MapManager : MonoBehaviour
         MapChip mc = Instantiate(mapChip);
         mc.SetMapPosition(new Vector2(posX, posY));
         mc.SetMapChipType(mapNumbers[posY, posX]);
-        mc.Positioning();
+        mc.Positioning(mapChipSize);
         SetPlayerPosition(posX, posY);
         mapChips[posX, posY] = mc;
     }
