@@ -14,13 +14,29 @@ public class GameManager : MonoBehaviour
     {
         //mapManager.SetPlayer(playerManager.GetPlayer());
         mapManager.MapCreate();
-        playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());
-        playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());
+        playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());//プレイヤーを初期位置に設定
+        playerManager.SetPlayerMapPoint(mapManager.GetPlayerStartPoint());//マップ上でのプレイヤーの位置を渡す
+        playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());//プレイヤーの移動距離を設定
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        PlayerMoveUpdate();
+    }
+
+    private void PlayerMoveUpdate()
+    {
+        if(playerManager.GetPlayerMoveMode()==1)
+        {
+            if(mapManager.IsPlayerEniterMapchip(playerManager.GetPlayerDirection(),playerManager.GetPlayerMapPoint()))
+            {
+                playerManager.PlayerMoveStart();
+            }
+            else
+            {
+                playerManager.PlayerStop();
+            }
+        }
     }
 }

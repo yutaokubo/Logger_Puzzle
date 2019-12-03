@@ -113,7 +113,9 @@ public class MapChip : MonoBehaviour
         transform.position = new Vector3(mapPosition.x * mapSizeX, mapPosition.y * -mapSizeY, 0);
     }
 
-
+    /// <summary>
+    /// 画像を変更
+    /// </summary>
     private void ChangeSprite()
     {
         renderer.sprite = spriteSelecter.GetMapChipSprite((int)nowSprite);
@@ -128,5 +130,39 @@ public class MapChip : MonoBehaviour
             renderer = gameObject.GetComponent<SpriteRenderer>();
             spriteSelecter = gameObject.GetComponent<MapChipSpriteSelecter>();
         }
+    }
+
+    /// <summary>
+    /// プレイヤーの移動方向を取得し通過できるかを返す
+    /// </summary>
+    /// <param name="direction">プレイヤーの方向</param>
+    /// <returns></returns>
+    public bool IsCanPlayerMoveSelf(int direction)
+    {
+        if (nowPlayerEnterType == PlayerEnterType.None)
+        {
+            return false;
+        }
+
+        if(nowPlayerEnterType == PlayerEnterType.All)
+        {
+            return true;
+        }
+
+        if(nowPlayerEnterType == PlayerEnterType.VerticalOnly)
+        {
+            if(direction==0||direction==1)
+            {
+                return true;
+            }
+        }
+        if(nowPlayerEnterType == PlayerEnterType.HorizontalOnly)
+        {
+            if(direction==2||direction==3)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

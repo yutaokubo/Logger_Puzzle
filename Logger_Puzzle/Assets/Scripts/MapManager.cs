@@ -23,8 +23,8 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private MapReader mapReader;//マップ読み込み用
 
-    //private Player player;//プレイヤー　スタート地点設定用
-    private Vector3 playerStartPosition;
+    private Vector3 playerStartPosition;//プレイヤースタート位置保存用
+    private int[] playerStartPoint = new int[2];//プレイヤースタート位置番号保存用
     private bool isPlayerSettingStartPosision;//プレイヤーがスタート位置に設定されているか
 
     // Start is called before the first frame update
@@ -75,7 +75,7 @@ public class MapManager : MonoBehaviour
         mc.SetMapChipType(mapNumbers[posY, posX]);
         mc.Positioning(mapChipSize);
         SetPlayerPosition(posX, posY);
-        mapChips[posX, posY] = mc;
+        mapChips[posY, posX] = mc;
     }
 
 
@@ -91,6 +91,8 @@ public class MapManager : MonoBehaviour
         if ((mapNumbers[posY, posX] == 3))
         {
             playerStartPosition = new Vector3(posX * mapChipSize.x, -posY * mapChipSize.y, 0);
+            playerStartPoint[0] = posY;
+            playerStartPoint[1] = posX;
             isPlayerSettingStartPosision = true;
         }
     }
@@ -103,9 +105,58 @@ public class MapManager : MonoBehaviour
     {
         return playerStartPosition;
     }
-
+    /// <summary>
+    /// マップ上でのスタート位置を返す
+    /// </summary>
+    /// <returns></returns>
+    public int[] GetPlayerStartPoint()
+    {
+        return playerStartPoint;
+    }
+    /// <summary>
+    /// マップチップのサイズを返す
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetMapChipSize()
     {
         return mapChipSize;
+    }
+
+    public bool IsPlayerEniterMapchip(int direction, int[] playerPoint)
+    {
+        if (direction == 0)//上方向の場合
+        {
+            if (playerPoint[0] - 1 < 0)
+            {
+                return false;
+            }
+            return mapChips[playerPoint[0] - 1, playerPoint[1]].IsCanPlayerMoveSelf(direction);
+        }
+        if (direction == 1)//下方向の場合
+        {
+            if (playerPoint[0] + 1 >= mapChips.GetLength(0))
+            {
+                return false;
+            }
+            return mapChips[playerPoint[0] + 1, playerPoint[1]].IsCanPlayerMoveSelf(direction);
+        }
+        if (direction == 2)//右方向の場合
+        {
+            if (playerPoint[1] + 1 >= mapChips.GetLength(1))
+            {
+                return false;
+            }
+            return mapChips[playerPoint[0], playerPoint[1] + 1].IsCanPlayerMoveSelf(direction);
+        }
+        if (direction == 3)//左方向の場合
+        {
+            if (playerPoint[1] - 1 < 0)
+            {
+                return false;
+            }
+            return mapChips[playerPoint[0], playerPoint[1] - 1].IsCanPlayerMoveSelf(direction);
+        }
+
+        return false;
     }
 }
