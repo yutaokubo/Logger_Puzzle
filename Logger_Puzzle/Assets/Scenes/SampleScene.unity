@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 602283798}
+  playerMapPoint: 0000000000000000
 --- !u!4 &334337985
 Transform:
   m_ObjectHideFlags: 0
@@ -278,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  mapChipDistance: 0.64
+  moveMode: 0
   direction: 0
 --- !u!212 &602283799
 SpriteRenderer:

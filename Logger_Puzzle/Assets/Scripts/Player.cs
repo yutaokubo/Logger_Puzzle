@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position + moveY;
             direction = Direction.Up;
             moveMode = MoveMode.MoveSet;
+            transform.rotation = Quaternion.Euler(0,0,0);
             return;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position - moveY;
             direction = Direction.Down;
             moveMode = MoveMode.MoveSet;
+            transform.rotation = Quaternion.Euler(0, 0, 180);
             return;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -80,6 +82,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position + moveX;
             direction = Direction.Right;
             moveMode = MoveMode.MoveSet;
+            transform.rotation = Quaternion.Euler(0, 0, 270);
             return;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -87,6 +90,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position - moveX;
             direction = Direction.Left;
             moveMode = MoveMode.MoveSet;
+            transform.rotation = Quaternion.Euler(0, 0, 90);
             return;
         }
     }
