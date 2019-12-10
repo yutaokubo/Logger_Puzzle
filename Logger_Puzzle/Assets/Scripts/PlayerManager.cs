@@ -63,20 +63,20 @@ public class PlayerManager : MonoBehaviour
     /// <returns></returns>
     public Vector2 GetPlayerDirectionRemotePoint(int length)
     {
-        int playerDirection = player.GetDirection();
-        if (playerDirection == 0)
+        Direction.DirectionState playerDirection = player.GetDirection();
+        if (playerDirection == Direction.DirectionState.Up)
         {
             return playerMapPoint + new Vector2(0, -length);
         }
-        if (playerDirection == 1)
+        if (playerDirection == Direction.DirectionState.Down)
         {
             return playerMapPoint + new Vector2(0, length);
         }
-        if (playerDirection == 2)
+        if (playerDirection == Direction.DirectionState.Right)
         {
             return playerMapPoint + new Vector2(length, 0);
         }
-        if (playerDirection == 3)
+        if (playerDirection == Direction.DirectionState.Left)
         {
             return playerMapPoint + new Vector2(-length, 0);
         }
@@ -97,7 +97,7 @@ public class PlayerManager : MonoBehaviour
         player.SetTargetPosition(player.transform.position);
     }
 
-    public int GetPlayerDirection()
+    public Direction.DirectionState GetPlayerDirection()
     {
         return player.GetDirection();
     }
@@ -107,19 +107,19 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void PlayerMoveStart()
     {
-        if (player.GetDirection() == 0)
+        if (player.GetDirection() ==  Direction.DirectionState.Up)
         {
             playerMapPoint.y -= 1;
         }
-        if (player.GetDirection() == 1)
+        if (player.GetDirection() ==  Direction.DirectionState.Down)
         {
             playerMapPoint.y += 1;
         }
-        if (player.GetDirection() == 2)
+        if (player.GetDirection() ==  Direction.DirectionState.Right)
         {
             playerMapPoint.x += 1;
         }
-        if (player.GetDirection() == 3)
+        if (player.GetDirection() == Direction.DirectionState.Left)
         {
             playerMapPoint.x -= 1;
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class MapChip : MonoBehaviour
 {
     private Vector2 mapPosition;//マップ上での位置
-    
+
     private float mapSizeX;
     private float mapSizeY;
 
@@ -56,7 +56,7 @@ public class MapChip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public class MapChip : MonoBehaviour
     /// </summary>
     private void MapChipSelecterSetting()
     {
-        if(renderer == null)
+        if (renderer == null)
         {
             renderer = gameObject.GetComponent<SpriteRenderer>();
             spriteSelecter = gameObject.GetComponent<MapChipSpriteSelecter>();
@@ -155,28 +155,30 @@ public class MapChip : MonoBehaviour
     /// </summary>
     /// <param name="direction">プレイヤーの方向</param>
     /// <returns></returns>
-    public bool IsCanPlayerMoveSelf(int direction)
+    public bool IsCanPlayerMoveSelf(Direction.DirectionState direction)
     {
         if (nowPlayerEnterType == PlayerEnterType.None)
         {
             return false;
         }
 
-        if(nowPlayerEnterType == PlayerEnterType.All)
+        if (nowPlayerEnterType == PlayerEnterType.All)
         {
             return true;
         }
 
-        if(nowPlayerEnterType == PlayerEnterType.VerticalOnly)
+        if (nowPlayerEnterType == PlayerEnterType.VerticalOnly)
         {
-            if(direction==0||direction==1)
+            if (direction == Direction.DirectionState.Up ||
+                direction == Direction.DirectionState.Down)
             {
                 return true;
             }
         }
-        if(nowPlayerEnterType == PlayerEnterType.HorizontalOnly)
+        if (nowPlayerEnterType == PlayerEnterType.HorizontalOnly)
         {
-            if(direction==2||direction==3)
+            if (direction == Direction.DirectionState.Right ||
+                direction == Direction.DirectionState.Left)
             {
                 return true;
             }

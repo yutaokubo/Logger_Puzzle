@@ -124,30 +124,30 @@ public class MapManager : MonoBehaviour
         return mapChipSize;
     }
 
-    public bool IsPlayerEnterMapchip(int direction, Vector2 playerPoint)
+    public bool IsPlayerEnterMapchip(Direction.DirectionState direction, Vector2 playerPoint)
     {
-        if (direction == 0)//上方向の場合
+        if (direction == Direction.DirectionState.Up)//上方向の場合
         {
             if (playerPoint.y - 1 < 0)
             {
                 return false;
             }
         }
-        if (direction == 1)//下方向の場合
+        if (direction == Direction.DirectionState.Down)//下方向の場合
         {
             if (playerPoint.y + 1 >= mapChips.GetLength(0))
             {
                 return false;
             }
         }
-        if (direction == 2)//右方向の場合
+        if (direction == Direction.DirectionState.Right)//右方向の場合
         {
             if (playerPoint.x + 1 >= mapChips.GetLength(1))
             {
                 return false;
             }
         }
-        if (direction == 3)//左方向の場合
+        if (direction == Direction.DirectionState.Left)//左方向の場合
         {
             if (playerPoint.x - 1 < 0)
             {
@@ -185,21 +185,21 @@ public class MapManager : MonoBehaviour
     /// <param name="direction">方向</param>
     /// <param name="length">距離</param>
     /// <returns></returns>
-    private MapChip GetFindtMapChips(int height,int weight,int direction,int length)
+    private MapChip GetFindtMapChips(int height,int weight,Direction.DirectionState direction,int length)
     {
-        if(direction == 0)
+        if(direction ==  Direction.DirectionState.Up)
         {
             return mapChips[height - length, weight];
         }
-        if(direction == 1)
+        if(direction ==  Direction.DirectionState.Down)
         {
             return mapChips[height + length, weight];
         }
-        if (direction == 2)
+        if (direction == Direction.DirectionState.Right)
         {
             return mapChips[height, weight+length];
         }
-        if (direction == 3)
+        if (direction ==  Direction.DirectionState.Left)
         {
             return mapChips[height, weight-length];
         }

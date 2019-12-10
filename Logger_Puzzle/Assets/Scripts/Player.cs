@@ -25,15 +25,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private MoveMode moveMode;
 
-    enum Direction
-    {
-        Up,
-        Down,
-        Right,
-        Left
-    }
     [SerializeField]
-    private Direction direction;//向いている方向
+    private Direction.DirectionState direction;
 
     enum SlashMode
     {
@@ -48,7 +41,7 @@ public class Player : MonoBehaviour
     {
 
         moveTargetPosition = transform.position;
-        direction = Direction.Up;
+        direction = Direction.DirectionState.Up;
     }
 
     // Update is called once per frame
@@ -73,7 +66,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             moveTargetPosition = transform.position + moveY;
-            direction = Direction.Up;
+            direction = Direction.DirectionState.Up;
             moveMode = MoveMode.MoveSet;
             transform.rotation = Quaternion.Euler(0,0,0);
             return;
@@ -81,7 +74,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             moveTargetPosition = transform.position - moveY;
-            direction = Direction.Down;
+            direction = Direction.DirectionState.Down;
             moveMode = MoveMode.MoveSet;
             transform.rotation = Quaternion.Euler(0, 0, 180);
             return;
@@ -89,7 +82,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             moveTargetPosition = transform.position + moveX;
-            direction = Direction.Right;
+            direction = Direction.DirectionState.Right;
             moveMode = MoveMode.MoveSet;
             transform.rotation = Quaternion.Euler(0, 0, 270);
             return;
@@ -97,7 +90,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             moveTargetPosition = transform.position - moveX;
-            direction = Direction.Left;
+            direction = Direction.DirectionState.Left;
             moveMode = MoveMode.MoveSet;
             transform.rotation = Quaternion.Euler(0, 0, 90);
             return;
@@ -158,9 +151,9 @@ public class Player : MonoBehaviour
     /// 現在の向いている方向を返す。
     /// </summary>
     /// <returns></returns>
-    public int GetDirection()
+    public Direction.DirectionState GetDirection()
     {
-        return (int)direction;
+        return direction;
     }
 
     /// <summary>
