@@ -24,7 +24,8 @@ public class MapManager : MonoBehaviour
     private MapReader mapReader;//マップ読み込み用
 
     private Vector3 playerStartPosition;//プレイヤースタート位置保存用
-    private int[] playerStartPoint = new int[2];//プレイヤースタート位置番号保存用
+    //private int[] playerStartPoint = new int[2];//プレイヤースタート位置番号保存用
+    private Vector2 playerStartPoint;
     private bool isPlayerSettingStartPosision;//プレイヤーがスタート位置に設定されているか
 
     // Start is called before the first frame update
@@ -91,8 +92,9 @@ public class MapManager : MonoBehaviour
         if ((mapNumbers[posY, posX] == 3))
         {
             playerStartPosition = new Vector3(posX * mapChipSize.x, -posY * mapChipSize.y, 0);
-            playerStartPoint[0] = posY;
-            playerStartPoint[1] = posX;
+            //playerStartPoint[0] = posY;
+            //playerStartPoint[1] = posX;
+            playerStartPoint = new Vector2(posX, posY);
             isPlayerSettingStartPosision = true;
         }
     }
@@ -109,7 +111,7 @@ public class MapManager : MonoBehaviour
     /// マップ上でのスタート位置を返す
     /// </summary>
     /// <returns></returns>
-    public int[] GetPlayerStartPoint()
+    public Vector2 GetPlayerStartPoint()
     {
         return playerStartPoint;
     }
@@ -122,41 +124,85 @@ public class MapManager : MonoBehaviour
         return mapChipSize;
     }
 
-    public bool IsPlayerEniterMapchip(int direction, int[] playerPoint)
+    public bool IsPlayerEnterMapchip(int direction, Vector2 playerPoint)
     {
         if (direction == 0)//上方向の場合
         {
-            if (playerPoint[0] - 1 < 0)
+            if (playerPoint.y - 1 < 0)
             {
                 return false;
             }
-            return mapChips[playerPoint[0] - 1, playerPoint[1]].IsCanPlayerMoveSelf(direction);
         }
         if (direction == 1)//下方向の場合
         {
-            if (playerPoint[0] + 1 >= mapChips.GetLength(0))
+            if (playerPoint.y + 1 >= mapChips.GetLength(0))
             {
                 return false;
             }
-            return mapChips[playerPoint[0] + 1, playerPoint[1]].IsCanPlayerMoveSelf(direction);
         }
         if (direction == 2)//右方向の場合
         {
-            if (playerPoint[1] + 1 >= mapChips.GetLength(1))
+            if (playerPoint.x + 1 >= mapChips.GetLength(1))
             {
                 return false;
             }
-            return mapChips[playerPoint[0], playerPoint[1] + 1].IsCanPlayerMoveSelf(direction);
         }
         if (direction == 3)//左方向の場合
         {
-            if (playerPoint[1] - 1 < 0)
+            if (playerPoint.x - 1 < 0)
             {
                 return false;
             }
-            return mapChips[playerPoint[0], playerPoint[1] - 1].IsCanPlayerMoveSelf(direction);
         }
+        return GetFindtMapChips((int)playerPoint.y, (int)playerPoint.x, direction, 1).IsCanPlayerMoveSelf(direction);
+        
+    }
 
-        return false;
+
+    /// <summary>
+    /// 指定されたポイントに木が生えているかどうか
+    /// </summary>
+    /// <param name="Point">指定ポイント</param>
+    /// <returns></returns>
+    public bool IsGrowingTree(Vector2 Point)
+    {
+        return mapChips[(int)Point.y, (int)Point.x].IsGrowingTree();
+    }
+    /// <summary>
+    /// 指定したポイントの木を切る
+    /// </summary>
+    /// <param name="point"></param>
+    public void Felling(Vector2 point)
+    {
+        mapChips[(int)point.y, (int)point.x].Felling();
+    }
+
+    /// <summary>
+    /// マップチップ群の、指定した位置から指定方向に指定距離離れたマップチップを取得
+    /// </summary>
+    /// <param name="height">元位置の高さ</param>
+    /// <param name="weight">元位置の幅</param>
+    /// <param name="direction">方向</param>
+    /// <param name="length">距離</param>
+    /// <returns></returns>
+    private MapChip GetFindtMapChips(int height,int weight,int direction,int length)
+    {
+        if(direction == 0)
+        {
+            return mapChips[height - length, weight];
+        }
+        if(direction == 1)
+        {
+            return mapChips[height + length, weight];
+        }
+        if (direction == 2)
+        {
+            return mapChips[height, weight+length];
+        }
+        if (direction == 3)
+        {
+            return mapChips[height, weight-length];
+        }
+        return mapChips[height, weight];
     }
 }

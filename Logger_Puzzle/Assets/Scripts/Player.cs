@@ -35,6 +35,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Direction direction;//向いている方向
 
+    enum SlashMode
+    {
+        None,//切ろうとしていない
+        Wait,//切る待機中
+        Slashing//切っている
+    }
+    private SlashMode slashMode;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +60,7 @@ public class Player : MonoBehaviour
         }
         Move();
         MoveModeUpdate();
+        Slash();
     }
     /// <summary>
     /// 移動先設定
@@ -116,6 +125,20 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
+    /// 前方を切る
+    /// </summary>
+    private void Slash()
+    {
+        if (moveMode != MoveMode.Stop)
+            return;
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            slashMode = SlashMode.Wait;
+        }
+    }
+
+    /// <summary>
     /// 外部から移動先を設定
     /// </summary>
     /// <param name="target"></param>
@@ -141,19 +164,28 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// 移動状態をマップマネージャーから変更できるように
+    /// 移動状態取得
     /// </summary>
-    /// <returns></returns>
+    /// <param name="modeNum"></param>
     public int GetMoveMode()
     {
         return (int)moveMode;
     }
     /// <summary>
-    /// 移動状態取得
+    /// 移動状態をマップマネージャーから変更できるように
     /// </summary>
-    /// <param name="modeNum"></param>
+    /// <returns></returns>
     public void SetMoveMode(int modeNum)
     {
         moveMode = (MoveMode)modeNum;
+    }
+
+    public int GetSlashMode()
+    {
+        return (int)slashMode;
+    }
+    public void SetSlashMode(int modeNum)
+    {
+        slashMode = (SlashMode)modeNum;
     }
 }

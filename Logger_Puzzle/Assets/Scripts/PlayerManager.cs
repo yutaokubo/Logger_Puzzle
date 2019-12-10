@@ -7,18 +7,19 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private Player player;//プレイヤー
     [SerializeField]
-    private int[] playerMapPoint = new int[2]; 
+    //private int[] playerMapPoint = new int[2];
+    private Vector2 playerMapPoint;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -45,14 +46,40 @@ public class PlayerManager : MonoBehaviour
     /// プレイヤーのスタート位置がどのマス目か設定
     /// </summary>
     /// <param name="mapPoint"></param>
-    public void SetPlayerMapPoint(int[] mapPoint)
+    public void SetPlayerMapPoint(Vector2 point)
     {
-        playerMapPoint[0] = mapPoint[0];
-        playerMapPoint[1] = mapPoint[1];
+        playerMapPoint = point;
     }
 
-    public int[] GetPlayerMapPoint()
+    public Vector2 GetPlayerMapPoint()
     {
+        return playerMapPoint;
+    }
+
+    /// <summary>
+    /// プレイヤーの方向へ指定分だけ離れたポイントを返す
+    /// </summary>
+    /// <param name="length">距離</param>
+    /// <returns></returns>
+    public Vector2 GetPlayerDirectionRemotePoint(int length)
+    {
+        int playerDirection = player.GetDirection();
+        if (playerDirection == 0)
+        {
+            return playerMapPoint + new Vector2(0, -length);
+        }
+        if (playerDirection == 1)
+        {
+            return playerMapPoint + new Vector2(0, length);
+        }
+        if (playerDirection == 2)
+        {
+            return playerMapPoint + new Vector2(length, 0);
+        }
+        if (playerDirection == 3)
+        {
+            return playerMapPoint + new Vector2(-length, 0);
+        }
         return playerMapPoint;
     }
 
@@ -80,23 +107,33 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void PlayerMoveStart()
     {
-        if(player.GetDirection() == 0)
+        if (player.GetDirection() == 0)
         {
-            playerMapPoint[0] -= 1;
+            playerMapPoint.y -= 1;
         }
         if (player.GetDirection() == 1)
         {
-            playerMapPoint[0] += 1;
+            playerMapPoint.y += 1;
         }
         if (player.GetDirection() == 2)
         {
-            playerMapPoint[1] += 1;
+            playerMapPoint.x += 1;
         }
         if (player.GetDirection() == 3)
         {
-            playerMapPoint[1] -= 1;
+            playerMapPoint.x -= 1;
         }
 
         player.SetMoveMode(2);
+    }
+
+    public int GetPlayerSlashMode()
+    {
+        return player.GetSlashMode();
+    }
+
+    public void PlayerSlashStart()
+    {
+        player.SetSlashMode(0);
     }
 }

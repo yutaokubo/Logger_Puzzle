@@ -23,19 +23,32 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         PlayerMoveUpdate();
+        PlayerSlashUpdate();
     }
 
     private void PlayerMoveUpdate()
     {
         if(playerManager.GetPlayerMoveMode()==1)
         {
-            if(mapManager.IsPlayerEniterMapchip(playerManager.GetPlayerDirection(),playerManager.GetPlayerMapPoint()))
+            if(mapManager.IsPlayerEnterMapchip(playerManager.GetPlayerDirection(),playerManager.GetPlayerMapPoint()))
             {
                 playerManager.PlayerMoveStart();
             }
             else
             {
                 playerManager.PlayerStop();
+            }
+        }
+    }
+
+    private void PlayerSlashUpdate()
+    {
+        if(playerManager.GetPlayerSlashMode()==1)
+        {
+            playerManager.PlayerSlashStart();
+            if (mapManager.IsGrowingTree(playerManager.GetPlayerDirectionRemotePoint(1)))
+            {
+                mapManager.Felling(playerManager.GetPlayerDirectionRemotePoint(1));
             }
         }
     }

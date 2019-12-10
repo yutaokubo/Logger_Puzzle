@@ -15,6 +15,7 @@ public class MapChip : MonoBehaviour
     {
         Nomal,//通常の草原
         Rock,//岩
+        Tree,//木
     }
 
     private MapChipSprite nowSprite;//画像変更用
@@ -41,7 +42,7 @@ public class MapChip : MonoBehaviour
     }
 
     private PlayerEnterType nowPlayerEnterType;
-    
+    [SerializeField]
     private bool isGrowingTree;//木が生えているか
     private bool isOnWood;//丸太が乗っているか
     private bool isCanWoodEnter;//丸太が侵入できるか
@@ -99,7 +100,24 @@ public class MapChip : MonoBehaviour
                 nowSprite = MapChipSprite.Nomal;
                 ChangeSprite();
                 break;
+
+            case 11://木一つ分
+                SetTree(1);
+                break;
         }
+    }
+    /// <summary>
+    /// 指定本数の木のマップチップを作成
+    /// </summary>
+    /// <param name="length"></param>
+    private void SetTree(int length)
+    {
+        nowMapChipType = MapChipType.Rock;
+        nowPlayerEnterType = PlayerEnterType.None;
+        isGrowingTree = true;
+        isCanWoodEnter = false;
+        nowSprite = MapChipSprite.Tree;
+        ChangeSprite();
     }
 
     /// <summary>
@@ -164,5 +182,26 @@ public class MapChip : MonoBehaviour
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// 木が生えているか
+    /// </summary>
+    /// <returns></returns>
+    public bool IsGrowingTree()
+    {
+        return isGrowingTree;
+    }
+    /// <summary>
+    /// 木のマップチップを通常地形に
+    /// </summary>
+    public void Felling()
+    {
+        isGrowingTree = false;
+        nowMapChipType = MapChipType.Nomal;
+        nowPlayerEnterType = PlayerEnterType.All;
+        isCanWoodEnter = true;
+        nowSprite = MapChipSprite.Nomal;
+        ChangeSprite();
     }
 }
