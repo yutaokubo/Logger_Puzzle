@@ -214,4 +214,17 @@ public class MapManager : MonoBehaviour
         }
         return mapChips[height, weight];
     }
+
+    /// <summary>
+    /// 指定したポイントに木を置く
+    /// </summary>
+    /// <param name="point"></param>
+    public void OnWood(Vector2 point)
+    {
+        mapChips[(int)point.y, (int)point.x].OnWood();
+    }
+    public bool IsOnWood(Vector2 point)
+    {
+        return mapChips[(int)point.y, (int)point.x].IsOnWood();
+    }
 }

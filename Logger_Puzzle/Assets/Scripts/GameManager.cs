@@ -62,6 +62,13 @@ public class GameManager : MonoBehaviour
                 {
                     woodManager.WoodBreak(woodManager.GetWoodsLastNumber());
                 }
+                else
+                {
+                    if(!mapManager.IsOnWood(woodCreatPoint))
+                    {
+                        mapManager.OnWood(woodCreatPoint);
+                    }
+                }
             }
         }
     }

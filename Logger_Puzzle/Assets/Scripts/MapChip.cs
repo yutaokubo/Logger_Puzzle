@@ -44,6 +44,7 @@ public class MapChip : MonoBehaviour
     private PlayerEnterType nowPlayerEnterType;
     [SerializeField]
     private int treeLength;//木が生えているか
+    [SerializeField]
     private bool isOnWood;//丸太が乗っているか
     private bool isCanWoodEnter;//丸太が侵入できるか
 
@@ -214,5 +215,24 @@ public class MapChip : MonoBehaviour
     public bool IsCanWoodEnter()
     {
         return isCanWoodEnter;
+    }
+
+    /// <summary>
+    /// 木を乗せる
+    /// </summary>
+    public void OnWood()
+    {
+        isOnWood = true;
+    }
+    /// <summary>
+    /// 木を外す
+    /// </summary>
+    public void RemoveWood()
+    {
+        isOnWood = false;
+    }
+    public bool IsOnWood()
+    {
+        return isOnWood;
     }
 }
