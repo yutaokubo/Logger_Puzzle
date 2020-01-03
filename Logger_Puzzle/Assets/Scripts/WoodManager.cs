@@ -17,13 +17,14 @@ public class WoodManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        RemoveNoneWood();
     }
 
-    public void WoodCreate(Vector2 Pos,Direction.DirectionState dir)
+    public void WoodCreate(Vector2 Pos, Direction.DirectionState dir, int length)
     {
         Wood w = Instantiate(wood, Pos, Quaternion.identity);
         w.SetDirection(dir);
+        w.SetLength(length);
         woods.Add(w);
     }
 
@@ -35,13 +36,30 @@ public class WoodManager : MonoBehaviour
         woods[num].Breaked();
     }
 
-    public void SetWoodRootPoint(int num,Vector2 point)
+    private void RemoveNoneWood()
+    {
+        woods.RemoveAll(w => w.GetState() == 4);
+    }
+
+    public void SetWoodRootPoint(int num, Vector2 point)
     {
         woods[num].SetRootPoint(point);
     }
 
     public int GetWoodsLastNumber()
     {
-        return woods.Count-1;
+        return woods.Count - 1;
+    }
+
+    public Wood GetIncludedPointWood(Vector2 point)
+    {
+        foreach (Wood w in woods)
+        {
+            if (w.IsIncludedMapPoint(point))
+            {
+                return w;
+            }
+        }
+        return null;
     }
 }

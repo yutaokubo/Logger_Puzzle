@@ -155,7 +155,7 @@ public class MapManager : MonoBehaviour
             }
         }
         return GetFindtMapChips((int)playerPoint.y, (int)playerPoint.x, direction, 1).IsCanPlayerMoveSelf(direction);
-        
+
     }
 
 
@@ -176,6 +176,10 @@ public class MapManager : MonoBehaviour
     {
         mapChips[(int)point.y, (int)point.x].Felling();
     }
+    public int GetTreeLength(Vector2 point)
+    {
+        return mapChips[(int)point.y, (int)point.x].GetTreeLength();
+    }
     /// <summary>
     /// 指定したポイントに木が侵入できるかどうか
     /// </summary>
@@ -190,41 +194,66 @@ public class MapManager : MonoBehaviour
     /// マップチップ群の、指定した位置から指定方向に指定距離離れたマップチップを取得
     /// </summary>
     /// <param name="height">元位置の高さ</param>
-    /// <param name="weight">元位置の幅</param>
+    /// <param name="width">元位置の幅</param>
     /// <param name="direction">方向</param>
     /// <param name="length">距離</param>
     /// <returns></returns>
-    private MapChip GetFindtMapChips(int height,int weight,Direction.DirectionState direction,int length)
+    private MapChip GetFindtMapChips(int height, int width, Direction.DirectionState direction, int length)
     {
-        if(direction ==  Direction.DirectionState.Up)
+        if (direction == Direction.DirectionState.Up)
         {
-            return mapChips[height - length, weight];
+            return mapChips[height - length, width];
         }
-        if(direction ==  Direction.DirectionState.Down)
+        if (direction == Direction.DirectionState.Down)
         {
-            return mapChips[height + length, weight];
+            return mapChips[height + length, width];
         }
         if (direction == Direction.DirectionState.Right)
         {
-            return mapChips[height, weight+length];
+            return mapChips[height, width + length];
         }
-        if (direction ==  Direction.DirectionState.Left)
+        if (direction == Direction.DirectionState.Left)
         {
-            return mapChips[height, weight-length];
+            return mapChips[height, width - length];
         }
-        return mapChips[height, weight];
+        return mapChips[height, width];
+    }
+    public Vector2 GetFindPoint(int height, int width, Direction.DirectionState direction, int length)
+    {
+        if (direction == Direction.DirectionState.Up)
+        {
+            return new Vector2(width, height - length);
+        }
+        if (direction == Direction.DirectionState.Down)
+        {
+            return new Vector2(width, height + length);
+        }
+        if (direction == Direction.DirectionState.Right)
+        {
+            return new Vector2(width + length, height);
+        }
+        if (direction == Direction.DirectionState.Left)
+        {
+            return new Vector2(width - length, height);
+        }
+        return new Vector2(width, height);
     }
 
     /// <summary>
-    /// 指定したポイントに木を置く
+    /// 指定したポイントに丸太を置く
     /// </summary>
     /// <param name="point"></param>
     public void OnWood(Vector2 point)
     {
         mapChips[(int)point.y, (int)point.x].OnWood();
     }
+    public void RemoveWood(Vector2 point)
+    {
+        mapChips[(int)point.y, (int)point.x].RemoveWood();
+    }
     public bool IsOnWood(Vector2 point)
     {
+        //Debug.Log(point);
         return mapChips[(int)point.y, (int)point.x].IsOnWood();
     }
 }

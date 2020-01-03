@@ -199,6 +199,11 @@ public class MapChip : MonoBehaviour
         }
         return false;
     }
+    public int GetTreeLength()
+    {
+        return treeLength;
+    }
+
     /// <summary>
     /// 木のマップチップを通常地形に
     /// </summary>
@@ -223,6 +228,7 @@ public class MapChip : MonoBehaviour
     public void OnWood()
     {
         isOnWood = true;
+        isCanWoodEnter = false;
     }
     /// <summary>
     /// 木を外す
@@ -230,6 +236,7 @@ public class MapChip : MonoBehaviour
     public void RemoveWood()
     {
         isOnWood = false;
+        isCanWoodEnter = true;
     }
     public bool IsOnWood()
     {
