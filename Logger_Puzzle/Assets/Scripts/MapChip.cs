@@ -43,7 +43,7 @@ public class MapChip : MonoBehaviour
 
     private PlayerEnterType nowPlayerEnterType;
     [SerializeField]
-    private bool isGrowingTree;//木が生えているか
+    private int treeLength;//木が生えているか
     private bool isOnWood;//丸太が乗っているか
     private bool isCanWoodEnter;//丸太が侵入できるか
 
@@ -114,7 +114,7 @@ public class MapChip : MonoBehaviour
     {
         nowMapChipType = MapChipType.Rock;
         nowPlayerEnterType = PlayerEnterType.None;
-        isGrowingTree = true;
+        treeLength = length;
         isCanWoodEnter = false;
         nowSprite = MapChipSprite.Tree;
         ChangeSprite();
@@ -192,18 +192,27 @@ public class MapChip : MonoBehaviour
     /// <returns></returns>
     public bool IsGrowingTree()
     {
-        return isGrowingTree;
+        if(treeLength>0)
+        {
+            return true;
+        }
+        return false;
     }
     /// <summary>
     /// 木のマップチップを通常地形に
     /// </summary>
     public void Felling()
     {
-        isGrowingTree = false;
+        treeLength = 0;
         nowMapChipType = MapChipType.Nomal;
         nowPlayerEnterType = PlayerEnterType.All;
         isCanWoodEnter = true;
         nowSprite = MapChipSprite.Nomal;
         ChangeSprite();
+    }
+
+    public bool IsCanWoodEnter()
+    {
+        return isCanWoodEnter;
     }
 }

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     private MapManager mapManager;
     [SerializeField]
     private PlayerManager playerManager;
+    [SerializeField]
+    private WoodManager woodManager;
 
     // Start is called before the first frame update
     void Start()
@@ -45,11 +47,26 @@ public class GameManager : MonoBehaviour
     {
         if(playerManager.GetPlayerSlashMode()==1)
         {
+            Vector2 targetTreePoint = playerManager.GetPlayerDirectionRemotePoint(1);
             playerManager.PlayerSlashStart();
-            if (mapManager.IsGrowingTree(playerManager.GetPlayerDirectionRemotePoint(1)))
+            if (mapManager.IsGrowingTree(targetTreePoint))
             {
-                mapManager.Felling(playerManager.GetPlayerDirectionRemotePoint(1));
+                FellTree(targetTreePoint);
+
+                Vector2 woodCreatPoint = playerManager.GetPlayerDirectionRemotePoint(2);
+                Vector2 woodCreatPostion = woodCreatPoint * mapManager.GetMapChipSize();
+                woodCreatPostion.y *= -1;
+                woodManager.WoodCreate(woodCreatPostion,playerManager.GetPlayerDirection());
+                woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), woodCreatPoint);
+                if(!mapManager.IsCanEnterWood(woodCreatPoint))
+                {
+                    woodManager.WoodBreak(woodManager.GetWoodsLastNumber());
+                }
             }
         }
+    }
+    private void FellTree(Vector2 mapPoint)
+    {
+        mapManager.Felling(mapPoint);
     }
 }

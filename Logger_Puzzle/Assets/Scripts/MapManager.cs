@@ -162,11 +162,11 @@ public class MapManager : MonoBehaviour
     /// <summary>
     /// 指定されたポイントに木が生えているかどうか
     /// </summary>
-    /// <param name="Point">指定ポイント</param>
+    /// <param name="point">指定ポイント</param>
     /// <returns></returns>
-    public bool IsGrowingTree(Vector2 Point)
+    public bool IsGrowingTree(Vector2 point)
     {
-        return mapChips[(int)Point.y, (int)Point.x].IsGrowingTree();
+        return mapChips[(int)point.y, (int)point.x].IsGrowingTree();
     }
     /// <summary>
     /// 指定したポイントの木を切る
@@ -175,6 +175,15 @@ public class MapManager : MonoBehaviour
     public void Felling(Vector2 point)
     {
         mapChips[(int)point.y, (int)point.x].Felling();
+    }
+    /// <summary>
+    /// 指定したポイントに木が侵入できるかどうか
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public bool IsCanEnterWood(Vector2 point)
+    {
+        return mapChips[(int)point.y, (int)point.x].IsCanWoodEnter();
     }
 
     /// <summary>
