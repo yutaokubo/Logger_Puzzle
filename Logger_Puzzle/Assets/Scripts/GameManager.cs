@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
                             mapManager.RemoveWood(woodPoint);
                             Debug.Log("woodPoint:"+woodPoint);
                             Debug.Log("woodDistination:" + woodDistination);
-                            mapManager.OnWood(woodDistination);
+                            mapManager.OnWood(woodDistination,dw.GetDirection());
                         }
                     }
                 }
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
 
                     if (!mapManager.IsOnWood(chackPoint))
                     {
-                        mapManager.OnWood(chackPoint);
+                        mapManager.OnWood(chackPoint,woodManager.GetWoodDirection(woodManager.GetWoodsLastNumber()));
                     }
                 }
 

@@ -16,6 +16,7 @@ public class MapChip : MonoBehaviour
         Nomal,//通常の草原
         Rock,//岩
         Tree,//木
+        Hole,//穴
     }
 
     private MapChipSprite nowSprite;//画像変更用
@@ -99,6 +100,14 @@ public class MapChip : MonoBehaviour
                 nowPlayerEnterType = PlayerEnterType.All;
                 isCanWoodEnter = true;
                 nowSprite = MapChipSprite.Nomal;
+                ChangeSprite();
+                break;
+
+            case 4://穴
+                nowMapChipType = MapChipType.Hole;
+                nowPlayerEnterType = PlayerEnterType.None;
+                isCanWoodEnter = true;
+                nowSprite = MapChipSprite.Hole;
                 ChangeSprite();
                 break;
 
@@ -235,10 +244,25 @@ public class MapChip : MonoBehaviour
     /// <summary>
     /// 木を乗せる
     /// </summary>
-    public void OnWood()
+    public void OnWood(Direction.DirectionState woodDir)
     {
         isOnWood = true;
         isCanWoodEnter = false;
+        if(nowMapChipType== MapChipType.Hole)
+        {
+            if (woodDir == Direction.DirectionState.Up || woodDir == Direction.DirectionState.Down)
+            {
+                nowPlayerEnterType = PlayerEnterType.VerticalOnly;
+            }
+            else
+            {
+                nowPlayerEnterType = PlayerEnterType.HorizontalOnly;
+            }
+        }
+        else
+        {
+            nowPlayerEnterType = PlayerEnterType.All;
+        }
     }
     /// <summary>
     /// 木を外す
@@ -247,9 +271,28 @@ public class MapChip : MonoBehaviour
     {
         isOnWood = false;
         isCanWoodEnter = true;
+        if(nowMapChipType == MapChipType.Hole)
+        {
+            nowPlayerEnterType = PlayerEnterType.None;
+        }
     }
     public bool IsOnWood()
     {
         return isOnWood;
+    }
+
+    private bool IsSameAxis(Direction.DirectionState dir1,Direction.DirectionState dir2)
+    {
+        if ((dir1 == Direction.DirectionState.Up || dir1 == Direction.DirectionState.Down)
+            && (dir2 == Direction.DirectionState.Up || dir2 == Direction.DirectionState.Down))
+        {
+            return true;
+        }
+        if ((dir1 == Direction.DirectionState.Right || dir1 == Direction.DirectionState.Left)
+            && (dir2 == Direction.DirectionState.Right || dir2 == Direction.DirectionState.Left))
+        {
+            return true;
+        }
+        return false;
     }
 }

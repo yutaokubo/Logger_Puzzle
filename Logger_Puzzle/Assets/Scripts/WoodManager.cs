@@ -52,6 +52,11 @@ public class WoodManager : MonoBehaviour
         return woods.Count - 1;
     }
 
+    public Direction.DirectionState GetWoodDirection(int num)
+    {
+        return woods[num].GetDirection();
+    }
+
     public Wood GetIncludedPointWood(Vector2 point)
     {
         foreach (Wood w in woods)

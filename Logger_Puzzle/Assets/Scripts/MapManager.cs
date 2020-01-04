@@ -243,9 +243,9 @@ public class MapManager : MonoBehaviour
     /// 指定したポイントに丸太を置く
     /// </summary>
     /// <param name="point"></param>
-    public void OnWood(Vector2 point)
+    public void OnWood(Vector2 point,Direction .DirectionState woodDir)
     {
-        mapChips[(int)point.y, (int)point.x].OnWood();
+        mapChips[(int)point.y, (int)point.x].OnWood(woodDir);
     }
     public void RemoveWood(Vector2 point)
     {
