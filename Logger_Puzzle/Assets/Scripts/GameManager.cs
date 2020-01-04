@@ -32,11 +32,11 @@ public class GameManager : MonoBehaviour
     {
         if (playerManager.GetPlayerMoveMode() == 1)
         {
-            if(mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
+            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
             {
                 Debug.Log(playerManager.GetPlayerMapPoint());
                 Wood nowOnWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());
-                if(!IsPlayerAxisSameWoodAxis(playerManager.GetPlayerDirection(),nowOnWood.GetDirection()))
+                if (!IsPlayerAxisSameWoodAxis(playerManager.GetPlayerDirection(), nowOnWood.GetDirection()))
                 {
                     playerManager.PlayerStop();
                     return;
@@ -67,14 +67,15 @@ public class GameManager : MonoBehaviour
                             }
                         }
                         dw.MoveSet(playerManager.GetPlayerDirection());
-                        for(int i = 0;i<dw.GetLength();i++)
+                        Vector2 dwRootPoint = dw.GetRootPoint();
+                        for (int i = 0; i < dw.GetLength(); i++)
                         {
-                            Vector2 woodPoint = mapManager.GetFindPoint((int)dw.GetRootPoint().y, (int)dw.GetRootPoint().x, dw.GetDirection(), i);
+                            Vector2 woodPoint = mapManager.GetFindPoint((int)dwRootPoint.y, (int)dwRootPoint.x, dw.GetDirection(), i);
                             Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoint.y, (int)woodPoint.x, playerManager.GetPlayerDirection(), 1);
                             dw.ChangeMapPoints(i, woodDistination);
                             mapManager.RemoveWood(woodPoint);
-                            Debug.Log(woodPoint);
-                            Debug.Log(woodDistination);
+                            Debug.Log("woodPoint:"+woodPoint);
+                            Debug.Log("woodDistination:" + woodDistination);
                             mapManager.OnWood(woodDistination);
                         }
                     }
@@ -117,17 +118,38 @@ public class GameManager : MonoBehaviour
                 woodCreatPostion.y *= -1;
                 woodManager.WoodCreate(woodCreatPostion, playerManager.GetPlayerDirection(), mapManager.GetTreeLength(targetTreePoint));
                 woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), woodCreatPoint);
-                if (!mapManager.IsCanEnterWood(woodCreatPoint))
+
+                for (int i = 0; i < mapManager.GetTreeLength(targetTreePoint); i++)
                 {
-                    woodManager.WoodBreak(woodManager.GetWoodsLastNumber());
-                }
-                else
-                {
-                    if (!mapManager.IsOnWood(woodCreatPoint))
+                    Vector2 chackPoint = mapManager.GetFindPoint((int)woodCreatPoint.y, (int)woodCreatPoint.x, playerManager.GetPlayerDirection(), i);
+                    if(!mapManager.IsCanEnterWood(chackPoint))
                     {
-                        mapManager.OnWood(woodCreatPoint);
+                        woodManager.WoodBreak(woodManager.GetWoodsLastNumber());
+                        FellTree(targetTreePoint);
+                        return;
                     }
                 }
+                for(int i = 0; i < mapManager.GetTreeLength(targetTreePoint); i++)
+                {
+                    Vector2 chackPoint = mapManager.GetFindPoint((int)woodCreatPoint.y, (int)woodCreatPoint.x, playerManager.GetPlayerDirection(), i);
+
+                    if (!mapManager.IsOnWood(chackPoint))
+                    {
+                        mapManager.OnWood(chackPoint);
+                    }
+                }
+
+                //if (!mapManager.IsCanEnterWood(woodCreatPoint))
+                //{
+                //    woodManager.WoodBreak(woodManager.GetWoodsLastNumber());
+                //}
+                //else
+                //{
+                //    if (!mapManager.IsOnWood(woodCreatPoint))
+                //    {
+                //        mapManager.OnWood(woodCreatPoint);
+                //    }
+                //}
 
                 FellTree(targetTreePoint);
             }

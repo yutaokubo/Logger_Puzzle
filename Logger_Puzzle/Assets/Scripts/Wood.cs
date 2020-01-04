@@ -5,6 +5,9 @@ using UnityEngine;
 public class Wood : MonoBehaviour
 {
     [SerializeField]
+    private GameObject woodChip;
+
+    [SerializeField]
     private int length;//木の長さ
 
     [SerializeField]
@@ -74,9 +77,9 @@ public class Wood : MonoBehaviour
             mapPoints[i] = GetDistancePoint(point, i);
         }
     }
-    public void ChangeMapPoints(int num,Vector2 point)
+    public void ChangeMapPoints(int num, Vector2 point)
     {
-        if(num == 0)
+        if (num == 0)
         {
             rootPoint = point;
         }
@@ -136,7 +139,7 @@ public class Wood : MonoBehaviour
 
     private void MoveStop()
     {
-        if(transform.position == moveTargetPosition)
+        if (transform.position == moveTargetPosition)
         {
             state = WoodState.Nomal;
         }
@@ -164,9 +167,8 @@ public class Wood : MonoBehaviour
     public void SetDirection(Direction.DirectionState direction)
     {
         this.direction = direction;
-        DirectionLook();
+        //DirectionLook();
     }
-
     /// <summary>
     /// 自分の方向に応じて向きを変える
     /// </summary>
@@ -181,6 +183,44 @@ public class Wood : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
+
+    public void WoodChipsSet()
+    {
+        for (int i = 0; i < length; i++)
+        {
+            GameObject wc = Instantiate(woodChip, transform.position, Quaternion.identity);
+            
+            wc.transform.position += (Vector3)WoodChipPositioning(i);
+            wc.transform.rotation = Quaternion.Euler(0, 0, WoodChipLookAt());
+            wc.transform.parent = this.transform;
+        }
+    }
+    private Vector2 WoodChipPositioning(int length)
+    {
+        if (direction == Direction.DirectionState.Up)
+            return new Vector2(0, length * 0.64f);
+        if(direction == Direction.DirectionState.Down)
+            return new Vector2(0, -(length * 0.64f));
+        if(direction == Direction.DirectionState.Right)
+            return new Vector2(length * 0.64f,0);
+        if(direction == Direction.DirectionState.Left)
+            return new Vector2(-(length * 0.64f),0);
+
+        return Vector2.zero;
+    }
+    private int WoodChipLookAt()
+    {
+        if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Down)
+        {
+            return 90;
+        }
+        if (direction == Direction.DirectionState.Right || direction == Direction.DirectionState.Left)
+        {
+            return 0;
+        }
+        return 0;
+    }
+
     /// <summary>
     /// 斬られたとき乗れなければ壊れる
     /// </summary>

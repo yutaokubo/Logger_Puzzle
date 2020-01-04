@@ -25,6 +25,7 @@ public class WoodManager : MonoBehaviour
         Wood w = Instantiate(wood, Pos, Quaternion.identity);
         w.SetDirection(dir);
         w.SetLength(length);
+        w.WoodChipsSet();
         woods.Add(w);
     }
 
