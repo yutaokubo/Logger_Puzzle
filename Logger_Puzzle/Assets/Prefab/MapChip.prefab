@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!114 &2633950734567923778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,6 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f82707cf765824fab747af00a6d49a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeLength: 0
+  isOnWood: 0
 --- !u!114 &8140672474627184281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,4 +111,6 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300000, guid: d1a37fc21df7dea4da602a4891ca904f, type: 3}
   - {fileID: 21300000, guid: 37809b76e6d512f43b149b02cff707a1, type: 3}
+  treeSprites:
   - {fileID: 21300000, guid: 629dff94ae13ec9429c52fcf18cb78ca, type: 3}
+  - {fileID: 21300000, guid: bcb009d9a37b86942974e90b50e8547e, type: 3}

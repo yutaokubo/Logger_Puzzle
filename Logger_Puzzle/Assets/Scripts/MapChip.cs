@@ -105,6 +105,10 @@ public class MapChip : MonoBehaviour
             case 11://木一つ分
                 SetTree(1);
                 break;
+
+            case 12:
+                SetTree(2);
+                break;
         }
     }
     /// <summary>
@@ -118,7 +122,7 @@ public class MapChip : MonoBehaviour
         treeLength = length;
         isCanWoodEnter = false;
         nowSprite = MapChipSprite.Tree;
-        ChangeSprite();
+        ChangeTreeSprite(length);
     }
 
     /// <summary>
@@ -138,6 +142,12 @@ public class MapChip : MonoBehaviour
     private void ChangeSprite()
     {
         renderer.sprite = spriteSelecter.GetMapChipSprite((int)nowSprite);
+        renderer.sortingOrder = 0;
+    }
+    private void ChangeTreeSprite(int length)
+    {
+        renderer.sprite = spriteSelecter.GetTreeSprite(length);
+        renderer.sortingOrder = 4;
     }
     /// <summary>
     /// スプライトを変える準備ができていなければ準備
