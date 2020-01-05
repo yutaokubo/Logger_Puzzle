@@ -111,12 +111,16 @@ public class MapChip : MonoBehaviour
                 ChangeSprite();
                 break;
 
-            case 11://木一つ分
+            case 11://木1つ分
                 SetTree(1);
                 break;
 
-            case 12:
+            case 12://木2つ分
                 SetTree(2);
+                break;
+
+            case 13://木3つ分
+                SetTree(3);
                 break;
         }
     }
@@ -281,18 +285,4 @@ public class MapChip : MonoBehaviour
         return isOnWood;
     }
 
-    private bool IsSameAxis(Direction.DirectionState dir1,Direction.DirectionState dir2)
-    {
-        if ((dir1 == Direction.DirectionState.Up || dir1 == Direction.DirectionState.Down)
-            && (dir2 == Direction.DirectionState.Up || dir2 == Direction.DirectionState.Down))
-        {
-            return true;
-        }
-        if ((dir1 == Direction.DirectionState.Right || dir1 == Direction.DirectionState.Left)
-            && (dir2 == Direction.DirectionState.Right || dir2 == Direction.DirectionState.Left))
-        {
-            return true;
-        }
-        return false;
-    }
 }

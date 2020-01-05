@@ -251,4 +251,11 @@ public class Wood : MonoBehaviour
     {
         return (int)state;
     }
+    /// <summary>
+    ///　分けたとき元の木を消す用
+    /// </summary>
+    public void Crack()
+    {
+        state = WoodState.None;
+    }
 }

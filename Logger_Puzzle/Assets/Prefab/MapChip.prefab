@@ -116,3 +116,4 @@ MonoBehaviour:
   treeSprites:
   - {fileID: 21300000, guid: 629dff94ae13ec9429c52fcf18cb78ca, type: 3}
   - {fileID: 21300000, guid: bcb009d9a37b86942974e90b50e8547e, type: 3}
+  - {fileID: 21300000, guid: bcb009d9a37b86942974e90b50e8547e, type: 3}
