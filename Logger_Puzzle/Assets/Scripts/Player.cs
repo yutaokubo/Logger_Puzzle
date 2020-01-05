@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
         Stop,//止まっている
         MoveSet,//移動しようとしている
         Moving,//移動中
+        AutoMoveSet,//自動移動しようとしている
+        AutoMoving,//自動移動
     }
     [SerializeField]
     private MoveMode moveMode;
@@ -102,7 +104,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        if (moveMode != MoveMode.Moving)
+        if (moveMode != MoveMode.Moving&&moveMode != MoveMode.AutoMoving)
             return;
 
         transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
@@ -110,11 +112,28 @@ public class Player : MonoBehaviour
     
     private void MoveModeUpdate()
     {
-        if(moveMode == MoveMode.Moving)
+        if(moveMode == MoveMode.Moving||moveMode == MoveMode.AutoMoving)
         {
             if (transform.position == moveTargetPosition)
                 moveMode = MoveMode.Stop;
         }
+    }
+
+    public void AutoMoveStart(Direction.DirectionState dir)
+    {
+        if (moveMode != MoveMode.Stop)
+            return;
+
+        if(dir == Direction.DirectionState.Up)
+            moveTargetPosition = transform.position + moveY;
+        if(dir == Direction.DirectionState.Down)
+            moveTargetPosition = transform.position - moveY;
+        if (dir == Direction.DirectionState.Right)
+            moveTargetPosition = transform.position + moveX;
+        if (dir == Direction.DirectionState.Left)
+            moveTargetPosition = transform.position - moveX;
+
+        moveMode = MoveMode.AutoMoving;
     }
 
     /// <summary>

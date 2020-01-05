@@ -127,6 +127,11 @@ public class PlayerManager : MonoBehaviour
         player.SetMoveMode(2);
     }
 
+    public void PlayerAutoMoveStart(Direction.DirectionState moveDir)
+    {
+        player.AutoMoveStart(moveDir);
+    }
+
     public int GetPlayerSlashMode()
     {
         return player.GetSlashMode();

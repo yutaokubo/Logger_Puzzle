@@ -300,6 +300,13 @@ public class GameManager : MonoBehaviour
                     }
                     w.SetRootPoint(woodDistainationPoints[0]);//丸太にも現在位置を把握させる
                     w.MoveSet(distinationDir);
+                    foreach(Vector2 wp in woodPoints)//動かす前の丸太に
+                    {
+                        if(playerManager.GetPlayerMapPoint()==wp)//プレイヤーが乗っていたなら
+                        {
+                            PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1));
+                        }
+                    }
                 }
                 else//進めないなら
                 {
@@ -311,5 +318,11 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void PlayerFlow(Direction.DirectionState moveDir,Vector2 Distination)
+    {
+        playerManager.PlayerAutoMoveStart(moveDir);
+        playerManager.SetPlayerMapPoint(Distination);
     }
 }
