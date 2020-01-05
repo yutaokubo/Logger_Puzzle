@@ -26,6 +26,7 @@ public class Wood : MonoBehaviour
         Breaking,//壊れる
         MoveSet,//移動待機
         Moving,//移動中
+        Falling,//落ちている
         None,//無くなった
     }
 
@@ -48,6 +49,7 @@ public class Wood : MonoBehaviour
     {
         Move();
         BreakedUpdate();
+        FallingUpdate();
         DeadChack();
     }
 
@@ -69,6 +71,7 @@ public class Wood : MonoBehaviour
         rootPoint = point;
         SetMapPoints(point);
     }
+
     private void SetMapPoints(Vector2 point)
     {
         mapPoints = new Vector2[length];
@@ -76,6 +79,10 @@ public class Wood : MonoBehaviour
         {
             mapPoints[i] = GetDistancePoint(point, i);
         }
+    }
+    public Vector2[] GetMapPoints()
+    {
+        return mapPoints;
     }
     public void ChangeMapPoints(int num, Vector2 point)
     {
@@ -136,7 +143,6 @@ public class Wood : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 5 * Time.deltaTime);
         MoveStop();
     }
-
     private void MoveStop()
     {
         if (transform.position == moveTargetPosition)
@@ -257,5 +263,22 @@ public class Wood : MonoBehaviour
     public void Crack()
     {
         state = WoodState.None;
+    }
+
+    public void Fall()
+    {
+        state = WoodState.Falling;
+    }
+    private void FallingUpdate()
+    {
+        if (state != WoodState.Falling)
+            return;
+
+        breakTimer += Time.deltaTime;
+        transform.localScale -= new Vector3(0.5f,0.5f,0) * Time.deltaTime;
+        if(breakTimer>=breakTime)
+        {
+            state = WoodState.None;
+        }
     }
 }

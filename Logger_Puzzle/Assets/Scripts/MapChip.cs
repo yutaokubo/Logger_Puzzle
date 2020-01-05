@@ -17,6 +17,7 @@ public class MapChip : MonoBehaviour
         Rock,//岩
         Tree,//木
         Hole,//穴
+        River,//川
     }
 
     private MapChipSprite nowSprite;//画像変更用
@@ -28,7 +29,7 @@ public class MapChip : MonoBehaviour
         Nomal,//通常、
         Rock,//通れない
         Hole,//穴
-        Rever,//川
+        River,//川
     }
 
     MapChipType nowMapChipType;//現在のマップチップのタイプ
@@ -48,6 +49,8 @@ public class MapChip : MonoBehaviour
     [SerializeField]
     private bool isOnWood;//丸太が乗っているか
     private bool isCanWoodEnter;//丸太が侵入できるか
+
+    private Direction.DirectionState riverDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +87,7 @@ public class MapChip : MonoBehaviour
                 nowPlayerEnterType = PlayerEnterType.All;
                 isCanWoodEnter = true;
                 nowSprite = MapChipSprite.Nomal;
+                riverDirection = Direction.DirectionState.None;
                 ChangeSprite();
                 break;
 
@@ -92,6 +96,7 @@ public class MapChip : MonoBehaviour
                 nowPlayerEnterType = PlayerEnterType.None;
                 isCanWoodEnter = false;
                 nowSprite = MapChipSprite.Rock;
+                riverDirection = Direction.DirectionState.None;
                 ChangeSprite();
                 break;
 
@@ -100,27 +105,40 @@ public class MapChip : MonoBehaviour
                 nowPlayerEnterType = PlayerEnterType.All;
                 isCanWoodEnter = true;
                 nowSprite = MapChipSprite.Nomal;
+                riverDirection = Direction.DirectionState.None;
                 ChangeSprite();
                 break;
 
             case 4://穴
                 nowMapChipType = MapChipType.Hole;
-                nowPlayerEnterType = PlayerEnterType.None;
+                nowPlayerEnterType = PlayerEnterType.AutoOnlyAll;
                 isCanWoodEnter = true;
                 nowSprite = MapChipSprite.Hole;
+                riverDirection = Direction.DirectionState.None;
                 ChangeSprite();
                 break;
 
             case 11://木1つ分
                 SetTree(1);
                 break;
-
             case 12://木2つ分
                 SetTree(2);
                 break;
-
             case 13://木3つ分
                 SetTree(3);
+                break;
+
+            case 20://上向き川
+                SetRiver(0);
+                break;
+            case 21://下向き川
+                SetRiver(1);
+                break;
+            case 22://右向き川
+                SetRiver(2);
+                break;
+            case 23://左向き川
+                SetRiver(3);
                 break;
         }
     }
@@ -135,7 +153,29 @@ public class MapChip : MonoBehaviour
         treeLength = length;
         isCanWoodEnter = false;
         nowSprite = MapChipSprite.Tree;
+        riverDirection = Direction.DirectionState.None;
         ChangeTreeSprite(length);
+    }
+    private void SetRiver(int num)
+    {
+        nowMapChipType = MapChipType.River;
+        nowPlayerEnterType = PlayerEnterType.AutoOnlyAll;
+        isCanWoodEnter = true;
+        nowSprite = MapChipSprite.River;
+        riverDirection = (Direction.DirectionState)num;
+        ChangeSprite();
+        RiverLookAtDir(riverDirection);
+    }
+    private void RiverLookAtDir(Direction.DirectionState dir)
+    {
+        if(dir== Direction.DirectionState.Up)
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        if(dir == Direction.DirectionState.Down)
+            transform.rotation = Quaternion.Euler(0, 0, 180);
+        if (dir == Direction.DirectionState.Right)
+            transform.rotation = Quaternion.Euler(0, 0, 90);
+        if (dir == Direction.DirectionState.Left)
+            transform.rotation = Quaternion.Euler(0, 0, 270);
     }
 
     /// <summary>
@@ -283,6 +323,13 @@ public class MapChip : MonoBehaviour
     public bool IsOnWood()
     {
         return isOnWood;
+    }
+
+    public bool IsHole()
+    {
+        if (nowMapChipType == MapChipType.Hole)
+            return true;
+        return false;
     }
 
 }

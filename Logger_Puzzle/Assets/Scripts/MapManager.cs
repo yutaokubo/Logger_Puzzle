@@ -256,4 +256,9 @@ public class MapManager : MonoBehaviour
         //Debug.Log(point);
         return mapChips[(int)point.y, (int)point.x].IsOnWood();
     }
+
+    public bool IsHole(Vector2 point)
+    {
+        return mapChips[(int)point.y, (int)point.x].IsHole();
+    }
 }

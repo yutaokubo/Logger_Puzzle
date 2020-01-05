@@ -39,7 +39,7 @@ public class WoodManager : MonoBehaviour
 
     private void RemoveNoneWood()
     {
-        woods.RemoveAll(w => w.GetState() == 4);
+        woods.RemoveAll(w => w.GetState() == 5);
     }
 
     public void SetWoodRootPoint(int num, Vector2 point)
@@ -67,5 +67,10 @@ public class WoodManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public List<Wood> GetWoods()
+    {
+        return woods;
     }
 }

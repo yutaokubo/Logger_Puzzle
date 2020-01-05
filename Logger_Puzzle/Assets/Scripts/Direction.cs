@@ -12,6 +12,7 @@ public class Direction : MonoBehaviour
         Down,
         Right,
         Left,
+        None,
     }
 
     public DirectionState state;

@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerMoveUpdate();
         PlayerSlashUpdate();
+        WoodFallChack();
     }
 
     private void PlayerMoveUpdate()
@@ -197,6 +198,30 @@ public class GameManager : MonoBehaviour
                 woodManager.WoodCreate(fPoint * mapManager.GetMapChipSize() * new Vector2(1, -1), pDir, l2);//前マス
                 woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), fPoint);
                 w1.Crack();
+            }
+        }
+    }
+
+    private void WoodsChack()
+    {
+        WoodFallChack();
+    }
+    private void WoodFallChack()
+    {
+        foreach(Wood w in woodManager.GetWoods())
+        {
+            if(w.GetState()==0)
+            {
+                foreach(Vector2 p in w.GetMapPoints())
+                {
+                    if (!mapManager.IsHole(p))
+                        return;
+                }
+                foreach (Vector2 p in w.GetMapPoints())
+                {
+                    mapManager.RemoveWood(p);
+                }
+                w.Fall();
             }
         }
     }
