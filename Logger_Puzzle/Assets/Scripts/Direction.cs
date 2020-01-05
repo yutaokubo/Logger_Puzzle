@@ -61,7 +61,7 @@ public class Direction : MonoBehaviour
         if (dir == DirectionState.Left)
             return DirectionState.Right;
 
-        return DirectionState.Up;
+        return DirectionState.None;
     }
 
 }

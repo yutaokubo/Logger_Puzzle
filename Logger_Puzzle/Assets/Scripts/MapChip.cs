@@ -319,6 +319,10 @@ public class MapChip : MonoBehaviour
         {
             nowPlayerEnterType = PlayerEnterType.None;
         }
+        if(nowMapChipType == MapChipType.River)
+        {
+            nowPlayerEnterType = PlayerEnterType.AutoOnlyAll;
+        }
     }
     public bool IsOnWood()
     {
@@ -330,6 +334,16 @@ public class MapChip : MonoBehaviour
         if (nowMapChipType == MapChipType.Hole)
             return true;
         return false;
+    }
+    public bool IsRiver()
+    {
+        if (nowMapChipType == MapChipType.River)
+            return true;
+        return false;
+    }
+    public Direction.DirectionState GetRiverDirection()
+    {
+        return riverDirection;
     }
 
 }

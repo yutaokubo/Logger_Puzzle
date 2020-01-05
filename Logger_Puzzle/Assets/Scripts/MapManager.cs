@@ -261,4 +261,12 @@ public class MapManager : MonoBehaviour
     {
         return mapChips[(int)point.y, (int)point.x].IsHole();
     }
+    public bool IsRiver(Vector2 point)
+    {
+        return mapChips[(int)point.y, (int)point.x].IsRiver();
+    }
+    public Direction.DirectionState GetRiverDirection(Vector2 point)
+    {
+        return mapChips[(int)point.y, (int)point.x].GetRiverDirection();
+    }
 }

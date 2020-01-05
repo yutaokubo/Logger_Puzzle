@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerMoveUpdate();
         PlayerSlashUpdate();
-        WoodFallChack();
+        WoodsChack();
     }
 
     private void PlayerMoveUpdate()
@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour
         {
             if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
             {
-                Debug.Log(playerManager.GetPlayerMapPoint());
                 Wood nowOnWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());
                 if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowOnWood.GetDirection()))
                 {
@@ -75,8 +74,8 @@ public class GameManager : MonoBehaviour
                             Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoint.y, (int)woodPoint.x, playerManager.GetPlayerDirection(), 1);
                             dw.ChangeMapPoints(i, woodDistination);
                             mapManager.RemoveWood(woodPoint);
-                            Debug.Log("woodPoint:" + woodPoint);
-                            Debug.Log("woodDistination:" + woodDistination);
+                            //Debug.Log("woodPoint:" + woodPoint);
+                            //Debug.Log("woodDistination:" + woodDistination);
                             mapManager.OnWood(woodDistination, dw.GetDirection());
                         }
                     }
@@ -205,23 +204,106 @@ public class GameManager : MonoBehaviour
     private void WoodsChack()
     {
         WoodFallChack();
+        WoodFlowChack();
     }
     private void WoodFallChack()
     {
-        foreach(Wood w in woodManager.GetWoods())
+        foreach (Wood w in woodManager.GetWoods())
         {
-            if(w.GetState()==0)
+            if (w.GetState() == 0)
             {
-                foreach(Vector2 p in w.GetMapPoints())
+                bool isFall = true;
+                foreach (Vector2 p in w.GetMapPoints())
                 {
                     if (!mapManager.IsHole(p))
-                        return;
+                    {
+                        isFall = false;
+                        break;
+                    }
                 }
+
+                if (!isFall)
+                    continue;
+
                 foreach (Vector2 p in w.GetMapPoints())
                 {
                     mapManager.RemoveWood(p);
                 }
                 w.Fall();
+            }
+        }
+    }
+
+    private void WoodFlowChack()
+    {
+        foreach (Wood w in woodManager.GetWoods())//丸太全てに処理する
+        {
+            if (w.GetState() == 0)//丸太が通常状態なら
+            {
+                bool isAllRiver = true;
+                foreach (Vector2 p in w.GetMapPoints())//その丸太のある全てのマス
+                {
+                    if (!mapManager.IsRiver(p))//川マスに乗っていなければ
+                        isAllRiver = false;
+                    break;
+                }
+                if (!isAllRiver)//1マスでも川マスに乗っていなければ
+                    continue;//この丸太の処理を終了
+
+                Debug.Log("OnRiver");
+                Direction.DirectionState distinationDir = Direction.DirectionState.None;//丸太の移動方向用
+                foreach (Vector2 p in w.GetMapPoints())//全ての丸太のマスに対して
+                {
+                    //↓川の向いている方向に丸太の乗っているマスが無ければ
+                    bool isNotDistination = w.IsIncludedMapPoint(mapManager.GetFindPoint((int)p.y, (int)p.x, mapManager.GetRiverDirection(p), 1));
+                    if (!isNotDistination)
+                    {
+                        distinationDir = mapManager.GetRiverDirection(p);//丸太の進行方向決定
+                    }
+                }
+                //ここから丸太を移動させる処理
+
+                Debug.Log("FlowDir;" + distinationDir);
+                Vector2[] woodDistainationPoints = new Vector2[w.GetLength()];//移動先のポイント
+                Vector2[] woodPoints = w.GetMapPoints();//丸太の元にあった場所の記憶用
+                bool isFlow = true;//流れるかどうか
+                for (int i = 0; i < w.GetLength(); i++)//移動先のポイントを設定
+                {
+                    Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoints[i].y, (int)woodPoints[i].x, distinationDir, 1);//丸太の1マスの移動先
+                    woodDistainationPoints[i] = woodDistination;
+                }
+
+                foreach (Vector2 wp in woodPoints)//一度丸太のあるマスから丸太が無いことにする。
+                {
+                    mapManager.RemoveWood(wp);
+                }
+                foreach (Vector2 wDP in woodDistainationPoints)//その上で進めるかどうか確かめる
+                {
+                    if (!mapManager.IsCanEnterWood(wDP))
+                    {
+                        isFlow = false;
+                        Debug.Log("FalseP:" + wDP);
+                        break;
+                    }
+                }
+                //Debug.Log("isFlow:" + isFlow);
+                if (isFlow)//進めるなら
+                {
+                    foreach (Vector2 wDP in woodDistainationPoints)//進む先全てのマス目に
+                    {
+                        mapManager.OnWood(wDP, w.GetDirection());//丸太を乗せる
+                    }
+                    w.SetRootPoint(woodDistainationPoints[0]);//丸太にも現在位置を把握させる
+                    w.MoveSet(distinationDir);
+                }
+                else//進めないなら
+                {
+                    foreach (Vector2 wp in woodPoints)//元のマス目に
+                    {
+                        mapManager.OnWood(wp, w.GetDirection());//丸太を乗せる
+                    }
+                    continue;//次の丸太に
+                }
             }
         }
     }
