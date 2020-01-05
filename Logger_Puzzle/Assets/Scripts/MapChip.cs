@@ -173,9 +173,9 @@ public class MapChip : MonoBehaviour
         if(dir == Direction.DirectionState.Down)
             transform.rotation = Quaternion.Euler(0, 0, 180);
         if (dir == Direction.DirectionState.Right)
-            transform.rotation = Quaternion.Euler(0, 0, 90);
-        if (dir == Direction.DirectionState.Left)
             transform.rotation = Quaternion.Euler(0, 0, 270);
+        if (dir == Direction.DirectionState.Left)
+            transform.rotation = Quaternion.Euler(0, 0, 90);
     }
 
     /// <summary>
