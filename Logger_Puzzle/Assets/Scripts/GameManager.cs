@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerManager.GetPlayerMoveMode() == 1)
         {
-            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
+            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint())&&!mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
             {
                 Wood nowOnWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());
                 if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowOnWood.GetDirection()))
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
                 Vector2 playerDestination = mapManager.GetFindPoint((int)playerManager.GetPlayerMapPoint().y,
                                                                     (int)playerManager.GetPlayerMapPoint().x,
                                                                     playerManager.GetPlayerDirection(), 1);
-                if (mapManager.IsOnWood(playerDestination))
+                if (mapManager.IsOnWood(playerDestination)&&!mapManager.IsRiver(playerDestination))
                 {
                     //Debug.Log("PlayerDestinationOnWood");
                     Wood dw = woodManager.GetIncludedPointWood(playerDestination);
@@ -283,6 +283,11 @@ public class GameManager : MonoBehaviour
                     {
                         isFlow = false;
                         Debug.Log("FalseP:" + wDP);
+                        break;
+                    }
+                    if(wDP == playerManager.GetPlayerMapPoint())
+                    {
+                        isFlow = false;
                         break;
                     }
                 }
