@@ -19,6 +19,7 @@ public class MapChip : MonoBehaviour
         Hole,//穴
         River,//川
         Goal,//ゴール
+        RiverRock,//川の中の岩
     }
 
     private MapChipSprite nowSprite;//画像変更用
@@ -153,6 +154,14 @@ public class MapChip : MonoBehaviour
                 break;
             case 23://左向き川
                 SetRiver(3);
+                break;
+            case 24://川の岩
+                nowMapChipType = MapChipType.Rock;
+                nowPlayerEnterType = PlayerEnterType.None;
+                isCanWoodEnter = false;
+                nowSprite = MapChipSprite.RiverRock;
+                riverDirection = Direction.DirectionState.None;
+                ChangeSprite();
                 break;
         }
     }
