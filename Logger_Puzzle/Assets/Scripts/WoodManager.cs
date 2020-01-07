@@ -9,6 +9,9 @@ public class WoodManager : MonoBehaviour
 
     private List<Wood> woods = new List<Wood>();
 
+    [SerializeField]
+    private BreakTree breakTree;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,5 +83,17 @@ public class WoodManager : MonoBehaviour
         //{
         //    w.ChangeLayer()
         //}
+    }
+
+    public void CreateBreakWood(int lenght, Direction.DirectionState dir, Vector2 pos)
+    {
+        BreakTree bt = Instantiate(breakTree, pos, Quaternion.identity);
+        bt.SetLenght(lenght);
+        bt.SetSpinDirection(dir);
+    }
+
+    public void LastWoodsBornFromTree()
+    {
+        woods[woods.Count - 1].BornFromTree();
     }
 }

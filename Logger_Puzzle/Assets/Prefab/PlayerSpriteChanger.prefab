@@ -48,3 +48,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 502c8f95d88f7e342a823ff7bae4c388, type: 3}
   - {fileID: 21300000, guid: 1a739522cb0ae99449e4f701ee956aef, type: 3}
   - {fileID: 21300000, guid: a40297905cd13424fa161d0150ee6b4f, type: 3}
+  SlashSprites:
+  - {fileID: 21300000, guid: a02245cefed58264a8b05d69ec64dacb, type: 3}
+  - {fileID: 21300000, guid: 47f9fb230b50049428e6a21835722c2c, type: 3}
+  - {fileID: 21300000, guid: a92da0709ce54ed438095e3dafce33ae, type: 3}
+  - {fileID: 21300000, guid: 210843db032c1774d8762968effc9129, type: 3}

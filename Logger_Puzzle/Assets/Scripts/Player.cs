@@ -38,6 +38,10 @@ public class Player : MonoBehaviour
         Slashing//切っている
     }
     private SlashMode slashMode;
+    [SerializeField]
+    private float slashTime;
+    private float slashTimer;
+
 
     [SerializeField]
     private PlayerSpriteChanger spriteChanger;
@@ -60,6 +64,7 @@ public class Player : MonoBehaviour
         Move();
         MoveModeUpdate();
         Slash();
+        SlashingUpdate();
         SpriteChange();
     }
     /// <summary>
@@ -67,13 +72,13 @@ public class Player : MonoBehaviour
     /// </summary>
     private void SetTargetPosition()
     {
-        if (moveMode != MoveMode.Stop)
+        if (moveMode != MoveMode.Stop || slashMode != SlashMode.None)
             return;
 
         movePreviousPosition = moveTargetPosition;
 
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             moveTargetPosition = transform.position + moveY;
             direction = Direction.DirectionState.Up;
@@ -81,7 +86,7 @@ public class Player : MonoBehaviour
             //transform.rotation = Quaternion.Euler(0,0,0);
             return;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
             moveTargetPosition = transform.position - moveY;
             direction = Direction.DirectionState.Down;
@@ -89,7 +94,7 @@ public class Player : MonoBehaviour
             //transform.rotation = Quaternion.Euler(0, 0, 180);
             return;
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             moveTargetPosition = transform.position + moveX;
             direction = Direction.DirectionState.Right;
@@ -97,7 +102,7 @@ public class Player : MonoBehaviour
             //transform.rotation = Quaternion.Euler(0, 0, 270);
             return;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             moveTargetPosition = transform.position - moveX;
             direction = Direction.DirectionState.Left;
@@ -112,15 +117,17 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        if (moveMode != MoveMode.Moving&&moveMode != MoveMode.AutoMoving)
+        if (moveMode != MoveMode.Moving && moveMode != MoveMode.AutoMoving)
             return;
-
-        transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
+        if (moveMode == MoveMode.Moving)
+            transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
+        if (moveMode == MoveMode.AutoMoving)
+            transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 5 * Time.deltaTime);
     }
-    
+
     private void MoveModeUpdate()
     {
-        if(moveMode == MoveMode.Moving||moveMode == MoveMode.AutoMoving)
+        if (moveMode == MoveMode.Moving || moveMode == MoveMode.AutoMoving)
         {
             if (transform.position == moveTargetPosition)
                 moveMode = MoveMode.Stop;
@@ -132,9 +139,9 @@ public class Player : MonoBehaviour
         if (moveMode != MoveMode.Stop)
             return;
 
-        if(dir == Direction.DirectionState.Up)
+        if (dir == Direction.DirectionState.Up)
             moveTargetPosition = transform.position + moveY;
-        if(dir == Direction.DirectionState.Down)
+        if (dir == Direction.DirectionState.Down)
             moveTargetPosition = transform.position - moveY;
         if (dir == Direction.DirectionState.Right)
             moveTargetPosition = transform.position + moveX;
@@ -149,12 +156,24 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Slash()
     {
-        if (moveMode != MoveMode.Stop)
+        if (moveMode != MoveMode.Stop&&moveMode != MoveMode.MoveSet&&moveMode != MoveMode.Moving)
             return;
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             slashMode = SlashMode.Wait;
+        }
+    }
+    private void SlashingUpdate()
+    {
+        if (slashMode != SlashMode.Slashing)
+            return;
+
+        slashTimer += Time.deltaTime;
+        if (slashTimer > slashTime)
+        {
+            slashTimer = 0;
+            slashMode = SlashMode.None;
         }
     }
 
@@ -211,7 +230,7 @@ public class Player : MonoBehaviour
 
     private void SpriteChange()
     {
-        if(renderer == null)
+        if (renderer == null)
         {
             renderer = gameObject.GetComponent<SpriteRenderer>();
         }
@@ -226,11 +245,18 @@ public class Player : MonoBehaviour
                 break;
 
         }
+
+        switch (slashMode)
+        {
+            case SlashMode.Slashing:
+                renderer.sprite = spriteChanger.GetSlashSprite(direction);
+                break;
+        }
     }
 
     public void ChangeLayer(int num)
     {
-        if(renderer != null)
-        renderer.sortingOrder = num;
+        if (renderer != null)
+            renderer.sortingOrder = num;
     }
 }

@@ -37,20 +37,31 @@ public class Wood : MonoBehaviour
     private Vector3 MoveY = new Vector3(0, 0.64f, 0);//Y移動量
     private Vector3 moveTargetPosition;
 
+    private bool isBornFromTree;
+
+    private bool isAppear;
+    [SerializeField]
+    private float appearTime;
+    private float appearTimer;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        Disappear();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
-        BreakedUpdate();
-        FallingUpdate();
-        DeadChack();
+        AppearCount();
+
+        if (isAppear)
+        {
+            Move();
+            FallingUpdate();
+            BreakedUpdate();
+            DeadChack();
+        }
     }
 
     public int GetLength()
@@ -293,5 +304,49 @@ public class Wood : MonoBehaviour
         //GameObject[] wcs = gameObject.transform.GetComponentsInChildren<GameObject>();
         //if (gameObject.GetComponent<SpriteRenderer>() != null)
         //    gameObject.GetComponent<SpriteRenderer>().sortingOrder = num;
+    }
+
+    private void Disappear()
+    {
+        if (!isBornFromTree)
+            return;
+        if (transform.childCount>0)
+        {
+            for(int i =0;i<transform.childCount;i++)
+            {
+                GameObject wc = transform.GetChild(i).gameObject;
+                wc.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+        isAppear = false;
+    }
+
+    private void AppearCount()
+    {
+        if(!isBornFromTree)
+        {
+            isAppear = true;
+        }
+
+        if (isAppear)
+            return;
+
+        appearTimer += Time.deltaTime;
+        if(appearTimer>appearTime)
+        {
+            if (transform.childCount > 0)
+            {
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    GameObject wc = transform.GetChild(i).gameObject;
+                    wc.GetComponent<SpriteRenderer>().enabled = true;
+                }
+            }
+            isAppear = true;
+        }
+    }
+    public void BornFromTree()
+    {
+        isBornFromTree = true;
     }
 }

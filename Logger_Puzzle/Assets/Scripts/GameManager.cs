@@ -114,6 +114,11 @@ public class GameManager : MonoBehaviour
             woodCreatPostion.y *= -1;
             woodManager.WoodCreate(woodCreatPostion, playerManager.GetPlayerDirection(), mapManager.GetTreeLength(targetTreePoint));
             woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), woodCreatPoint);
+            woodManager.LastWoodsBornFromTree();
+
+            Vector2 bTreeCreatPostion = targetTreePoint * mapManager.GetMapChipSize();
+            bTreeCreatPostion.y *= -1;
+            woodManager.CreateBreakWood(mapManager.GetTreeLength(targetTreePoint)-1, playerManager.GetPlayerDirection(), bTreeCreatPostion);
 
             for (int i = 0; i < mapManager.GetTreeLength(targetTreePoint); i++)
             {

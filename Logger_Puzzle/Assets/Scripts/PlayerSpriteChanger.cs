@@ -6,6 +6,8 @@ public class PlayerSpriteChanger : MonoBehaviour
 {
     [SerializeField]
     private Sprite[] NomalSprites;
+    [SerializeField]
+    private Sprite[] SlashSprites;
 
     // Start is called before the first frame update
     void Start()
@@ -22,5 +24,10 @@ public class PlayerSpriteChanger : MonoBehaviour
     public Sprite GetNomalSprite(Direction.DirectionState dir)
     {
         return NomalSprites[(int)dir];
+    }
+
+    public Sprite GetSlashSprite(Direction.DirectionState dir)
+    {
+        return SlashSprites[(int)dir];
     }
 }

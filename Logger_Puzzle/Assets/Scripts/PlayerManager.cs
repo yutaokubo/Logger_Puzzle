@@ -138,7 +138,7 @@ public class PlayerManager : MonoBehaviour
 
     public void PlayerSlashStart()
     {
-        player.SetSlashMode(0);
+        player.SetSlashMode(2);
     }
 
     public void ChangePlayerLayer()

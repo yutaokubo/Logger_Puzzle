@@ -100,3 +100,4 @@ MonoBehaviour:
   mapPoints: []
   breakTime: 1
   state: 0
+  appearTime: 0.2

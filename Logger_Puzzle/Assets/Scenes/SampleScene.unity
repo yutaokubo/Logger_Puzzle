@@ -195,6 +195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wood: {fileID: 4023066050389496388, guid: e7f7fd11b506be143b03982e59d3cd25, type: 3}
+  breakTree: {fileID: 1353037543816082144, guid: ed12cee500107e54c8c829cd010cfc2c,
+    type: 3}
 --- !u!4 &419709065
 Transform:
   m_ObjectHideFlags: 0
@@ -322,9 +324,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370a6b0bc7e4bdc4ebbcd6d910f28c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 3
   moveMode: 0
   direction: 0
+  slashTime: 0.3
   spriteChanger: {fileID: 722725204380152996, guid: 9deb4af4c4f23d548b9c1f749f8d5fca,
     type: 3}
 --- !u!212 &602283799
