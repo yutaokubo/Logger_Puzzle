@@ -44,6 +44,9 @@ public class Wood : MonoBehaviour
     private float appearTime;
     private float appearTimer;
 
+    [SerializeField]
+    private Sprite[] woodChipSprites;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -206,22 +209,57 @@ public class Wood : MonoBehaviour
         for (int i = 0; i < length; i++)
         {
             GameObject wc = Instantiate(woodChip, transform.position, Quaternion.identity);
-            
+
             wc.transform.position += (Vector3)WoodChipPositioning(i);
             wc.transform.rotation = Quaternion.Euler(0, 0, WoodChipLookAt());
             wc.transform.parent = this.transform;
+        }
+        WoodChipsSpritesChange();
+    }
+    private void WoodChipsSpritesChange()
+    {
+        if (transform.childCount == 1)
+        {
+            GameObject wc = transform.GetChild(0).gameObject;
+            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[0];
+            return;
+        }
+        if (transform.childCount > 0)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject wc = transform.GetChild(i).gameObject;
+                if (i == 0)
+                {
+                    if(direction == Direction.DirectionState.Up||direction == Direction.DirectionState.Right)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[1];
+                    else
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[3];
+
+                }
+                if (i > 0 && i < transform.childCount - 1)
+                    wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[2];
+                if (i == transform.childCount - 1)
+                {
+                    if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[3];
+                    else
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[1];
+                }
+
+            }
         }
     }
     private Vector2 WoodChipPositioning(int length)
     {
         if (direction == Direction.DirectionState.Up)
             return new Vector2(0, length * 0.64f);
-        if(direction == Direction.DirectionState.Down)
+        if (direction == Direction.DirectionState.Down)
             return new Vector2(0, -(length * 0.64f));
-        if(direction == Direction.DirectionState.Right)
-            return new Vector2(length * 0.64f,0);
-        if(direction == Direction.DirectionState.Left)
-            return new Vector2(-(length * 0.64f),0);
+        if (direction == Direction.DirectionState.Right)
+            return new Vector2(length * 0.64f, 0);
+        if (direction == Direction.DirectionState.Left)
+            return new Vector2(-(length * 0.64f), 0);
 
         return Vector2.zero;
     }
@@ -286,8 +324,8 @@ public class Wood : MonoBehaviour
             return;
 
         breakTimer += Time.deltaTime;
-        transform.localScale -= new Vector3(0.5f,0.5f,0) * Time.deltaTime;
-        if(breakTimer>=breakTime)
+        transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+        if (breakTimer >= breakTime)
         {
             state = WoodState.None;
         }
@@ -310,9 +348,9 @@ public class Wood : MonoBehaviour
     {
         if (!isBornFromTree)
             return;
-        if (transform.childCount>0)
+        if (transform.childCount > 0)
         {
-            for(int i =0;i<transform.childCount;i++)
+            for (int i = 0; i < transform.childCount; i++)
             {
                 GameObject wc = transform.GetChild(i).gameObject;
                 wc.GetComponent<SpriteRenderer>().enabled = false;
@@ -323,7 +361,7 @@ public class Wood : MonoBehaviour
 
     private void AppearCount()
     {
-        if(!isBornFromTree)
+        if (!isBornFromTree)
         {
             isAppear = true;
         }
@@ -332,7 +370,7 @@ public class Wood : MonoBehaviour
             return;
 
         appearTimer += Time.deltaTime;
-        if(appearTimer>appearTime)
+        if (appearTimer > appearTime)
         {
             if (transform.childCount > 0)
             {

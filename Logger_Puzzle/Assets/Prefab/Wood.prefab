@@ -101,3 +101,8 @@ MonoBehaviour:
   breakTime: 1
   state: 0
   appearTime: 0.2
+  woodChipSprites:
+  - {fileID: 21300000, guid: d4966f41bf8156241a9b7a2123b60cf7, type: 3}
+  - {fileID: 21300000, guid: b5b6951a07ec37748b698ecb941986a2, type: 3}
+  - {fileID: 21300000, guid: 0e05c08f24c8af547974a8768c379e3c, type: 3}
+  - {fileID: 21300000, guid: 956eebf69855c014c9d771e81c73ca87, type: 3}
