@@ -18,6 +18,7 @@ public class MapChip : MonoBehaviour
         Tree,//木
         Hole,//穴
         River,//川
+        Goal,//ゴール
     }
 
     private MapChipSprite nowSprite;//画像変更用
@@ -114,6 +115,15 @@ public class MapChip : MonoBehaviour
                 nowPlayerEnterType = PlayerEnterType.AutoOnlyAll;
                 isCanWoodEnter = true;
                 nowSprite = MapChipSprite.Hole;
+                riverDirection = Direction.DirectionState.None;
+                ChangeSprite();
+                break;
+
+            case 5://ゴール
+                nowMapChipType = MapChipType.Nomal;
+                nowPlayerEnterType = PlayerEnterType.All;
+                isCanWoodEnter = true;
+                nowSprite = MapChipSprite.Goal;
                 riverDirection = Direction.DirectionState.None;
                 ChangeSprite();
                 break;
