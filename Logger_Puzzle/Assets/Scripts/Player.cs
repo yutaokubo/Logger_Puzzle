@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private Direction.DirectionState direction;
+    private SpriteRenderer renderer;
 
     enum SlashMode
     {
@@ -38,12 +39,15 @@ public class Player : MonoBehaviour
     }
     private SlashMode slashMode;
 
+    [SerializeField]
+    private PlayerSpriteChanger spriteChanger;
+
     // Start is called before the first frame update
     void Start()
     {
 
         moveTargetPosition = transform.position;
-        direction = Direction.DirectionState.Up;
+        direction = Direction.DirectionState.Down;
     }
 
     // Update is called once per frame
@@ -56,6 +60,7 @@ public class Player : MonoBehaviour
         Move();
         MoveModeUpdate();
         Slash();
+        SpriteChange();
     }
     /// <summary>
     /// 移動先設定
@@ -73,7 +78,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position + moveY;
             direction = Direction.DirectionState.Up;
             moveMode = MoveMode.MoveSet;
-            transform.rotation = Quaternion.Euler(0,0,0);
+            //transform.rotation = Quaternion.Euler(0,0,0);
             return;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -81,7 +86,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position - moveY;
             direction = Direction.DirectionState.Down;
             moveMode = MoveMode.MoveSet;
-            transform.rotation = Quaternion.Euler(0, 0, 180);
+            //transform.rotation = Quaternion.Euler(0, 0, 180);
             return;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -89,7 +94,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position + moveX;
             direction = Direction.DirectionState.Right;
             moveMode = MoveMode.MoveSet;
-            transform.rotation = Quaternion.Euler(0, 0, 270);
+            //transform.rotation = Quaternion.Euler(0, 0, 270);
             return;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -97,7 +102,7 @@ public class Player : MonoBehaviour
             moveTargetPosition = transform.position - moveX;
             direction = Direction.DirectionState.Left;
             moveMode = MoveMode.MoveSet;
-            transform.rotation = Quaternion.Euler(0, 0, 90);
+            //transform.rotation = Quaternion.Euler(0, 0, 90);
             return;
         }
     }
@@ -202,5 +207,30 @@ public class Player : MonoBehaviour
     public void SetSlashMode(int modeNum)
     {
         slashMode = (SlashMode)modeNum;
+    }
+
+    private void SpriteChange()
+    {
+        if(renderer == null)
+        {
+            renderer = gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        switch (moveMode)
+        {
+            case MoveMode.Stop:
+            case MoveMode.MoveSet:
+            case MoveMode.AutoMoveSet:
+            case MoveMode.AutoMoving:
+                renderer.sprite = spriteChanger.GetNomalSprite(direction);
+                break;
+
+        }
+    }
+
+    public void ChangeLayer(int num)
+    {
+        if(renderer != null)
+        renderer.sortingOrder = num;
     }
 }

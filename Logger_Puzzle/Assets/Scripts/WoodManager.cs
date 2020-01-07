@@ -73,4 +73,12 @@ public class WoodManager : MonoBehaviour
     {
         return woods;
     }
+
+    public void ChangeWoodsLayer()
+    {
+        //foreach(Wood w in woods)
+        //{
+        //    w.ChangeLayer()
+        //}
+    }
 }

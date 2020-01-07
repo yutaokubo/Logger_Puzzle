@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
         PlayerMoveUpdate();
         PlayerSlashUpdate();
         WoodsChack();
+
+        //ChangeLayers();
     }
 
     private void PlayerMoveUpdate()
@@ -340,5 +342,10 @@ public class GameManager : MonoBehaviour
     {
         playerManager.PlayerAutoMoveStart(moveDir);
         playerManager.SetPlayerMapPoint(Distination);
+    }
+
+    private void ChangeLayers()
+    {
+        playerManager.ChangePlayerLayer();
     }
 }

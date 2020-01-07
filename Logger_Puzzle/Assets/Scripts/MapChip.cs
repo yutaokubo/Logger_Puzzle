@@ -346,4 +346,10 @@ public class MapChip : MonoBehaviour
         return riverDirection;
     }
 
+    public void ChangeLayer(int num)
+    {
+        if (gameObject.GetComponent<SpriteRenderer>() != null)
+            gameObject.GetComponent<SpriteRenderer>().sortingOrder = num;
+    }
+
 }

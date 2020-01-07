@@ -281,4 +281,17 @@ public class Wood : MonoBehaviour
             state = WoodState.None;
         }
     }
+
+    public void ChangeLayer(int num)
+    {
+        //int maxHeight = 0;
+        //foreach(Vector2 p in mapPoints)
+        //{
+        //    if (p.y > maxHeight)
+        //        maxHeight = (int)p.y;
+        //}
+        //GameObject[] wcs = gameObject.transform.GetComponentsInChildren<GameObject>();
+        //if (gameObject.GetComponent<SpriteRenderer>() != null)
+        //    gameObject.GetComponent<SpriteRenderer>().sortingOrder = num;
+    }
 }

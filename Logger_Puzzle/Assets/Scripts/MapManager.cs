@@ -62,6 +62,8 @@ public class MapManager : MonoBehaviour
             }
         }
         isPlayerSettingStartPosision = false;
+
+        //SetLayer();
     }
 
     /// <summary>
@@ -243,7 +245,7 @@ public class MapManager : MonoBehaviour
     /// 指定したポイントに丸太を置く
     /// </summary>
     /// <param name="point"></param>
-    public void OnWood(Vector2 point,Direction .DirectionState woodDir)
+    public void OnWood(Vector2 point, Direction.DirectionState woodDir)
     {
         mapChips[(int)point.y, (int)point.x].OnWood(woodDir);
     }
@@ -268,5 +270,16 @@ public class MapManager : MonoBehaviour
     public Direction.DirectionState GetRiverDirection(Vector2 point)
     {
         return mapChips[(int)point.y, (int)point.x].GetRiverDirection();
+    }
+
+    private void SetLayer()
+    {
+        for (int i = 0; i < mapHeight; i++)
+        {
+            for (int t = 0; t < mapWidth; t++)
+            {
+                mapChips[i, t].ChangeLayer(i * 10 + 3);
+            }
+        }
     }
 }

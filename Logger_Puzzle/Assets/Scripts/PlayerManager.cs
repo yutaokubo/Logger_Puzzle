@@ -19,7 +19,6 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
 
@@ -140,5 +139,10 @@ public class PlayerManager : MonoBehaviour
     public void PlayerSlashStart()
     {
         player.SetSlashMode(0);
+    }
+
+    public void ChangePlayerLayer()
+    {
+        player.ChangeLayer((int)playerMapPoint.y * 10 + 5);
     }
 }
