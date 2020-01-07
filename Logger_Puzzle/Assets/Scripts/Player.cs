@@ -62,6 +62,9 @@ public class Player : MonoBehaviour
     /// </summary>
     private void SetTargetPosition()
     {
+        if (moveMode != MoveMode.Stop)
+            return;
+
         movePreviousPosition = moveTargetPosition;
 
 

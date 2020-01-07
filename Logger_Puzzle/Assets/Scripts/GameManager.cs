@@ -267,6 +267,7 @@ public class GameManager : MonoBehaviour
                 Vector2[] woodDistainationPoints = new Vector2[w.GetLength()];//移動先のポイント
                 Vector2[] woodPoints = w.GetMapPoints();//丸太の元にあった場所の記憶用
                 bool isFlow = true;//流れるかどうか
+                bool isPlayerOnDistanation = false;//移動先にプレイヤーがいるか
                 for (int i = 0; i < w.GetLength(); i++)//移動先のポイントを設定
                 {
                     Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoints[i].y, (int)woodPoints[i].x, distinationDir, 1);//丸太の1マスの移動先
@@ -285,10 +286,12 @@ public class GameManager : MonoBehaviour
                         Debug.Log("FalseP:" + wDP);
                         break;
                     }
-                    if(wDP == playerManager.GetPlayerMapPoint())
+                    if(wDP == playerManager.GetPlayerMapPoint()&&!w.IsIncludedMapPoint(playerManager.GetPlayerMapPoint())&&
+                        !mapManager.IsRiver(wDP)&&playerManager.GetPlayerMoveMode()==0)
                     {
-                        isFlow = false;
-                        break;
+                        //isFlow = false;
+                        //break;
+                        isPlayerOnDistanation = true;
                     }
                 }
                 //Debug.Log("isFlow:" + isFlow);
@@ -302,9 +305,22 @@ public class GameManager : MonoBehaviour
                     w.MoveSet(distinationDir);
                     foreach(Vector2 wp in woodPoints)//動かす前の丸太に
                     {
-                        if(playerManager.GetPlayerMapPoint()==wp)//プレイヤーが乗っていたなら
+                        if(playerManager.GetPlayerMapPoint()==wp
+                            && mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1) != playerManager.GetPlayerMapPoint())//プレイヤーが乗っていたなら
                         {
                             PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1));
+                        }
+                    }
+                    if(isPlayerOnDistanation)
+                    {
+                        foreach (Vector2 wDP in woodDistainationPoints)
+                        {
+                            if(wDP == playerManager.GetPlayerMapPoint())
+                            {
+                                Debug.Log("PFlow:"+wDP);
+                                PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
+                                break;
+                            }
                         }
                     }
                 }
