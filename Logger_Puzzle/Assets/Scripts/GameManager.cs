@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private WoodManager woodManager;
 
+    [SerializeField]
+    private float cameraSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +30,7 @@ public class GameManager : MonoBehaviour
         PlayerMoveUpdate();
         PlayerSlashUpdate();
         WoodsChack();
+        DebugCameraMove();
 
         //ChangeLayers();
     }
@@ -35,7 +39,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerManager.GetPlayerMoveMode() == 1)
         {
-            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint())&&!mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
+            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()) && !mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
             {
                 Wood nowOnWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());
                 if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowOnWood.GetDirection()))
@@ -50,7 +54,7 @@ public class GameManager : MonoBehaviour
                 Vector2 playerDestination = mapManager.GetFindPoint((int)playerManager.GetPlayerMapPoint().y,
                                                                     (int)playerManager.GetPlayerMapPoint().x,
                                                                     playerManager.GetPlayerDirection(), 1);
-                if (mapManager.IsOnWood(playerDestination)&&!mapManager.IsRiver(playerDestination))
+                if (mapManager.IsOnWood(playerDestination) && !mapManager.IsRiver(playerDestination))
                 {
                     //Debug.Log("PlayerDestinationOnWood");
                     Wood dw = woodManager.GetIncludedPointWood(playerDestination);
@@ -118,7 +122,7 @@ public class GameManager : MonoBehaviour
 
             Vector2 bTreeCreatPostion = targetTreePoint * mapManager.GetMapChipSize();
             bTreeCreatPostion.y *= -1;
-            woodManager.CreateBreakWood(mapManager.GetTreeLength(targetTreePoint)-1, playerManager.GetPlayerDirection(), bTreeCreatPostion);
+            woodManager.CreateBreakWood(mapManager.GetTreeLength(targetTreePoint) - 1, playerManager.GetPlayerDirection(), bTreeCreatPostion);
 
             for (int i = 0; i < mapManager.GetTreeLength(targetTreePoint); i++)
             {
@@ -293,8 +297,8 @@ public class GameManager : MonoBehaviour
                         Debug.Log("FalseP:" + wDP);
                         break;
                     }
-                    if(wDP == playerManager.GetPlayerMapPoint()&&!w.IsIncludedMapPoint(playerManager.GetPlayerMapPoint())&&
-                        !mapManager.IsRiver(wDP)&&playerManager.GetPlayerMoveMode()==0)
+                    if (wDP == playerManager.GetPlayerMapPoint() && !w.IsIncludedMapPoint(playerManager.GetPlayerMapPoint()) &&
+                        !mapManager.IsRiver(wDP) && playerManager.GetPlayerMoveMode() == 0)
                     {
                         //isFlow = false;
                         //break;
@@ -310,21 +314,21 @@ public class GameManager : MonoBehaviour
                     }
                     w.SetRootPoint(woodDistainationPoints[0]);//丸太にも現在位置を把握させる
                     w.MoveSet(distinationDir);
-                    foreach(Vector2 wp in woodPoints)//動かす前の丸太に
+                    foreach (Vector2 wp in woodPoints)//動かす前の丸太に
                     {
-                        if(playerManager.GetPlayerMapPoint()==wp
+                        if (playerManager.GetPlayerMapPoint() == wp
                             && mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1) != playerManager.GetPlayerMapPoint())//プレイヤーが乗っていたなら
                         {
                             PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1));
                         }
                     }
-                    if(isPlayerOnDistanation)
+                    if (isPlayerOnDistanation)
                     {
                         foreach (Vector2 wDP in woodDistainationPoints)
                         {
-                            if(wDP == playerManager.GetPlayerMapPoint())
+                            if (wDP == playerManager.GetPlayerMapPoint())
                             {
-                                Debug.Log("PFlow:"+wDP);
+                                Debug.Log("PFlow:" + wDP);
                                 PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
                                 break;
                             }
@@ -343,7 +347,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void PlayerFlow(Direction.DirectionState moveDir,Vector2 Distination)
+    private void PlayerFlow(Direction.DirectionState moveDir, Vector2 Distination)
     {
         playerManager.PlayerAutoMoveStart(moveDir);
         playerManager.SetPlayerMapPoint(Distination);
@@ -352,5 +356,36 @@ public class GameManager : MonoBehaviour
     private void ChangeLayers()
     {
         playerManager.ChangePlayerLayer();
+    }
+
+
+    private void DebugCameraMove()
+    {
+        Camera camera = Camera.main;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            camera.transform.position += new Vector3(0, cameraSpeed * Time.deltaTime, 0);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            camera.transform.position += new Vector3(0, -cameraSpeed * Time.deltaTime, 0);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            camera.transform.position += new Vector3(cameraSpeed * Time.deltaTime, 0, 0);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            camera.transform.position += new Vector3(-cameraSpeed * Time.deltaTime, 0, 0);
+        }
+        if (Input.GetKey(KeyCode.Z))
+        {
+            camera.orthographicSize -= cameraSpeed * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.C))
+        {
+            camera.orthographicSize += cameraSpeed * Time.deltaTime;
+        }
     }
 }
