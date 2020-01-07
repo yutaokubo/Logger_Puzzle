@@ -53,6 +53,10 @@ public class MapChip : MonoBehaviour
 
     private Direction.DirectionState riverDirection;
 
+    private float riverSpriteTimer;
+    [SerializeField]
+    private float riverSpriteSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +66,7 @@ public class MapChip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        RiverFlow();
     }
 
     /// <summary>
@@ -354,6 +358,16 @@ public class MapChip : MonoBehaviour
     public Direction.DirectionState GetRiverDirection()
     {
         return riverDirection;
+    }
+
+    private void RiverFlow()
+    {
+        if (nowSprite != MapChipSprite.River)
+            return;
+
+        riverSpriteTimer += riverSpriteSpeed * Time.deltaTime;
+        Debug.Log((int)(riverSpriteTimer % 2));
+        renderer.sprite = spriteSelecter.GetRiverSprite((int)(riverSpriteTimer % 2));
     }
 
     public void ChangeLayer(int num)
