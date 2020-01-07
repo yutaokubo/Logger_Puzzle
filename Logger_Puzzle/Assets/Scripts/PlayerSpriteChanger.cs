@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerSpriteChanger : MonoBehaviour
 {
     [SerializeField]
-    private Sprite[] NomalSprites;
+    private Sprite[] nomalSprites;
     [SerializeField]
-    private Sprite[] SlashSprites;
+    private Sprite[] slashSprites;
+    [SerializeField]
+    private Sprite[] walkSprites;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +25,16 @@ public class PlayerSpriteChanger : MonoBehaviour
 
     public Sprite GetNomalSprite(Direction.DirectionState dir)
     {
-        return NomalSprites[(int)dir];
+        return nomalSprites[(int)dir];
     }
 
     public Sprite GetSlashSprite(Direction.DirectionState dir)
     {
-        return SlashSprites[(int)dir];
+        return slashSprites[(int)dir];
+    }
+
+    public Sprite GetWalkSprite(Direction.DirectionState dir,int timing)
+    {
+        return walkSprites[timing * 4 + (int)dir];
     }
 }

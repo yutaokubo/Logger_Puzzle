@@ -46,6 +46,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerSpriteChanger spriteChanger;
 
+    private float walkSpriteTimer;
+    [SerializeField]
+    private float walkSpriteSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -156,7 +160,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Slash()
     {
-        if (moveMode != MoveMode.Stop&&moveMode != MoveMode.MoveSet)
+        if (moveMode != MoveMode.Stop && moveMode != MoveMode.MoveSet)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -242,8 +246,15 @@ public class Player : MonoBehaviour
             case MoveMode.AutoMoveSet:
             case MoveMode.AutoMoving:
                 renderer.sprite = spriteChanger.GetNomalSprite(direction);
+                walkSpriteTimer = 0;
                 break;
 
+            case MoveMode.Moving:
+
+                walkSpriteTimer += walkSpriteSpeed * Time.deltaTime;
+                Debug.Log("Walk:" + (int)walkSpriteTimer%2);
+                renderer.sprite = spriteChanger.GetWalkSprite(direction, (int)walkSpriteTimer % 2);
+                break;
         }
 
         switch (slashMode)

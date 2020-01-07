@@ -366,7 +366,6 @@ public class MapChip : MonoBehaviour
             return;
 
         riverSpriteTimer += riverSpriteSpeed * Time.deltaTime;
-        Debug.Log((int)(riverSpriteTimer % 2));
         renderer.sprite = spriteSelecter.GetRiverSprite((int)(riverSpriteTimer % 2));
     }
 

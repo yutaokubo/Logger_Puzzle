@@ -776,6 +776,7 @@ MonoBehaviour:
   slashTime: 0.3
   spriteChanger: {fileID: 722725204380152996, guid: 9deb4af4c4f23d548b9c1f749f8d5fca,
     type: 3}
+  walkSpriteSpeed: 9
 --- !u!212 &602283799
 SpriteRenderer:
   m_ObjectHideFlags: 0
