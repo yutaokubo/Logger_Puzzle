@@ -156,7 +156,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Slash()
     {
-        if (moveMode != MoveMode.Stop&&moveMode != MoveMode.MoveSet&&moveMode != MoveMode.Moving)
+        if (moveMode != MoveMode.Stop&&moveMode != MoveMode.MoveSet)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space))
