@@ -252,7 +252,7 @@ public class Player : MonoBehaviour
             case MoveMode.Moving:
 
                 walkSpriteTimer += walkSpriteSpeed * Time.deltaTime;
-                Debug.Log("Walk:" + (int)walkSpriteTimer%2);
+                //Debug.Log("Walk:" + (int)walkSpriteTimer%2);
                 renderer.sprite = spriteChanger.GetWalkSprite(direction, (int)walkSpriteTimer % 2);
                 break;
         }

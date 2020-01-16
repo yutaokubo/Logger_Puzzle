@@ -255,8 +255,11 @@ public class GameManager : MonoBehaviour
                 foreach (Vector2 p in w.GetMapPoints())//その丸太のある全てのマス
                 {
                     if (!mapManager.IsRiver(p))//川マスに乗っていなければ
+                    {
                         isAllRiver = false;
-                    break;
+                        //Debug.Log("woodPoint"+p);
+                        break;
+                    }
                 }
                 if (!isAllRiver)//1マスでも川マスに乗っていなければ
                     continue;//この丸太の処理を終了
@@ -294,7 +297,7 @@ public class GameManager : MonoBehaviour
                     if (!mapManager.IsCanEnterWood(wDP))
                     {
                         isFlow = false;
-                        Debug.Log("FalseP:" + wDP);
+                        //Debug.Log("FalseP:" + wDP);
                         break;
                     }
                     if (wDP == playerManager.GetPlayerMapPoint() && !w.IsIncludedMapPoint(playerManager.GetPlayerMapPoint()) &&
