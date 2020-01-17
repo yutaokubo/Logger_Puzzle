@@ -154,7 +154,7 @@ public class Wood : MonoBehaviour
         if (state != WoodState.Moving)
             return;
 
-        transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 5 * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 3 * Time.deltaTime);
         MoveStop();
     }
     private void MoveStop()
@@ -173,7 +173,6 @@ public class Wood : MonoBehaviour
             if (p == point)
             {
                 return true;
-                Debug.Log("Wood");
             }
         }
         return false;

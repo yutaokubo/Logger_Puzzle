@@ -106,15 +106,15 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void PlayerMoveStart()
     {
-        if (player.GetDirection() ==  Direction.DirectionState.Up)
+        if (player.GetDirection() == Direction.DirectionState.Up)
         {
             playerMapPoint.y -= 1;
         }
-        if (player.GetDirection() ==  Direction.DirectionState.Down)
+        if (player.GetDirection() == Direction.DirectionState.Down)
         {
             playerMapPoint.y += 1;
         }
-        if (player.GetDirection() ==  Direction.DirectionState.Right)
+        if (player.GetDirection() == Direction.DirectionState.Right)
         {
             playerMapPoint.x += 1;
         }
@@ -130,6 +130,11 @@ public class PlayerManager : MonoBehaviour
     {
         player.AutoMoveStart(moveDir);
     }
+    public void ForciblyPlayerAutoMoveStart()
+    {
+        player.SetMoveMode(4);
+        player.SetTargetPosition(new Vector3(playerMapPoint.x * 0.64f, playerMapPoint.y * -0.64f, 0));
+    }
 
     public int GetPlayerSlashMode()
     {
@@ -139,6 +144,11 @@ public class PlayerManager : MonoBehaviour
     public void PlayerSlashStart()
     {
         player.SetSlashMode(2);
+    }
+
+    public void PlayerFall()
+    {
+        player.Fall();
     }
 
     public void ChangePlayerLayer()

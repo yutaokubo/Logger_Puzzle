@@ -27,9 +27,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        WoodsChack();
+        PlayerFallChack();
         PlayerMoveUpdate();
         PlayerSlashUpdate();
-        WoodsChack();
         DebugCameraMove();
 
         //ChangeLayers();
@@ -264,7 +265,7 @@ public class GameManager : MonoBehaviour
                 if (!isAllRiver)//1マスでも川マスに乗っていなければ
                     continue;//この丸太の処理を終了
 
-                Debug.Log("OnRiver");
+                //Debug.Log("OnRiver");
                 Direction.DirectionState distinationDir = Direction.DirectionState.None;//丸太の移動方向用
                 foreach (Vector2 p in w.GetMapPoints())//全ての丸太のマスに対して
                 {
@@ -277,7 +278,7 @@ public class GameManager : MonoBehaviour
                 }
                 //ここから丸太を移動させる処理
 
-                Debug.Log("FlowDir;" + distinationDir);
+                //Debug.Log("FlowDir;" + distinationDir);
                 Vector2[] woodDistainationPoints = new Vector2[w.GetLength()];//移動先のポイント
                 Vector2[] woodPoints = w.GetMapPoints();//丸太の元にあった場所の記憶用
                 bool isFlow = true;//流れるかどうか
@@ -292,6 +293,7 @@ public class GameManager : MonoBehaviour
                 {
                     mapManager.RemoveWood(wp);
                 }
+
                 foreach (Vector2 wDP in woodDistainationPoints)//その上で進めるかどうか確かめる
                 {
                     if (!mapManager.IsCanEnterWood(wDP))
@@ -301,7 +303,7 @@ public class GameManager : MonoBehaviour
                         break;
                     }
                     if (wDP == playerManager.GetPlayerMapPoint() && !w.IsIncludedMapPoint(playerManager.GetPlayerMapPoint()) &&
-                        !mapManager.IsRiver(wDP) && playerManager.GetPlayerMoveMode() == 0)
+                        !mapManager.IsRiver(wDP))
                     {
                         //isFlow = false;
                         //break;
@@ -331,8 +333,11 @@ public class GameManager : MonoBehaviour
                         {
                             if (wDP == playerManager.GetPlayerMapPoint())
                             {
-                                Debug.Log("PFlow:" + wDP);
-                                PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
+                                if(!mapManager.IsOnWood(mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1)))
+                                {
+                                    Debug.Log("PFlow:" + wDP);
+                                    PlayerPushedWood(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
+                                }
                                 break;
                             }
                         }
@@ -352,8 +357,30 @@ public class GameManager : MonoBehaviour
 
     private void PlayerFlow(Direction.DirectionState moveDir, Vector2 Distination)
     {
-        playerManager.PlayerAutoMoveStart(moveDir);
         playerManager.SetPlayerMapPoint(Distination);
+        playerManager.PlayerAutoMoveStart(moveDir);
+    }
+    private void PlayerPushedWood(Direction.DirectionState moveDir, Vector2 Distination)
+    {
+        playerManager.SetPlayerMapPoint(Distination);
+        if (playerManager.GetPlayerMoveMode() == 2)
+        {
+            playerManager.ForciblyPlayerAutoMoveStart();
+        }
+        else
+        {
+            playerManager.PlayerStop();
+            playerManager.PlayerAutoMoveStart(moveDir);
+        }
+    }
+
+    private void PlayerFallChack()
+    {
+        Vector2 PlayerPoint = playerManager.GetPlayerMapPoint();
+        if(mapManager.IsHole(PlayerPoint)&&!mapManager.IsOnWood(PlayerPoint))
+        {
+            playerManager.PlayerFall();
+        }
     }
 
     private void ChangeLayers()

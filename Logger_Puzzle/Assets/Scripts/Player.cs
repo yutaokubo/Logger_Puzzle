@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 
     private Vector3 moveX;//X方向移動量
     private Vector3 moveY;//Y方向移動量
-
+    [SerializeField]
     private Vector3 moveTargetPosition;//移動先
     private Vector3 movePreviousPosition;//元の位置
 
@@ -42,6 +42,17 @@ public class Player : MonoBehaviour
     private float slashTime;
     private float slashTimer;
 
+    enum FallMode
+    {
+        None,//落ちていない
+        Falling,//落ちている途中
+        Falled,//落ちた
+    }
+    private FallMode fallMode;
+    [SerializeField]
+    private float fallingTime;
+    private float fallingTimer;
+
 
     [SerializeField]
     private PlayerSpriteChanger spriteChanger;
@@ -65,6 +76,7 @@ public class Player : MonoBehaviour
         {
             SetTargetPosition();
         }
+        FallingUpdate();
         Move();
         MoveModeUpdate();
         Slash();
@@ -123,10 +135,13 @@ public class Player : MonoBehaviour
     {
         if (moveMode != MoveMode.Moving && moveMode != MoveMode.AutoMoving)
             return;
+        if (fallMode != FallMode.None)
+            return;
+
         if (moveMode == MoveMode.Moving)
             transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
         if (moveMode == MoveMode.AutoMoving)
-            transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 5 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 3 * Time.deltaTime);
     }
 
     private void MoveModeUpdate()
@@ -152,6 +167,7 @@ public class Player : MonoBehaviour
         if (dir == Direction.DirectionState.Left)
             moveTargetPosition = transform.position - moveX;
 
+
         moveMode = MoveMode.AutoMoving;
     }
 
@@ -161,6 +177,8 @@ public class Player : MonoBehaviour
     private void Slash()
     {
         if (moveMode != MoveMode.Stop && moveMode != MoveMode.MoveSet)
+            return;
+        if (fallMode != FallMode.None)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -230,6 +248,24 @@ public class Player : MonoBehaviour
     public void SetSlashMode(int modeNum)
     {
         slashMode = (SlashMode)modeNum;
+    }
+
+    public void Fall()
+    {
+        fallMode = FallMode.Falling;
+    }
+    private void FallingUpdate()
+    {
+        if (fallMode != FallMode.Falling)
+            return;
+
+        fallingTimer += Time.deltaTime;
+        transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+        if (fallingTimer>=fallingTime)
+        {
+            fallMode = FallMode.Falled;
+            this.gameObject.SetActive(false);
+        }
     }
 
     private void SpriteChange()
