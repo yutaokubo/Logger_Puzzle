@@ -61,12 +61,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float walkSpriteSpeed;
 
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
 
         moveTargetPosition = transform.position;
         direction = Direction.DirectionState.Down;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -81,7 +84,8 @@ public class Player : MonoBehaviour
         MoveModeUpdate();
         Slash();
         SlashingUpdate();
-        SpriteChange();
+        Animation();
+        //SpriteChange();
     }
     /// <summary>
     /// 移動先設定
@@ -265,6 +269,28 @@ public class Player : MonoBehaviour
         {
             fallMode = FallMode.Falled;
             this.gameObject.SetActive(false);
+        }
+    }
+
+    private void Animation()
+    {
+        animator.SetInteger("Direction", (int)(direction));
+
+        if(moveMode== MoveMode.Moving)
+        {
+            animator.SetBool("Walk", true);
+        }
+        else
+        {
+            animator.SetBool("Walk", false);
+        }
+        if(slashMode == SlashMode.Slashing)
+        {
+            animator.SetBool("Slash", true);
+        }
+        else
+        {
+            animator.SetBool("Slash", false);
         }
     }
 
