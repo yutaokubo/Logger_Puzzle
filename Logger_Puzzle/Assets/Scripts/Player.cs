@@ -43,6 +43,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerMode playerMode;
     private PlayerMode previousPlayerMode;
+
+    [SerializeField]
+    private float walkStartTime;
+    private float walkStartTimer;
     
     enum AnimationMode
     {
@@ -69,6 +73,7 @@ public class Player : MonoBehaviour
         direction = Direction.DirectionState.Down;
         animator = GetComponent<Animator>();
         animationMode = AnimationMode.Nomal;
+        walkStartTimer = walkStartTime;
     }
 
     // Update is called once per frame
@@ -100,35 +105,85 @@ public class Player : MonoBehaviour
 
         movePreviousPosition = moveTargetPosition;
 
+        if(!Input.GetKey(KeyCode.UpArrow)&&!Input.GetKey(KeyCode.DownArrow)&& !Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow))
+        {
+            walkStartTimer = 0;
+        }
+
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            moveTargetPosition = transform.position + moveY;
-            direction = Direction.DirectionState.Up;
-            playerMode = PlayerMode.MoveWeit;
+            if(direction == Direction.DirectionState.Up)
+            {
+                walkStartTimer += Time.deltaTime;
+                if(walkStartTimer>=walkStartTime)
+                {
+                    moveTargetPosition = transform.position + moveY;
+                    playerMode = PlayerMode.MoveWeit;
+                }
+            }
+            else
+            {
+                direction = Direction.DirectionState.Up;
+                //walkStartTimer = 0;
+            }
             //transform.rotation = Quaternion.Euler(0,0,0);
             return;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            moveTargetPosition = transform.position - moveY;
-            direction = Direction.DirectionState.Down;
-            playerMode = PlayerMode.MoveWeit;
+            if(direction == Direction.DirectionState.Down)
+            {
+                walkStartTimer += Time.deltaTime;
+                if (walkStartTimer >= walkStartTime)
+                {
+                    moveTargetPosition = transform.position - moveY;
+                    playerMode = PlayerMode.MoveWeit;
+                }
+            }
+            else
+            {
+                direction = Direction.DirectionState.Down;
+                //walkStartTimer = 0;
+            }
             //transform.rotation = Quaternion.Euler(0, 0, 180);
             return;
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            moveTargetPosition = transform.position + moveX;
-            direction = Direction.DirectionState.Right;
-            playerMode = PlayerMode.MoveWeit;
+            if(direction == Direction.DirectionState.Right)
+            {
+                walkStartTimer += Time.deltaTime;
+                if (walkStartTimer >= walkStartTime)
+                {
+                    moveTargetPosition = transform.position + moveX;
+                    playerMode = PlayerMode.MoveWeit;
+                }
+
+            }
+            else
+            {
+                direction = Direction.DirectionState.Right;
+                //walkStartTimer = 0;
+            }
             //transform.rotation = Quaternion.Euler(0, 0, 270);
             return;
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            moveTargetPosition = transform.position - moveX;
-            direction = Direction.DirectionState.Left;
-            playerMode = PlayerMode.MoveWeit;
+            if(direction == Direction.DirectionState.Left)
+            {
+                walkStartTimer += Time.deltaTime;
+                if (walkStartTimer >= walkStartTime)
+                {
+                    moveTargetPosition = transform.position - moveX;
+                    playerMode = PlayerMode.MoveWeit;
+                }
+            }
+            else
+            {
+                direction = Direction.DirectionState.Left;
+                //walkStartTimer = 0;
+            }
             //transform.rotation = Quaternion.Euler(0, 0, 90);
             return;
         }

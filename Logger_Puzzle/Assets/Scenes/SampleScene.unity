@@ -1107,10 +1107,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   moveTargetPosition: {x: 0, y: 0, z: 0}
-  moveMode: 0
   direction: 0
   slashTime: 0.3
   fallingTime: 1
+  playerMode: 0
+  walkStartTime: 0.08
   spriteChanger: {fileID: 722725204380152996, guid: 9deb4af4c4f23d548b9c1f749f8d5fca,
     type: 3}
   walkSpriteSpeed: 9
