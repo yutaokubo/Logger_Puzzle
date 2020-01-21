@@ -272,22 +272,7 @@ public class Player : MonoBehaviour
     {
         animator.SetInteger("Direction", (int)(direction));
 
-        //if (playerMode == PlayerMode.Moving)
-        //{
-        //    animator.SetBool("Walk", true);
-        //}
-        //else
-        //{
-        //    animator.SetBool("Walk", false);
-        //}
-        //if (playerMode == PlayerMode.Slashing)
-        //{
-        //    animator.SetBool("Slash", true);
-        //}
-        //else
-        //{
-        //    animator.SetBool("Slash", false);
-        //}
+
         if(animationMode == AnimationMode.Walk)
         {
             animator.SetBool("Walk", true);

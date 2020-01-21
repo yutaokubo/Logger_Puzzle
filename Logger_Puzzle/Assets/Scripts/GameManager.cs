@@ -38,61 +38,72 @@ public class GameManager : MonoBehaviour
 
     private void PlayerMoveUpdate()
     {
-        //if (playerManager.GetPlayerMoveMode() == 1)
-        if (playerManager.GetPlayerMode() == 1)
+        if (playerManager.GetPlayerMode() == 1)//プレイヤーが移動待機状態なら
         {
-            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()) && !mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
+            if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()) && !mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//川に乗っていない丸太の上に乗っていたなら
             {
-                Wood nowOnWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());
-                if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowOnWood.GetDirection()))
+                Wood nowOnWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());//乗っている木を取得
+                if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowOnWood.GetDirection()))//プレイヤー移動方向軸と木の向いている方向軸が違うなら
+                {
+                    playerManager.PlayerStop();//プレイヤーを止めて
+                    return;//移動しない
+                }
+            }
+
+            Vector2 playerDestination = mapManager.GetFindPoint((int)playerManager.GetPlayerMapPoint().y,
+                                                                (int)playerManager.GetPlayerMapPoint().x,
+                                                                playerManager.GetPlayerDirection(), 1);//プレイヤーの移動先のポイントを取得
+
+            if(mapManager.IsOnWood(playerDestination)&&mapManager.IsRiver(playerDestination))//移動先が丸太かつ川なら
+            {
+                Wood dw = woodManager.GetIncludedPointWood(playerDestination);//移動先の木を取得
+                if(dw.GetState()==3)
                 {
                     playerManager.PlayerStop();
                     return;
                 }
             }
 
-            if (mapManager.IsPlayerEnterMapchip(playerManager.GetPlayerDirection(), playerManager.GetPlayerMapPoint()))
+            if (mapManager.IsPlayerEnterMapchip(playerManager.GetPlayerDirection(), playerManager.GetPlayerMapPoint()))//移動したいマスにプレイヤーが侵入できるなら
             {
-                Vector2 playerDestination = mapManager.GetFindPoint((int)playerManager.GetPlayerMapPoint().y,
-                                                                    (int)playerManager.GetPlayerMapPoint().x,
-                                                                    playerManager.GetPlayerDirection(), 1);
-                if (mapManager.IsOnWood(playerDestination) && !mapManager.IsRiver(playerDestination))
+                if (mapManager.IsOnWood(playerDestination) && !mapManager.IsRiver(playerDestination))//移動先に丸太があって川でないなら
                 {
                     //Debug.Log("PlayerDestinationOnWood");
-                    Wood dw = woodManager.GetIncludedPointWood(playerDestination);
+                    Wood dw = woodManager.GetIncludedPointWood(playerDestination);//その丸太を取得
                     //Debug.Log(dw);
-                    if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), dw.GetDirection()))
+                    if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), dw.GetDirection()))//プレイヤーの移動方向軸と丸太の方向軸が違うなら
                     {
-                        for (int i = 0; i < dw.GetLength(); i++)
+                        for (int i = 0; i < dw.GetLength(); i++)//丸太の長さ分
                         {
-                            Vector2 woodPoint = mapManager.GetFindPoint((int)dw.GetRootPoint().y, (int)dw.GetRootPoint().x, dw.GetDirection(), i);
-                            Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoint.y, (int)woodPoint.x, playerManager.GetPlayerDirection(), 1);
-                            if (!mapManager.IsCanEnterWood(woodDistination))
+                            Vector2 woodPoint = mapManager.GetFindPoint((int)dw.GetRootPoint().y, (int)dw.GetRootPoint().x, dw.GetDirection(), i);//丸太のマス一つ分の現在地マス
+                            Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoint.y, (int)woodPoint.x, playerManager.GetPlayerDirection(), 1);//丸太のマスの移動先1マス
+                            if (!mapManager.IsCanEnterWood(woodDistination))//1マスでも丸太が侵入できないますがあれば
                             {
-                                playerManager.PlayerStop();
+                                playerManager.PlayerStop();//プレイヤーを止めて
                                 //Debug.Log("Return");
-                                return;
+                                return;//移動しない
                             }
                         }
-                        dw.MoveSet(playerManager.GetPlayerDirection());
-                        Vector2 dwRootPoint = dw.GetRootPoint();
-                        for (int i = 0; i < dw.GetLength(); i++)
+                        //ここまでくると丸太移動が出来ることが確定
+                        dw.MoveSet(playerManager.GetPlayerDirection());//丸太をプレイヤーの移動方向へ移動させる
+                        Vector2 dwRootPoint = dw.GetRootPoint();//丸太の根本のマス目を取得
+                        for (int i = 0; i < dw.GetLength(); i++)//その丸太全てに対し
                         {
                             Vector2 woodPoint = mapManager.GetFindPoint((int)dwRootPoint.y, (int)dwRootPoint.x, dw.GetDirection(), i);
                             Vector2 woodDistination = mapManager.GetFindPoint((int)woodPoint.y, (int)woodPoint.x, playerManager.GetPlayerDirection(), 1);
-                            dw.ChangeMapPoints(i, woodDistination);
-                            mapManager.RemoveWood(woodPoint);
+                            dw.ChangeMapPoints(i, woodDistination);//丸太に自身の場所データを変更させる
+                            mapManager.RemoveWood(woodPoint);//もともと乗っていたマス目を乗っていないことに
                             //Debug.Log("woodPoint:" + woodPoint);
                             //Debug.Log("woodDistination:" + woodDistination);
-                            mapManager.OnWood(woodDistination, dw.GetDirection());
+                            mapManager.OnWood(woodDistination, dw.GetDirection());//移動先のマス目に乗っているように
                         }
                     }
                 }
-                playerManager.PlayerMoveStart();
+                playerManager.PlayerMoveStart();//プレイヤー移動開始
             }
-            else
+            else//移動したいマスにプレイヤーが移動出来ないなら
             {
-                playerManager.PlayerStop();
+                playerManager.PlayerStop();//プレイヤーを止める
             }
         }
     }
