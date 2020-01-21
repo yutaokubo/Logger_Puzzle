@@ -43,7 +43,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerMode playerMode;
     private PlayerMode previousPlayerMode;
-
+    
+    enum AnimationMode
+    {
+        Nomal,//通常
+        Walk,//移動
+        Slash,//切る
+    }
+    private AnimationMode animationMode;
 
     [SerializeField]
     private PlayerSpriteChanger spriteChanger;
@@ -61,6 +68,7 @@ public class Player : MonoBehaviour
         moveTargetPosition = transform.position;
         direction = Direction.DirectionState.Down;
         animator = GetComponent<Animator>();
+        animationMode = AnimationMode.Nomal;
     }
 
     // Update is called once per frame
@@ -135,7 +143,10 @@ public class Player : MonoBehaviour
             return;
         
         if (playerMode == PlayerMode.Moving)
+        {
             transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
+            animationMode = AnimationMode.Walk;
+        }
         if (playerMode == PlayerMode.AutoMoving)
             transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 3 * Time.deltaTime);
     }
@@ -145,7 +156,10 @@ public class Player : MonoBehaviour
         if (playerMode == PlayerMode.Moving || playerMode == PlayerMode.AutoMoving)
         {
             if (transform.position == moveTargetPosition)
+            {
                 playerMode = PlayerMode.Nomal;
+                animationMode = AnimationMode.Nomal;
+            }
         }
     }
 
@@ -182,18 +196,23 @@ public class Player : MonoBehaviour
                 SetTargetPosition(transform.position);
             }
             playerMode = PlayerMode.SlashWeit;
+            animationMode = AnimationMode.Slash;
         }
     }
     private void SlashingUpdate()
     {
-        if (playerMode != PlayerMode.Slashing)
+        if (animationMode != AnimationMode.Slash)
             return;
 
         slashTimer += Time.deltaTime;
         if (slashTimer > slashTime)
         {
             slashTimer = 0;
-            playerMode = PlayerMode.Nomal;
+            animationMode = AnimationMode.Nomal;
+            if(playerMode == PlayerMode.Slashing)
+            {
+                playerMode = PlayerMode.Nomal;
+            }
         }
     }
 
@@ -253,20 +272,35 @@ public class Player : MonoBehaviour
     {
         animator.SetInteger("Direction", (int)(direction));
 
-        if (playerMode == PlayerMode.Moving)
+        //if (playerMode == PlayerMode.Moving)
+        //{
+        //    animator.SetBool("Walk", true);
+        //}
+        //else
+        //{
+        //    animator.SetBool("Walk", false);
+        //}
+        //if (playerMode == PlayerMode.Slashing)
+        //{
+        //    animator.SetBool("Slash", true);
+        //}
+        //else
+        //{
+        //    animator.SetBool("Slash", false);
+        //}
+        if(animationMode == AnimationMode.Walk)
         {
             animator.SetBool("Walk", true);
+            animator.SetBool("Slash", false);
+        }
+        else if(animationMode == AnimationMode.Slash)
+        {
+            animator.SetBool("Slash", true);
+            animator.SetBool("Walk", false);
         }
         else
         {
             animator.SetBool("Walk", false);
-        }
-        if (playerMode == PlayerMode.Slashing)
-        {
-            animator.SetBool("Slash", true);
-        }
-        else
-        {
             animator.SetBool("Slash", false);
         }
     }
