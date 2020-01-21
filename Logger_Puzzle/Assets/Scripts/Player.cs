@@ -16,42 +16,33 @@ public class Player : MonoBehaviour
     private Vector3 moveTargetPosition;//移動先
     private Vector3 movePreviousPosition;//元の位置
 
-    enum MoveMode
-    {
-        Stop,//止まっている
-        MoveSet,//移動しようとしている
-        Moving,//移動中
-        AutoMoveSet,//自動移動しようとしている
-        AutoMoving,//自動移動
-    }
-    [SerializeField]
-    private MoveMode moveMode;
-
     [SerializeField]
     private Direction.DirectionState direction;
     private SpriteRenderer renderer;
-
-    enum SlashMode
-    {
-        None,//切ろうとしていない
-        Wait,//切る待機中
-        Slashing//切っている
-    }
-    private SlashMode slashMode;
+    
     [SerializeField]
     private float slashTime;
     private float slashTimer;
 
-    enum FallMode
-    {
-        None,//落ちていない
-        Falling,//落ちている途中
-        Falled,//落ちた
-    }
-    private FallMode fallMode;
     [SerializeField]
     private float fallingTime;
     private float fallingTimer;
+
+    enum PlayerMode
+    {
+        Nomal,//通常状態
+        MoveWeit,//移動待機
+        Moving,//移動中
+        AutoMoveWeit,//自動移動待機
+        AutoMoving,//自動移動
+        SlashWeit,//切る待機
+        Slashing,//切っている
+        Falling,//落ちている
+        Falled,//落ちた
+    }
+    [SerializeField]
+    private PlayerMode playerMode;
+    private PlayerMode previousPlayerMode;
 
 
     [SerializeField]
@@ -85,24 +76,27 @@ public class Player : MonoBehaviour
         Slash();
         SlashingUpdate();
         Animation();
+        PreviousModeUpdate();
         //SpriteChange();
+        Debug.Log(playerMode);
     }
     /// <summary>
     /// 移動先設定
     /// </summary>
     private void SetTargetPosition()
     {
-        if (moveMode != MoveMode.Stop || slashMode != SlashMode.None)
+        if (playerMode != PlayerMode.Nomal)
+            return;
+        if (previousPlayerMode != PlayerMode.Nomal)
             return;
 
         movePreviousPosition = moveTargetPosition;
-
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
             moveTargetPosition = transform.position + moveY;
             direction = Direction.DirectionState.Up;
-            moveMode = MoveMode.MoveSet;
+            playerMode = PlayerMode.MoveWeit;
             //transform.rotation = Quaternion.Euler(0,0,0);
             return;
         }
@@ -110,7 +104,7 @@ public class Player : MonoBehaviour
         {
             moveTargetPosition = transform.position - moveY;
             direction = Direction.DirectionState.Down;
-            moveMode = MoveMode.MoveSet;
+            playerMode = PlayerMode.MoveWeit;
             //transform.rotation = Quaternion.Euler(0, 0, 180);
             return;
         }
@@ -118,7 +112,7 @@ public class Player : MonoBehaviour
         {
             moveTargetPosition = transform.position + moveX;
             direction = Direction.DirectionState.Right;
-            moveMode = MoveMode.MoveSet;
+            playerMode = PlayerMode.MoveWeit;
             //transform.rotation = Quaternion.Euler(0, 0, 270);
             return;
         }
@@ -126,7 +120,7 @@ public class Player : MonoBehaviour
         {
             moveTargetPosition = transform.position - moveX;
             direction = Direction.DirectionState.Left;
-            moveMode = MoveMode.MoveSet;
+            playerMode = PlayerMode.MoveWeit;
             //transform.rotation = Quaternion.Euler(0, 0, 90);
             return;
         }
@@ -137,30 +131,28 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        if (moveMode != MoveMode.Moving && moveMode != MoveMode.AutoMoving)
+        if (playerMode != PlayerMode.Moving && playerMode != PlayerMode.AutoMoving)
             return;
-        if (fallMode != FallMode.None)
-            return;
-
-        if (moveMode == MoveMode.Moving)
+        
+        if (playerMode == PlayerMode.Moving)
             transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
-        if (moveMode == MoveMode.AutoMoving)
+        if (playerMode == PlayerMode.AutoMoving)
             transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, 3 * Time.deltaTime);
     }
 
     private void MoveModeUpdate()
     {
-        if (moveMode == MoveMode.Moving || moveMode == MoveMode.AutoMoving)
+        if (playerMode == PlayerMode.Moving || playerMode == PlayerMode.AutoMoving)
         {
             if (transform.position == moveTargetPosition)
-                moveMode = MoveMode.Stop;
+                playerMode = PlayerMode.Nomal;
         }
     }
 
     public void AutoMoveStart(Direction.DirectionState dir)
     {
-        if (moveMode != MoveMode.Stop)
-            return;
+        //if (playerMode != PlayerMode.Nomal && playerMode != PlayerMode.Slashing)
+        //    return;
 
         if (dir == Direction.DirectionState.Up)
             moveTargetPosition = transform.position + moveY;
@@ -171,8 +163,8 @@ public class Player : MonoBehaviour
         if (dir == Direction.DirectionState.Left)
             moveTargetPosition = transform.position - moveX;
 
-
-        moveMode = MoveMode.AutoMoving;
+        
+        playerMode = PlayerMode.AutoMoving;
     }
 
     /// <summary>
@@ -180,26 +172,28 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Slash()
     {
-        if (moveMode != MoveMode.Stop && moveMode != MoveMode.MoveSet)
-            return;
-        if (fallMode != FallMode.None)
+        if (playerMode != PlayerMode.Nomal && playerMode != PlayerMode.MoveWeit)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            slashMode = SlashMode.Wait;
+            if (playerMode == PlayerMode.MoveWeit)
+            {
+                SetTargetPosition(transform.position);
+            }
+            playerMode = PlayerMode.SlashWeit;
         }
     }
     private void SlashingUpdate()
     {
-        if (slashMode != SlashMode.Slashing)
+        if (playerMode != PlayerMode.Slashing)
             return;
 
         slashTimer += Time.deltaTime;
         if (slashTimer > slashTime)
         {
             slashTimer = 0;
-            slashMode = SlashMode.None;
+            playerMode = PlayerMode.Nomal;
         }
     }
 
@@ -228,46 +222,29 @@ public class Player : MonoBehaviour
         return direction;
     }
 
-    /// <summary>
-    /// 移動状態取得
-    /// </summary>
-    /// <param name="modeNum"></param>
-    public int GetMoveMode()
+    public int GetPlayerMode()
     {
-        return (int)moveMode;
+        return (int)playerMode;
     }
-    /// <summary>
-    /// 移動状態をマップマネージャーから変更できるように
-    /// </summary>
-    /// <returns></returns>
-    public void SetMoveMode(int modeNum)
+    public void SetPlayerMode(int modeNumber)
     {
-        moveMode = (MoveMode)modeNum;
-    }
-
-    public int GetSlashMode()
-    {
-        return (int)slashMode;
-    }
-    public void SetSlashMode(int modeNum)
-    {
-        slashMode = (SlashMode)modeNum;
+        playerMode = (PlayerMode)modeNumber;
     }
 
     public void Fall()
     {
-        fallMode = FallMode.Falling;
+        playerMode = PlayerMode.Falling;
     }
     private void FallingUpdate()
     {
-        if (fallMode != FallMode.Falling)
+        if (playerMode != PlayerMode.Falling)
             return;
 
         fallingTimer += Time.deltaTime;
         transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
-        if (fallingTimer>=fallingTime)
+        if (fallingTimer >= fallingTime)
         {
-            fallMode = FallMode.Falled;
+            playerMode = PlayerMode.Falled;
             this.gameObject.SetActive(false);
         }
     }
@@ -276,7 +253,7 @@ public class Player : MonoBehaviour
     {
         animator.SetInteger("Direction", (int)(direction));
 
-        if(moveMode== MoveMode.Moving)
+        if (playerMode == PlayerMode.Moving)
         {
             animator.SetBool("Walk", true);
         }
@@ -284,7 +261,7 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("Walk", false);
         }
-        if(slashMode == SlashMode.Slashing)
+        if (playerMode == PlayerMode.Slashing)
         {
             animator.SetBool("Slash", true);
         }
@@ -294,37 +271,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void SpriteChange()
+    private void PreviousModeUpdate()
     {
-        if (renderer == null)
-        {
-            renderer = gameObject.GetComponent<SpriteRenderer>();
-        }
-
-        switch (moveMode)
-        {
-            case MoveMode.Stop:
-            case MoveMode.MoveSet:
-            case MoveMode.AutoMoveSet:
-            case MoveMode.AutoMoving:
-                renderer.sprite = spriteChanger.GetNomalSprite(direction);
-                walkSpriteTimer = 0;
-                break;
-
-            case MoveMode.Moving:
-
-                walkSpriteTimer += walkSpriteSpeed * Time.deltaTime;
-                //Debug.Log("Walk:" + (int)walkSpriteTimer%2);
-                renderer.sprite = spriteChanger.GetWalkSprite(direction, (int)walkSpriteTimer % 2);
-                break;
-        }
-
-        switch (slashMode)
-        {
-            case SlashMode.Slashing:
-                renderer.sprite = spriteChanger.GetSlashSprite(direction);
-                break;
-        }
+        previousPlayerMode = playerMode;
     }
 
     public void ChangeLayer(int num)

@@ -82,17 +82,14 @@ public class PlayerManager : MonoBehaviour
         return playerMapPoint;
     }
 
-    /// <summary>
-    /// プレイヤーの移動状態を取得
-    /// </summary>
-    /// <returns></returns>
-    public int GetPlayerMoveMode()
+    
+    public int GetPlayerMode()
     {
-        return player.GetMoveMode();
+        return player.GetPlayerMode();
     }
     public void PlayerStop()
     {
-        player.SetMoveMode(0);
+        player.SetPlayerMode(0);
         player.SetTargetPosition(player.transform.position);
     }
 
@@ -122,8 +119,8 @@ public class PlayerManager : MonoBehaviour
         {
             playerMapPoint.x -= 1;
         }
-
-        player.SetMoveMode(2);
+        
+        player.SetPlayerMode(2);
     }
 
     public void PlayerAutoMoveStart(Direction.DirectionState moveDir)
@@ -132,18 +129,13 @@ public class PlayerManager : MonoBehaviour
     }
     public void ForciblyPlayerAutoMoveStart()
     {
-        player.SetMoveMode(4);
+        player.SetPlayerMode(4);
         player.SetTargetPosition(new Vector3(playerMapPoint.x * 0.64f, playerMapPoint.y * -0.64f, 0));
-    }
-
-    public int GetPlayerSlashMode()
-    {
-        return player.GetSlashMode();
     }
 
     public void PlayerSlashStart()
     {
-        player.SetSlashMode(2);
+        player.SetPlayerMode(6);
     }
 
     public void PlayerFall()

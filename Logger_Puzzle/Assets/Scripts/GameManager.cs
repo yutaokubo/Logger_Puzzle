@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
     {
         WoodsChack();
         PlayerFallChack();
-        PlayerMoveUpdate();
         PlayerSlashUpdate();
+        PlayerMoveUpdate();
         DebugCameraMove();
 
         //ChangeLayers();
@@ -38,7 +38,8 @@ public class GameManager : MonoBehaviour
 
     private void PlayerMoveUpdate()
     {
-        if (playerManager.GetPlayerMoveMode() == 1)
+        //if (playerManager.GetPlayerMoveMode() == 1)
+        if (playerManager.GetPlayerMode() == 1)
         {
             if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()) && !mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//木の上に乗っていたなら
             {
@@ -69,7 +70,7 @@ public class GameManager : MonoBehaviour
                             if (!mapManager.IsCanEnterWood(woodDistination))
                             {
                                 playerManager.PlayerStop();
-                                Debug.Log("Return");
+                                //Debug.Log("Return");
                                 return;
                             }
                         }
@@ -98,7 +99,8 @@ public class GameManager : MonoBehaviour
 
     private void PlayerSlashUpdate()
     {
-        if (playerManager.GetPlayerSlashMode() == 1)
+        //if (playerManager.GetPlayerSlashMode() == 1)
+        if (playerManager.GetPlayerMode() == 5)
         {
             FellTree();
             CrackWood();
@@ -333,7 +335,7 @@ public class GameManager : MonoBehaviour
                         {
                             if (wDP == playerManager.GetPlayerMapPoint())
                             {
-                                if(!mapManager.IsOnWood(mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1)))
+                                if (!mapManager.IsOnWood(mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1)))
                                 {
                                     Debug.Log("PFlow:" + wDP);
                                     PlayerPushedWood(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
@@ -363,7 +365,8 @@ public class GameManager : MonoBehaviour
     private void PlayerPushedWood(Direction.DirectionState moveDir, Vector2 Distination)
     {
         playerManager.SetPlayerMapPoint(Distination);
-        if (playerManager.GetPlayerMoveMode() == 2)
+        //if (playerManager.GetPlayerMoveMode() == 2)
+        if (playerManager.GetPlayerMode() == 2)
         {
             playerManager.ForciblyPlayerAutoMoveStart();
         }
@@ -377,7 +380,7 @@ public class GameManager : MonoBehaviour
     private void PlayerFallChack()
     {
         Vector2 PlayerPoint = playerManager.GetPlayerMapPoint();
-        if(mapManager.IsHole(PlayerPoint)&&!mapManager.IsOnWood(PlayerPoint))
+        if (mapManager.IsHole(PlayerPoint) && !mapManager.IsOnWood(PlayerPoint))
         {
             playerManager.PlayerFall();
         }
