@@ -213,9 +213,9 @@ public class Wood : MonoBehaviour
             wc.transform.rotation = Quaternion.Euler(0, 0, WoodChipLookAt());
             wc.transform.parent = this.transform;
         }
-        WoodChipsSpritesChange();
+        WoodChipsSpritesSet();
     }
-    private void WoodChipsSpritesChange()
+    private void WoodChipsSpritesSet()
     {
         if (transform.childCount == 1)
         {
@@ -230,7 +230,7 @@ public class Wood : MonoBehaviour
                 GameObject wc = transform.GetChild(i).gameObject;
                 if (i == 0)
                 {
-                    if(direction == Direction.DirectionState.Up||direction == Direction.DirectionState.Right)
+                    if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[1];
                     else
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[3];
@@ -249,6 +249,116 @@ public class Wood : MonoBehaviour
             }
         }
     }
+
+    public void InRiverSpriteChange()
+    {
+        if (direction == Direction.DirectionState.Left || direction == Direction.DirectionState.Right)
+        {
+            if (transform.childCount == 1)
+            {
+                GameObject wc = transform.GetChild(0).gameObject;
+                wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[4];
+                return;
+            }
+            if (transform.childCount > 0)
+            {
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    GameObject wc = transform.GetChild(i).gameObject;
+                    if (i == 0)
+                    {
+                        if (direction == Direction.DirectionState.Right)
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[5];
+                        else
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[7];
+
+                    }
+                    if (i > 0 && i < transform.childCount - 1)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[6];
+                    if (i == transform.childCount - 1)
+                    {
+                        if ( direction == Direction.DirectionState.Right)
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[7];
+                        else
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[5];
+                    }
+
+                }
+            }
+
+        }
+        if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Down)
+        {
+            if (transform.childCount == 1)
+            {
+                GameObject wc = transform.GetChild(0).gameObject;
+                wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[8];
+                return;
+            }
+            if (transform.childCount > 0)
+            {
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    GameObject wc = transform.GetChild(i).gameObject;
+                    if (i == 0)
+                    {
+                        if (direction == Direction.DirectionState.Up)
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
+                        else
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
+
+                    }
+                    if (i > 0 && i < transform.childCount - 1)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[10];
+                    if (i == transform.childCount - 1)
+                    {
+                        if (direction == Direction.DirectionState.Up )
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
+                        else
+                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
+                    }
+
+                }
+            }
+        }
+
+    }
+    public void OutRiverSpriteChange()
+    {
+
+        if (transform.childCount == 1)
+        {
+            GameObject wc = transform.GetChild(0).gameObject;
+            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[0];
+            return;
+        }
+        if (transform.childCount > 0)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject wc = transform.GetChild(i).gameObject;
+                if (i == 0)
+                {
+                    if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[1];
+                    else
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[3];
+
+                }
+                if (i > 0 && i < transform.childCount - 1)
+                    wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[2];
+                if (i == transform.childCount - 1)
+                {
+                    if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[3];
+                    else
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[1];
+                }
+
+            }
+        }
+    }
+
     private Vector2 WoodChipPositioning(int length)
     {
         if (direction == Direction.DirectionState.Up)
