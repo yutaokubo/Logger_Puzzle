@@ -72,6 +72,17 @@ public class GameManager : MonoBehaviour
                     playerManager.PlayerStop();//プレイヤーを止める
                     return;
                 }
+                if(!dw.IsIncludedMapPoint(playerManager.GetPlayerMapPoint())&&mapManager.IsRiver(playerManager.GetPlayerMapPoint()))
+                {
+                    foreach (Vector2 p in dw.GetMapPoints())
+                    {
+                        if (!mapManager.IsRiver(p))
+                        {
+                            playerManager.PlayerStop();
+                            return;
+                        }
+                    }
+                }
             }
 
             if (mapManager.IsPlayerEnterMapchip(playerManager.GetPlayerDirection(), playerManager.GetPlayerMapPoint()))//移動したいマスにプレイヤーが侵入できるなら
@@ -204,6 +215,10 @@ public class GameManager : MonoBehaviour
                 if(targetWood != null)
                 {
                     playerManager.SetPlayerLayer((int)targetWood.GetMaxPointHeight());
+                }
+                else
+                {
+                    playerManager.SetPlayerLayer((int)playerManager.GetPlayerMapPoint().y + 1);
                 }
             }
         }

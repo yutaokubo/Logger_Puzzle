@@ -253,8 +253,6 @@ public class Wood : MonoBehaviour
 
     public void InRiverSpriteChange()
     {
-        if (direction == Direction.DirectionState.Left || direction == Direction.DirectionState.Right)
-        {
             if (transform.childCount == 1)
             {
                 GameObject wc = transform.GetChild(0).gameObject;
@@ -286,42 +284,6 @@ public class Wood : MonoBehaviour
 
                 }
             }
-
-        }
-        if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Down)
-        {
-            if (transform.childCount == 1)
-            {
-                GameObject wc = transform.GetChild(0).gameObject;
-                wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[8];
-                return;
-            }
-            if (transform.childCount > 0)
-            {
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    GameObject wc = transform.GetChild(i).gameObject;
-                    if (i == 0)
-                    {
-                        if (direction == Direction.DirectionState.Up)
-                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
-                        else
-                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
-
-                    }
-                    if (i > 0 && i < transform.childCount - 1)
-                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[10];
-                    if (i == transform.childCount - 1)
-                    {
-                        if (direction == Direction.DirectionState.Up)
-                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
-                        else
-                            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
-                    }
-
-                }
-            }
-        }
 
     }
     public void OutRiverSpriteChange()
