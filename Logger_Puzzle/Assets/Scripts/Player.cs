@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Direction.DirectionState direction;
     private SpriteRenderer renderer;
-    
+
     [SerializeField]
     private float slashTime;
     private float slashTimer;
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float walkStartTime;
     private float walkStartTimer;
-    
+
     enum AnimationMode
     {
         Nomal,//通常
@@ -90,8 +90,8 @@ public class Player : MonoBehaviour
         SlashingUpdate();
         Animation();
         PreviousModeUpdate();
-        //SpriteChange();
-        Debug.Log(playerMode);
+        ChangePivot();
+        //Debug.Log(playerMode);
     }
     /// <summary>
     /// 移動先設定
@@ -105,17 +105,17 @@ public class Player : MonoBehaviour
 
         movePreviousPosition = moveTargetPosition;
 
-        if(!Input.GetKey(KeyCode.UpArrow)&&!Input.GetKey(KeyCode.DownArrow)&& !Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow))
+        if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow))
         {
             walkStartTimer = 0;
         }
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            if(direction == Direction.DirectionState.Up)
+            if (direction == Direction.DirectionState.Up)
             {
                 walkStartTimer += Time.deltaTime;
-                if(walkStartTimer>=walkStartTime)
+                if (walkStartTimer >= walkStartTime)
                 {
                     moveTargetPosition = transform.position + moveY;
                     playerMode = PlayerMode.MoveWeit;
@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            if(direction == Direction.DirectionState.Down)
+            if (direction == Direction.DirectionState.Down)
             {
                 walkStartTimer += Time.deltaTime;
                 if (walkStartTimer >= walkStartTime)
@@ -150,7 +150,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            if(direction == Direction.DirectionState.Right)
+            if (direction == Direction.DirectionState.Right)
             {
                 walkStartTimer += Time.deltaTime;
                 if (walkStartTimer >= walkStartTime)
@@ -170,7 +170,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            if(direction == Direction.DirectionState.Left)
+            if (direction == Direction.DirectionState.Left)
             {
                 walkStartTimer += Time.deltaTime;
                 if (walkStartTimer >= walkStartTime)
@@ -196,7 +196,7 @@ public class Player : MonoBehaviour
     {
         if (playerMode != PlayerMode.Moving && playerMode != PlayerMode.AutoMoving)
             return;
-        
+
         if (playerMode == PlayerMode.Moving)
         {
             transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
@@ -232,7 +232,7 @@ public class Player : MonoBehaviour
         if (dir == Direction.DirectionState.Left)
             moveTargetPosition = transform.position - moveX;
 
-        
+
         playerMode = PlayerMode.AutoMoving;
     }
 
@@ -264,7 +264,7 @@ public class Player : MonoBehaviour
         {
             slashTimer = 0;
             animationMode = AnimationMode.Nomal;
-            if(playerMode == PlayerMode.Slashing)
+            if (playerMode == PlayerMode.Slashing)
             {
                 playerMode = PlayerMode.Nomal;
             }
@@ -328,12 +328,12 @@ public class Player : MonoBehaviour
         animator.SetInteger("Direction", (int)(direction));
 
 
-        if(animationMode == AnimationMode.Walk)
+        if (animationMode == AnimationMode.Walk)
         {
             animator.SetBool("Walk", true);
             animator.SetBool("Slash", false);
         }
-        else if(animationMode == AnimationMode.Slash)
+        else if (animationMode == AnimationMode.Slash)
         {
             animator.SetBool("Slash", true);
             animator.SetBool("Walk", false);
@@ -356,5 +356,10 @@ public class Player : MonoBehaviour
         Debug.Log(renderer);
         if (renderer != null)
             renderer.sortingOrder = num;
+    }
+
+    private void ChangePivot()
+    {
+        renderer.material.mainTextureOffset += new Vector2(0, 10);
     }
 }
