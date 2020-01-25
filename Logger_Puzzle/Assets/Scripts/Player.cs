@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        renderer = GetComponent<SpriteRenderer>();
         moveTargetPosition = transform.position;
         direction = Direction.DirectionState.Down;
         animator = GetComponent<Animator>();
@@ -352,6 +352,8 @@ public class Player : MonoBehaviour
 
     public void ChangeLayer(int num)
     {
+
+        Debug.Log(renderer);
         if (renderer != null)
             renderer.sortingOrder = num;
     }

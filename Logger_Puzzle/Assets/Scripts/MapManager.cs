@@ -63,7 +63,7 @@ public class MapManager : MonoBehaviour
         }
         isPlayerSettingStartPosision = false;
 
-        //SetLayer();
+        SetLayer();
     }
 
     /// <summary>
@@ -278,7 +278,7 @@ public class MapManager : MonoBehaviour
         {
             for (int t = 0; t < mapWidth; t++)
             {
-                mapChips[i, t].ChangeLayer(i * 10 + 3);
+                mapChips[i, t].ChangeLayer(i * 10 + 1);
             }
         }
     }

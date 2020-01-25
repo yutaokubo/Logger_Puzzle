@@ -48,6 +48,7 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerMapPoint(Vector2 point)
     {
         playerMapPoint = point;
+        ChangePlayerLayer();
     }
 
     public Vector2 GetPlayerMapPoint()
@@ -145,6 +146,10 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangePlayerLayer()
     {
-        player.ChangeLayer((int)playerMapPoint.y * 10 + 5);
+        player.ChangeLayer((int)(playerMapPoint.y * 10 + 5));
+    }
+    public void SetPlayerLayer(int num)
+    {
+        player.ChangeLayer((int)(num * 10 + 5));
     }
 }

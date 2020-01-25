@@ -51,7 +51,7 @@ public class BreakTree : MonoBehaviour
                 break;
 
             case Direction.DirectionState.Up:
-                transform.position += new Vector3(0,5 * Time.deltaTime, 0);
+                transform.position += new Vector3(0, 5 * Time.deltaTime, 0);
                 break;
 
         }
@@ -69,7 +69,7 @@ public class BreakTree : MonoBehaviour
     {
         GameObject sp = transform.GetChild(0).gameObject;
 
-        if(sp.GetComponent<SpriteRenderer>()!=null)
+        if (sp.GetComponent<SpriteRenderer>() != null)
         {
             sp.GetComponent<SpriteRenderer>().sprite = treeSprites[lenght];
         }
@@ -78,5 +78,12 @@ public class BreakTree : MonoBehaviour
     {
         spinDir = dir;
     }
-    
+
+    public void ChangeLayer(int num)
+    {
+        Debug.Log("BT:" + num);
+        GameObject tree = transform.GetChild(0).gameObject;
+        tree.transform.GetComponent<SpriteRenderer>().sortingOrder = (num + 1) * 10 + 3;
+    }
+
 }

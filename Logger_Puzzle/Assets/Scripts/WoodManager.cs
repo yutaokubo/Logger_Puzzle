@@ -29,6 +29,7 @@ public class WoodManager : MonoBehaviour
         w.SetDirection(dir);
         w.SetLength(length);
         w.WoodChipsSet();
+        w.ChangeLayer();
         woods.Add(w);
     }
 
@@ -48,6 +49,7 @@ public class WoodManager : MonoBehaviour
     public void SetWoodRootPoint(int num, Vector2 point)
     {
         woods[num].SetRootPoint(point);
+        woods[num].ChangeLayer();
     }
 
     public int GetWoodsLastNumber()
@@ -85,11 +87,12 @@ public class WoodManager : MonoBehaviour
         //}
     }
 
-    public void CreateBreakWood(int lenght, Direction.DirectionState dir, Vector2 pos)
+    public void CreateBreakWood(int lenght, Direction.DirectionState dir, Vector2 pos,Vector2 point)
     {
         BreakTree bt = Instantiate(breakTree, pos, Quaternion.identity);
         bt.SetLenght(lenght);
         bt.SetSpinDirection(dir);
+        bt.ChangeLayer((int)point.y+lenght);
     }
 
     public void LastWoodsBornFromTree()

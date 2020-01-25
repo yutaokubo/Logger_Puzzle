@@ -46,6 +46,7 @@ public class Wood : MonoBehaviour
 
     [SerializeField]
     private Sprite[] woodChipSprites;
+    private int maxPointHeight;
 
     // Start is called before the first frame update
     void Start()
@@ -277,7 +278,7 @@ public class Wood : MonoBehaviour
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[6];
                     if (i == transform.childCount - 1)
                     {
-                        if ( direction == Direction.DirectionState.Right)
+                        if (direction == Direction.DirectionState.Right)
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[7];
                         else
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[5];
@@ -312,7 +313,7 @@ public class Wood : MonoBehaviour
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[10];
                     if (i == transform.childCount - 1)
                     {
-                        if (direction == Direction.DirectionState.Up )
+                        if (direction == Direction.DirectionState.Up)
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
                         else
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
@@ -440,17 +441,26 @@ public class Wood : MonoBehaviour
         }
     }
 
-    public void ChangeLayer(int num)
+    public void ChangeLayer()
     {
-        //int maxHeight = 0;
-        //foreach(Vector2 p in mapPoints)
-        //{
-        //    if (p.y > maxHeight)
-        //        maxHeight = (int)p.y;
-        //}
-        //GameObject[] wcs = gameObject.transform.GetComponentsInChildren<GameObject>();
-        //if (gameObject.GetComponent<SpriteRenderer>() != null)
-        //    gameObject.GetComponent<SpriteRenderer>().sortingOrder = num;
+        maxPointHeight = 0;
+        foreach (Vector2 p in mapPoints)
+        {
+            if (p.y > maxPointHeight)
+                maxPointHeight = (int)p.y;
+        }
+        if (transform.childCount > 0)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject wc = transform.GetChild(i).gameObject;
+                wc.GetComponent<SpriteRenderer>().sortingOrder = maxPointHeight * 10 + 3 ;
+            }
+        }
+    }
+    public int GetMaxPointHeight()
+    {
+        return maxPointHeight;
     }
 
     private void Disappear()

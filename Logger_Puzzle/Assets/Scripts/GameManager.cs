@@ -110,10 +110,20 @@ public class GameManager : MonoBehaviour
                                                                  //Debug.Log("woodDistination:" + woodDistination);
                                 mapManager.OnWood(woodDistination, dw.GetDirection());//移動先のマス目に乗っているように
                             }
+                            if (playerManager.GetPlayerDirection() != Direction.DirectionState.Up)//上に行かないなら
+                            {
+                                dw.ChangeLayer();//丸太のレイヤーを変更
+                            }
                         }
                     }
                 }
                 playerManager.PlayerMoveStart();//プレイヤー移動開始
+                if (playerManager.GetPlayerDirection() != Direction.DirectionState.Up)
+                {
+                    playerManager.ChangePlayerLayer();
+                    if (dw != null)
+                        playerManager.SetPlayerLayer(dw.GetMaxPointHeight());
+                }
             }
             else//移動したいマスにプレイヤーが移動出来ないなら
             {
@@ -150,7 +160,7 @@ public class GameManager : MonoBehaviour
 
             Vector2 bTreeCreatPostion = targetTreePoint * mapManager.GetMapChipSize();
             bTreeCreatPostion.y *= -1;
-            woodManager.CreateBreakWood(mapManager.GetTreeLength(targetTreePoint) - 1, playerManager.GetPlayerDirection(), bTreeCreatPostion);
+            woodManager.CreateBreakWood(mapManager.GetTreeLength(targetTreePoint) - 1, playerManager.GetPlayerDirection(), bTreeCreatPostion, targetTreePoint);
 
             for (int i = 0; i < mapManager.GetTreeLength(targetTreePoint); i++)
             {
@@ -185,6 +195,17 @@ public class GameManager : MonoBehaviour
             //}
 
             mapManager.Felling(targetTreePoint);
+        }
+        else
+        {
+            if (playerManager.GetPlayerDirection() == Direction.DirectionState.Down)
+            {
+                Wood targetWood = woodManager.GetIncludedPointWood(targetTreePoint);
+                if(targetWood != null)
+                {
+                    playerManager.SetPlayerLayer((int)targetWood.GetMaxPointHeight());
+                }
+            }
         }
     }
     /// <summary>
@@ -347,7 +368,9 @@ public class GameManager : MonoBehaviour
                         mapManager.OnWood(wDP, w.GetDirection());//丸太を乗せる
                     }
                     w.SetRootPoint(woodDistainationPoints[0]);//丸太にも現在位置を把握させる
-                    w.MoveSet(distinationDir);
+                    w.MoveSet(distinationDir);//丸太移動開始
+                    if (distinationDir != Direction.DirectionState.Up)//上方向でなければ
+                        w.ChangeLayer();//丸太のレイヤーを変える
                     foreach (Vector2 wp in woodPoints)//動かす前の丸太に
                     {
                         if (playerManager.GetPlayerMapPoint() == wp
@@ -368,7 +391,7 @@ public class GameManager : MonoBehaviour
                                     Debug.Log("PFlow:" + wDP);
                                     PlayerPushedWood(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
                                 }
-                                else if(!w.IsIncludedMapPoint(mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1)))
+                                else if (!w.IsIncludedMapPoint(mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1)))
                                 {
                                     PlayerPushedWood(distinationDir, mapManager.GetFindPoint((int)wDP.y, (int)wDP.x, distinationDir, 1));
                                 }
@@ -393,6 +416,8 @@ public class GameManager : MonoBehaviour
     {
         playerManager.SetPlayerMapPoint(Distination);
         playerManager.PlayerAutoMoveStart(moveDir);
+        if (moveDir != Direction.DirectionState.Up)
+            playerManager.ChangePlayerLayer();
     }
     private void PlayerPushedWood(Direction.DirectionState moveDir, Vector2 Distination)
     {
@@ -407,6 +432,8 @@ public class GameManager : MonoBehaviour
             playerManager.PlayerStop();
             playerManager.PlayerAutoMoveStart(moveDir);
         }
+        if (moveDir != Direction.DirectionState.Up)
+            playerManager.ChangePlayerLayer();
     }
 
     private void PlayerFallChack()
