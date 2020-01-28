@@ -14,7 +14,7 @@ public class Wood : MonoBehaviour
     private Vector2 rootPoint;//根元のマス目のポイント
     [SerializeField]
     private Vector2[] mapPoints;//使用しているマップチップのポイント
-
+    [SerializeField]
     private Direction.DirectionState direction;//方向
 
     private float breakTimer;
@@ -269,7 +269,7 @@ public class Wood : MonoBehaviour
                     GameObject wc = transform.GetChild(i).gameObject;
                     if (i == 0)
                     {
-                        if (direction == Direction.DirectionState.Right)
+                        if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[5];
                         else
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[7];
@@ -279,7 +279,7 @@ public class Wood : MonoBehaviour
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[6];
                     if (i == transform.childCount - 1)
                     {
-                        if (direction == Direction.DirectionState.Right)
+                        if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[7];
                         else
                             wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[5];
