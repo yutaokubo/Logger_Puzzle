@@ -253,6 +253,9 @@ public class Wood : MonoBehaviour
 
     public void InRiverSpriteChange()
     {
+        if (state == WoodState.Breaking)
+            return;
+
             if (transform.childCount == 1)
             {
                 GameObject wc = transform.GetChild(0).gameObject;
@@ -288,6 +291,8 @@ public class Wood : MonoBehaviour
     }
     public void OutRiverSpriteChange()
     {
+        if (state == WoodState.Breaking)
+            return;
 
         if (transform.childCount == 1)
         {
@@ -316,6 +321,45 @@ public class Wood : MonoBehaviour
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[3];
                     else
                         wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[1];
+                }
+
+            }
+        }
+    }
+    private void BreakedSpriteChange()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject wc = transform.GetChild(i).gameObject;
+            wc.GetComponent<SpriteRenderer>().sortingOrder += 10;
+        }
+        if (transform.childCount == 1)
+        {
+            GameObject wc = transform.GetChild(0).gameObject;
+            wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[8];
+            return;
+        }
+        if (transform.childCount > 0)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject wc = transform.GetChild(i).gameObject;
+                if (i == 0)
+                {
+                    if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
+                    else
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
+
+                }
+                if (i > 0 && i < transform.childCount - 1)
+                    wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[10];
+                if (i == transform.childCount - 1)
+                {
+                    if (direction == Direction.DirectionState.Up || direction == Direction.DirectionState.Right)
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[11];
+                    else
+                        wc.GetComponent<SpriteRenderer>().sprite = woodChipSprites[9];
                 }
 
             }
@@ -354,6 +398,7 @@ public class Wood : MonoBehaviour
     public void Breaked()
     {
         state = WoodState.Breaking;
+        BreakedSpriteChange();
     }
 
     private void BreakedUpdate()

@@ -193,18 +193,6 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            //if (!mapManager.IsCanEnterWood(woodCreatPoint))
-            //{
-            //    woodManager.WoodBreak(woodManager.GetWoodsLastNumber());
-            //}
-            //else
-            //{
-            //    if (!mapManager.IsOnWood(woodCreatPoint))
-            //    {
-            //        mapManager.OnWood(woodCreatPoint);
-            //    }
-            //}
-
             mapManager.Felling(targetTreePoint);
         }
         else

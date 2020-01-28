@@ -28,6 +28,8 @@ public class MapManager : MonoBehaviour
     private Vector2 playerStartPoint;
     private bool isPlayerSettingStartPosision;//プレイヤーがスタート位置に設定されているか
 
+    private Camera mainCamera;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +66,7 @@ public class MapManager : MonoBehaviour
         isPlayerSettingStartPosision = false;
 
         SetLayer();
+        CameraReset();
     }
 
     /// <summary>
@@ -280,6 +283,45 @@ public class MapManager : MonoBehaviour
             {
                 mapChips[i, t].ChangeLayer(i * 10 + 1);
             }
+        }
+    }
+
+    public void CameraReset()
+    {
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+        CameraPositonReset();
+        CameraZoomReset();
+    }
+
+    private void CameraPositonReset()
+    {
+        float cameraX = mapWidth * mapChipSize.x / 2;
+        float cameraY = -mapHeight * mapChipSize.y / 2;
+
+        mainCamera.transform.position = new Vector3(cameraX, cameraY, -10);
+    }
+    private void CameraZoomReset()
+    {
+        if (mapHeight <= 19 && mapHeight > 15)
+        {
+            mainCamera.orthographicSize = 7;
+        }
+        if (mapHeight <= 15 && mapHeight > 11)
+        {
+            mainCamera.orthographicSize = 5.5f;
+        }
+        if (mapHeight <= 11 && mapHeight > 7)
+        {
+            mainCamera.orthographicSize = 4;
+        }
+        if (mapHeight <= 7)
+        {
+            mainCamera.orthographicSize = 3;
+        }
+        if(mapWidth>19)
+        {
+            mainCamera.orthographicSize = 5;
         }
     }
 }
