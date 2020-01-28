@@ -72,14 +72,17 @@ public class GameManager : MonoBehaviour
                     playerManager.PlayerStop();//プレイヤーを止める
                     return;
                 }
-                if(!dw.IsIncludedMapPoint(playerManager.GetPlayerMapPoint())&&mapManager.IsRiver(playerManager.GetPlayerMapPoint()))
+                if(!dw.IsIncludedMapPoint(playerManager.GetPlayerMapPoint())&&mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//目的地の丸太にプレイヤーが乗っておらず、プレイヤーが川にいる時
                 {
-                    foreach (Vector2 p in dw.GetMapPoints())
+                    if(!Direction.IsSameAxis(playerManager.GetPlayerDirection(),dw.GetDirection()))
                     {
-                        if (!mapManager.IsRiver(p))
+                        foreach (Vector2 p in dw.GetMapPoints())
                         {
-                            playerManager.PlayerStop();
-                            return;
+                            if (!mapManager.IsRiver(p))
+                            {
+                                playerManager.PlayerStop();
+                                return;
+                            }
                         }
                     }
                 }
