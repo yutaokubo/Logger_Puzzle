@@ -356,6 +356,8 @@ public class Player : MonoBehaviour
         Debug.Log(renderer);
         if (renderer != null)
             renderer.sortingOrder = num;
+
+        Debug.Log("OK");
     }
 
     private void ChangePivot()

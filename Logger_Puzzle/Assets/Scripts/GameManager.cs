@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
         mapManager.MapCreate();
         playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());//プレイヤーを初期位置に設定
         playerManager.SetPlayerMapPoint(mapManager.GetPlayerStartPoint());//マップ上でのプレイヤーの位置を渡す
+        playerManager.ChangePlayerLayer();
         playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());//プレイヤーの移動距離を設定
     }
 
@@ -404,6 +405,8 @@ public class GameManager : MonoBehaviour
                                 break;
                             }
                         }
+                        if (distinationDir != Direction.DirectionState.Up)
+                            playerManager.SetPlayerLayer(w.GetMaxPointHeight());
                     }
                 }
                 else//進めないなら

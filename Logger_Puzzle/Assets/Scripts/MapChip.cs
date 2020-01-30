@@ -143,6 +143,12 @@ public class MapChip : MonoBehaviour
             case 13://木3つ分
                 SetTree(3);
                 break;
+            case 14://木4つ分
+                SetTree(4);
+                break;
+            case 15://木5つ分
+                SetTree(5);
+                break;
 
             case 20://上向き川
                 SetRiver(0);

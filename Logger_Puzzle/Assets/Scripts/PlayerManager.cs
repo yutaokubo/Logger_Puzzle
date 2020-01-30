@@ -48,7 +48,7 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerMapPoint(Vector2 point)
     {
         playerMapPoint = point;
-        ChangePlayerLayer();
+        //ChangePlayerLayer();
     }
 
     public Vector2 GetPlayerMapPoint()
