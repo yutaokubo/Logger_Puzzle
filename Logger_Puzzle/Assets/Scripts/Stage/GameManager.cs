@@ -57,6 +57,16 @@ public class GameManager : MonoBehaviour
             {
                 dw = woodManager.GetIncludedPointWood(playerDestination);//移動先の木を取得
             }
+
+            if(mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))
+            {
+                if(!Direction.IsSameAxis(playerManager.GetPlayerDirection(),nowPointWood.GetDirection()))
+                {
+                    playerManager.PlayerStop();//プレイヤーを止めて
+                    return;//移動しない
+                }
+            }
+
             if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()) && !mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//川に乗っていない丸太の上に乗っていたなら
             {
                 nowPointWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());//乗っている木を取得
@@ -87,6 +97,17 @@ public class GameManager : MonoBehaviour
                                 playerManager.PlayerStop();
                                 return;
                             }
+                        }
+                    }
+                }
+                if(!Direction.IsSameAxis(playerManager.GetPlayerDirection(),dw.GetDirection()))
+                {
+                    foreach(Vector2 dwp in dw.GetMapPoints())
+                    {
+                        if(!mapManager.IsRiver(dwp))
+                        {
+                            playerManager.PlayerStop();
+                            return;
                         }
                     }
                 }
