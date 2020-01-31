@@ -387,6 +387,7 @@ public class GameManager : MonoBehaviour
                             && mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1) != playerManager.GetPlayerMapPoint())//プレイヤーが乗っていたなら
                         {
                             PlayerFlow(distinationDir, mapManager.GetFindPoint((int)wp.y, (int)wp.x, distinationDir, 1));
+                            playerManager.SetPlayerLayer(w.GetMaxPointHeight());
                             break;
                         }
                     }
