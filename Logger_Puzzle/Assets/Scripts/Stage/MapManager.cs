@@ -8,8 +8,8 @@ public class MapManager : MonoBehaviour
     private int[,] mapNumbers;//各マップチップの番号
 
     private MapChip[,] mapChips;//マップチップ格納用
-
-    private int nowStageNumber;//現在のステージ番号
+    
+    public static int nowStageNumber = 1;//現在のステージ番号
 
     private int mapHeight;//マップの高さ
     private int mapWidth;//マップの幅
@@ -29,6 +29,11 @@ public class MapManager : MonoBehaviour
     private bool isPlayerSettingStartPosision;//プレイヤーがスタート位置に設定されているか
 
     private Camera mainCamera;
+
+    [SerializeField]
+    private Grid grid;//グリッド線
+    [SerializeField]
+    private GameObject grids;//グリッド線一括用
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +66,7 @@ public class MapManager : MonoBehaviour
             {
                 mapNumbers[i, t] = int.Parse(mapReader.GetMapNumber(i, t));
                 MapChipCreate(t, i);
+                GridCreat(t, i);
             }
         }
         isPlayerSettingStartPosision = false;
@@ -82,6 +88,26 @@ public class MapManager : MonoBehaviour
         mc.Positioning(mapChipSize);
         SetPlayerPosition(posX, posY);
         mapChips[posY, posX] = mc;
+    }
+
+    /// <summary>
+    /// グリッド線生成
+    /// </summary>
+    /// <param name="posX">X位置</param>
+    /// <param name="posY">Y位置</param>
+    private void GridCreat(int posX,int posY)
+    {
+        Grid g = Instantiate(grid);
+        g.SetPostion(new Vector2(posX, -posY) * mapChipSize);
+        g.transform.parent = grids.transform;
+    }
+
+    public void GridLineChange()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            grids.SetActive(!grids.activeSelf);
+        }
     }
 
 
@@ -181,6 +207,11 @@ public class MapManager : MonoBehaviour
     {
         mapChips[(int)point.y, (int)point.x].Felling();
     }
+    /// <summary>
+    /// 指定ポイントの木の長さを取得
+    /// </summary>
+    /// <param name="point">位置</param>
+    /// <returns></returns>
     public int GetTreeLength(Vector2 point)
     {
         return mapChips[(int)point.y, (int)point.x].GetTreeLength();

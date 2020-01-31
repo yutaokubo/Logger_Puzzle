@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3259709978718871271
+--- !u!1 &6807152012018929594
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3354400568500303130}
-  - component: {fileID: 2604474099381236641}
-  - component: {fileID: 4023066050389496388}
+  - component: {fileID: 5235960255270238655}
+  - component: {fileID: 108362908083576936}
+  - component: {fileID: 2736239340479212015}
   m_Layer: 0
-  m_Name: Wood
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3354400568500303130
+--- !u!4 &5235960255270238655
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3259709978718871271}
+  m_GameObject: {fileID: 6807152012018929594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,13 +32,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2604474099381236641
+--- !u!212 &108362908083576936
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3259709978718871271}
+  m_GameObject: {fileID: 6807152012018929594}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -69,8 +69,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: 5000
+  m_Sprite: {fileID: 21300000, guid: 59e5be6b4f299344c8231e518b930d6b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -78,40 +78,18 @@ SpriteRenderer:
   m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4023066050389496388
+--- !u!114 &2736239340479212015
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3259709978718871271}
+  m_GameObject: {fileID: 6807152012018929594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad063a0dd3cf9f241be5ba74eaf9349c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e80b230cb636364998cd5aeb57ced96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  woodChip: {fileID: 3433542505250838925, guid: b98ea72cd5ffc034397fd93bdb10e20b,
-    type: 3}
-  length: 0
-  rootPoint: {x: 0, y: 0}
-  mapPoints: []
-  direction: 0
-  breakTime: 1
-  state: 0
-  appearTime: 0.2
-  woodChipSprites:
-  - {fileID: 21300000, guid: 70cb35cc0f63e7c4eacdec97e3cd63b6, type: 3}
-  - {fileID: 21300000, guid: ccdf09b9cb17e824b80a99e09e029059, type: 3}
-  - {fileID: 21300000, guid: 400d687a62a88cd4ba79920c9b12a19d, type: 3}
-  - {fileID: 21300000, guid: c7a4a595231cf074485385e919ae5b15, type: 3}
-  - {fileID: 21300000, guid: b8c5892046027644891c55edbd4f0101, type: 3}
-  - {fileID: 21300000, guid: e80db5e56942f3b4fbd9989f5d745ade, type: 3}
-  - {fileID: 21300000, guid: 6ee0c546bdb07324cb69d6fbec29ca56, type: 3}
-  - {fileID: 21300000, guid: 3d92b1a4cb2313c4b8b59d8776a8ff5e, type: 3}
-  - {fileID: 21300000, guid: 8a52952aa7ade1e43a2c7ed10df47150, type: 3}
-  - {fileID: 21300000, guid: e70e82a15925c6140b165381042932d5, type: 3}
-  - {fileID: 21300000, guid: cedafbac4628fa6418b909d0b3d868fa, type: 3}
-  - {fileID: 21300000, guid: 9648d22cb565db244b4f9f2e402bc358, type: 3}

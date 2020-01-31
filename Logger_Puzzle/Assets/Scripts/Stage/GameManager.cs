@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,7 +33,9 @@ public class GameManager : MonoBehaviour
         PlayerFallChack();
         PlayerSlashUpdate();
         PlayerMoveUpdate();
+        GridLineChange();
         DebugCameraMove();
+        DebugSceneReload();
 
         //ChangeLayers();
     }
@@ -459,6 +462,10 @@ public class GameManager : MonoBehaviour
         playerManager.ChangePlayerLayer();
     }
 
+    private void GridLineChange()
+    {
+        mapManager.GridLineChange();
+    }
 
     private void DebugCameraMove()
     {
@@ -487,6 +494,13 @@ public class GameManager : MonoBehaviour
         if (Input.GetKey(KeyCode.C))
         {
             camera.orthographicSize += cameraSpeed * Time.deltaTime;
+        }
+    }
+    private void DebugSceneReload()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
