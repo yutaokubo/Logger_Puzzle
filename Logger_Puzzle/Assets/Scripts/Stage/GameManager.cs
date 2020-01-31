@@ -156,6 +156,14 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
+                if(mapManager.IsOnWood(playerManager.GetPlayerMapPoint())&&!mapManager.IsOnWood(playerDestination))
+                {
+                    playerManager.PlayerOffsetRemove();
+                }
+                if(mapManager.IsOnWood(playerDestination)&&!mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))
+                {
+                    playerManager.PlayerOffsetAdd();
+                }
                 playerManager.PlayerMoveStart();//プレイヤー移動開始
                 if (playerManager.GetPlayerDirection() != Direction.DirectionState.Up)
                 {

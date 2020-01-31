@@ -91,6 +91,7 @@ public class PlayerManager : MonoBehaviour
     public void PlayerStop()
     {
         player.SetPlayerMode(0);
+        PlayerOffsetReset();
         player.SetTargetPosition(player.transform.position);
     }
 
@@ -151,5 +152,19 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerLayer(int num)
     {
         player.ChangeLayer((int)(num * 10 + 5));
+    }
+
+
+    public void PlayerOffsetReset()
+    {
+        player.OffSetReset();
+    }
+    public void PlayerOffsetAdd()
+    {
+        player.OffsetAdd();
+    }
+    public void PlayerOffsetRemove()
+    {
+        player.OffsetRemove();
     }
 }

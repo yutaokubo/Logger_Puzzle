@@ -57,11 +57,16 @@ public class Player : MonoBehaviour
     private AnimationMode animationMode;
 
     [SerializeField]
-    private PlayerSpriteChanger spriteChanger;
-
-    private float walkSpriteTimer;
+    private Vector3 offsetValue;
     [SerializeField]
-    private float walkSpriteSpeed;
+    private Vector3 nowOffset;
+
+    //[SerializeField]
+    //private PlayerSpriteChanger spriteChanger;
+
+    //private float walkSpriteTimer;
+    [SerializeField]
+    //private float walkSpriteSpeed;
 
     private Animator animator;
 
@@ -79,7 +84,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position == moveTargetPosition)
+        //if (transform.position == moveTargetPosition+(Vector3)nowOffset)
+        //{
+        //    SetTargetPosition();
+        //}
+        if (playerMode == PlayerMode.Nomal)
         {
             SetTargetPosition();
         }
@@ -102,7 +111,6 @@ public class Player : MonoBehaviour
             return;
         if (previousPlayerMode != PlayerMode.Nomal)
             return;
-
         movePreviousPosition = moveTargetPosition;
 
         if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow))
@@ -199,7 +207,7 @@ public class Player : MonoBehaviour
 
         if (playerMode == PlayerMode.Moving)
         {
-            transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition + nowOffset, moveSpeed * Time.deltaTime);
             animationMode = AnimationMode.Walk;
         }
         if (playerMode == PlayerMode.AutoMoving)
@@ -210,10 +218,11 @@ public class Player : MonoBehaviour
     {
         if (playerMode == PlayerMode.Moving || playerMode == PlayerMode.AutoMoving)
         {
-            if (transform.position == moveTargetPosition)
+            if (transform.position == moveTargetPosition+nowOffset)
             {
                 playerMode = PlayerMode.Nomal;
                 animationMode = AnimationMode.Nomal;
+                OffSetReset();
             }
         }
     }
@@ -307,7 +316,7 @@ public class Player : MonoBehaviour
 
     public void Fall()
     {
-        playerMode = PlayerMode.Falling;
+            playerMode = PlayerMode.Falling;
     }
     private void FallingUpdate()
     {
@@ -316,11 +325,27 @@ public class Player : MonoBehaviour
 
         fallingTimer += Time.deltaTime;
         transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+
+        transform.position -= offsetValue * Time.deltaTime / fallingTime;
+
         if (fallingTimer >= fallingTime)
         {
             playerMode = PlayerMode.Falled;
             this.gameObject.SetActive(false);
         }
+    }
+
+    public void OffSetReset()
+    {
+        nowOffset = Vector2.zero;
+    }
+    public void OffsetAdd()
+    {
+        nowOffset = offsetValue;
+    }
+    public void OffsetRemove()
+    {
+        nowOffset = -offsetValue;
     }
 
     private void Animation()
@@ -353,11 +378,9 @@ public class Player : MonoBehaviour
     public void ChangeLayer(int num)
     {
 
-        Debug.Log(renderer);
         if (renderer != null)
             renderer.sortingOrder = num;
 
-        Debug.Log("OK");
     }
 
     private void ChangePivot()
