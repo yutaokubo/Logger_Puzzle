@@ -167,4 +167,9 @@ public class PlayerManager : MonoBehaviour
     {
         player.OffsetRemove();
     }
+
+    public void PlayerGoal()
+    {
+        player.SetPlayerMode(9);
+    }
 }

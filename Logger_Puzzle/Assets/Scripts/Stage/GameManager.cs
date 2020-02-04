@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private WoodManager woodManager;
 
+    private bool IsClear;
+
     [SerializeField]
     private float cameraSpeed;
 
@@ -22,8 +24,9 @@ public class GameManager : MonoBehaviour
         mapManager.MapCreate();
         playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());//プレイヤーを初期位置に設定
         playerManager.SetPlayerMapPoint(mapManager.GetPlayerStartPoint());//マップ上でのプレイヤーの位置を渡す
-        playerManager.ChangePlayerLayer();
+        playerManager.ChangePlayerLayer();//プレイヤーのレイヤーを変更
         playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());//プレイヤーの移動距離を設定
+        IsClear = false;//まだクリアしてない
     }
 
     // Update is called once per frame
@@ -33,6 +36,8 @@ public class GameManager : MonoBehaviour
         PlayerFallChack();
         PlayerSlashUpdate();
         PlayerMoveUpdate();
+        PlayerGoalChack();
+        GameClear();
         GridLineChange();
         DebugCameraMove();
         DebugSceneReload();
@@ -117,62 +122,6 @@ public class GameManager : MonoBehaviour
                         }
                     }
             }
-
-
-            //if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()))
-            //{
-            //    if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowPointWood.GetDirection()))
-            //    {
-            //        playerManager.PlayerStop();//プレイヤーを止めて
-            //        return;//移動しない
-            //    }
-            //}
-
-            //if (mapManager.IsOnWood(playerManager.GetPlayerMapPoint()) && !mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//川に乗っていない丸太の上に乗っていたなら
-            //{
-            //    nowPointWood = woodManager.GetIncludedPointWood(playerManager.GetPlayerMapPoint());//乗っている木を取得
-            //    if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), nowPointWood.GetDirection()))//プレイヤー移動方向軸と木の向いている方向軸が違うなら
-            //    {
-            //        playerManager.PlayerStop();//プレイヤーを止めて
-            //        return;//移動しない
-            //    }
-            //}
-
-
-            //if (mapManager.IsOnWood(playerDestination) && mapManager.IsRiver(playerDestination))//移動先が丸太かつ川なら
-            //{
-            //    destinationPointWood = woodManager.GetIncludedPointWood(playerDestination);//移動先の木を取得
-            //    if (destinationPointWood.GetState() == 3)//流れているなら
-            //    {
-            //        playerManager.PlayerStop();//プレイヤーを止める
-            //        return;
-            //    }
-            //    if (!destinationPointWood.IsIncludedMapPoint(playerManager.GetPlayerMapPoint()) && mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//目的地の丸太にプレイヤーが乗っておらず、プレイヤーが川にいる時
-            //    {
-            //        if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), destinationPointWood.GetDirection()))
-            //        {
-            //            foreach (Vector2 p in destinationPointWood.GetMapPoints())
-            //            {
-            //                if (!mapManager.IsRiver(p))
-            //                {
-            //                    playerManager.PlayerStop();
-            //                    return;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), destinationPointWood.GetDirection()))
-            //    {
-            //        foreach (Vector2 dwp in destinationPointWood.GetMapPoints())
-            //        {
-            //            if (!mapManager.IsRiver(dwp))
-            //            {
-            //                playerManager.PlayerStop();
-            //                return;
-            //            }
-            //        }
-            //    }
-            //}
 
             //ここから移動したいマスに侵入できるかの判断
 
@@ -552,10 +501,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ChangeLayers()
+    private void PlayerGoalChack()
     {
-        playerManager.ChangePlayerLayer();
+        if(mapManager.IsGoal(playerManager.GetPlayerMapPoint()))
+        {
+            if (playerManager.GetPlayerMode() == 0)
+            {
+                playerManager.PlayerGoal();
+                IsClear = true;
+                Debug.Log("Goal");
+            }
+        }
     }
+
+    private void GameClear()
+    {
+        if (playerManager.GetPlayerMode() == 10)
+        {
+            Invoke("LoadNextScene", 0.5f);
+        }
+    }
+    private void LoadNextScene()
+    {
+        SceneManager.LoadScene("TitleScene");
+    }
+
 
     private void GridLineChange()
     {

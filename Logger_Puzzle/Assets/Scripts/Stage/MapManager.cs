@@ -321,6 +321,15 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public bool IsGoal(Vector2 point)
+    {
+        if(mapNumbers[(int)point.y,(int)point.x] == 5)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void CameraReset()
     {
         if (mainCamera == null)

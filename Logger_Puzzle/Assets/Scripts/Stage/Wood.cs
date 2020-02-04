@@ -434,6 +434,7 @@ public class Wood : MonoBehaviour
     public void Fall()
     {
         state = WoodState.Falling;
+        FallingChangeLayer();
     }
     private void FallingUpdate()
     {
@@ -460,17 +461,29 @@ public class Wood : MonoBehaviour
         {
             for (int i = 0; i < transform.childCount; i++)
             {
-                //GameObject wc = transform.GetChild(i).gameObject;
-                //wc.GetComponent<SpriteRenderer>().sortingOrder = maxPointHeight * 10 + 3 ;
                 GameObject wc = transform.GetChild(i).gameObject;
-                foreach(Vector2 v in mapPoints)
-                {
-                    Debug.Log(v);
-                }
                 wc.GetComponent<SpriteRenderer>().sortingOrder = (int)mapPoints[i].y * 10 + 3;
             }
         }
     }
+    private void FallingChangeLayer()
+    {
+        maxPointHeight = 0;
+        foreach (Vector2 p in mapPoints)
+        {
+            if (p.y > maxPointHeight)
+                maxPointHeight = (int)p.y;
+        }
+        if (transform.childCount > 0)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject wc = transform.GetChild(i).gameObject;
+                wc.GetComponent<SpriteRenderer>().sortingOrder = maxPointHeight * 10 + 3;
+            }
+        }
+    }
+    
     public int GetMaxPointHeight()
     {
         return maxPointHeight;

@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
         Slashing,//切っている
         Falling,//落ちている
         Falled,//落ちた
+        Goal,//ゴールした
+        GoalEnd,//ゴールし終わった
     }
     [SerializeField]
     private PlayerMode playerMode;
@@ -53,6 +55,7 @@ public class Player : MonoBehaviour
         Nomal,//通常
         Walk,//移動
         Slash,//切る
+        Goal,//ゴール
     }
     private AnimationMode animationMode;
 
@@ -90,6 +93,7 @@ public class Player : MonoBehaviour
         MoveModeUpdate();
         Slash();
         SlashingUpdate();
+        GoalUpdate();
         Animation();
         PreviousModeUpdate();
         //Debug.Log(playerMode);
@@ -323,8 +327,23 @@ public class Player : MonoBehaviour
         if (fallingTimer >= fallingTime)
         {
             playerMode = PlayerMode.Falled;
-            this.gameObject.SetActive(false);
+            renderer.enabled = false;
+            //this.gameObject.SetActive(false);
         }
+    }
+    private void GoalUpdate()
+    {
+        if (playerMode != PlayerMode.Goal)
+            return;
+        fallingTimer += Time.deltaTime;
+        transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+        if (fallingTimer >= fallingTime)
+        {
+            playerMode = PlayerMode.GoalEnd;
+            renderer.enabled = false;
+            //this.gameObject.SetActive(false);
+        }
+
     }
 
     public void OffSetReset()
@@ -359,6 +378,17 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("Walk", false);
             animator.SetBool("Slash", false);
+        }
+
+        if(playerMode == PlayerMode.Goal)
+        {
+            if(animator.GetBool("Goal")==false)
+            {
+                animationMode = AnimationMode.Goal;
+                animator.SetBool("Walk", false);
+                animator.SetBool("Slash", false);
+                animator.SetBool("Goal", true);
+            }
         }
     }
 
