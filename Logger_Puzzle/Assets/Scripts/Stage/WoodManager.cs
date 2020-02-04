@@ -29,7 +29,7 @@ public class WoodManager : MonoBehaviour
         w.SetDirection(dir);
         w.SetLength(length);
         w.WoodChipsSet();
-        w.ChangeLayer();
+        //w.ChangeLayer();
         woods.Add(w);
     }
 
@@ -81,10 +81,10 @@ public class WoodManager : MonoBehaviour
 
     public void ChangeWoodsLayer()
     {
-        //foreach(Wood w in woods)
-        //{
-        //    w.ChangeLayer()
-        //}
+        foreach (Wood w in woods)
+        {
+            w.ChangeLayer();
+        }
     }
 
     public void CreateBreakWood(int lenght, Direction.DirectionState dir, Vector2 pos,Vector2 point)

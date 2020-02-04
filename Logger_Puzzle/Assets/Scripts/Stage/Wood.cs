@@ -460,8 +460,14 @@ public class Wood : MonoBehaviour
         {
             for (int i = 0; i < transform.childCount; i++)
             {
+                //GameObject wc = transform.GetChild(i).gameObject;
+                //wc.GetComponent<SpriteRenderer>().sortingOrder = maxPointHeight * 10 + 3 ;
                 GameObject wc = transform.GetChild(i).gameObject;
-                wc.GetComponent<SpriteRenderer>().sortingOrder = maxPointHeight * 10 + 3 ;
+                foreach(Vector2 v in mapPoints)
+                {
+                    Debug.Log(v);
+                }
+                wc.GetComponent<SpriteRenderer>().sortingOrder = (int)mapPoints[i].y * 10 + 3;
             }
         }
     }

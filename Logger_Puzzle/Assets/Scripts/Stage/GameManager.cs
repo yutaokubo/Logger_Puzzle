@@ -266,6 +266,7 @@ public class GameManager : MonoBehaviour
             woodCreatPostion.y *= -1;
             woodManager.WoodCreate(woodCreatPostion, playerManager.GetPlayerDirection(), mapManager.GetTreeLength(targetTreePoint));
             woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), woodCreatPoint);
+            woodManager.ChangeWoodsLayer();
             woodManager.LastWoodsBornFromTree();
 
             Vector2 bTreeCreatPostion = targetTreePoint * mapManager.GetMapChipSize();
@@ -358,6 +359,7 @@ public class GameManager : MonoBehaviour
                 woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), pPoint);
                 woodManager.WoodCreate(fPoint * mapManager.GetMapChipSize() * new Vector2(1, -1), pDir, l2);//前マス
                 woodManager.SetWoodRootPoint(woodManager.GetWoodsLastNumber(), fPoint);
+                woodManager.ChangeWoodsLayer();
                 w1.Crack();
             }
         }
