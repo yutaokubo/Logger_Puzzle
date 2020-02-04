@@ -14,6 +14,9 @@ public class MapChipSpriteSelecter : MonoBehaviour
     [SerializeField]
     private List<Sprite> riverSprites;
 
+    [SerializeField]
+    private List<Sprite> goalSprites;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,5 +55,14 @@ public class MapChipSpriteSelecter : MonoBehaviour
             return riverSprites[0];
         }
         return riverSprites[riverTiming];
+    }
+    public Sprite GetGoalSprite(int goalTiming)
+    {
+
+        if (goalTiming > goalSprites.Count)
+        {
+            return goalSprites[0];
+        }
+        return goalSprites[goalTiming];
     }
 }

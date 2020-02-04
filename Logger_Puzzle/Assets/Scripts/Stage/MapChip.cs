@@ -58,6 +58,10 @@ public class MapChip : MonoBehaviour
     [SerializeField]
     private float riverSpriteSpeed;
 
+    private float goalSpriteTimer;
+    [SerializeField]
+    private float goalSpriteSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +73,7 @@ public class MapChip : MonoBehaviour
     void Update()
     {
         RiverFlow();
+        GoalAnimation();
     }
 
     /// <summary>
@@ -383,6 +388,14 @@ public class MapChip : MonoBehaviour
 
         riverSpriteTimer += riverSpriteSpeed * Time.deltaTime;
         renderer.sprite = spriteSelecter.GetRiverSprite((int)(riverSpriteTimer % 2));
+    }
+    private void GoalAnimation()
+    {
+        if (nowSprite != MapChipSprite.Goal)
+            return;
+
+        goalSpriteTimer += goalSpriteSpeed * Time.deltaTime;
+        renderer.sprite = spriteSelecter.GetGoalSprite((int)(goalSpriteTimer % 2));
     }
 
     public void ChangeLayer(int num)

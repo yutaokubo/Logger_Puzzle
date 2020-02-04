@@ -97,6 +97,7 @@ MonoBehaviour:
   treeLength: 0
   isOnWood: 0
   riverSpriteSpeed: 2
+  goalSpriteSpeed: 6
 --- !u!114 &8140672474627184281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,3 +127,6 @@ MonoBehaviour:
   riverSprites:
   - {fileID: 21300000, guid: 21499c8d49c8eb24885b0d05dc886e78, type: 3}
   - {fileID: 21300000, guid: b1493395ff12c6c4bb3d8de8bd7f1aab, type: 3}
+  goalSprites:
+  - {fileID: 21300000, guid: b30ec52fb82f50b4d8e8b6aa908149b7, type: 3}
+  - {fileID: 21300000, guid: fea983443e8c3a0409e48df9cb2b1d76, type: 3}

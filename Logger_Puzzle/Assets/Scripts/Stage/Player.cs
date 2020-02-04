@@ -84,14 +84,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (transform.position == moveTargetPosition+(Vector3)nowOffset)
-        //{
-        //    SetTargetPosition();
-        //}
-        if (playerMode == PlayerMode.Nomal)
-        {
-            SetTargetPosition();
-        }
+        SetTargetPosition();
         FallingUpdate();
         Move();
         MoveModeUpdate();
@@ -99,7 +92,6 @@ public class Player : MonoBehaviour
         SlashingUpdate();
         Animation();
         PreviousModeUpdate();
-        ChangePivot();
         //Debug.Log(playerMode);
     }
     /// <summary>
@@ -218,7 +210,7 @@ public class Player : MonoBehaviour
     {
         if (playerMode == PlayerMode.Moving || playerMode == PlayerMode.AutoMoving)
         {
-            if (transform.position == moveTargetPosition+nowOffset)
+            if (transform.position == moveTargetPosition + nowOffset)
             {
                 playerMode = PlayerMode.Nomal;
                 animationMode = AnimationMode.Nomal;
@@ -316,7 +308,7 @@ public class Player : MonoBehaviour
 
     public void Fall()
     {
-            playerMode = PlayerMode.Falling;
+        playerMode = PlayerMode.Falling;
     }
     private void FallingUpdate()
     {
@@ -383,8 +375,4 @@ public class Player : MonoBehaviour
 
     }
 
-    private void ChangePivot()
-    {
-        renderer.material.mainTextureOffset += new Vector2(0, 10);
-    }
 }

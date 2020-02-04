@@ -313,6 +313,10 @@ public class MapManager : MonoBehaviour
             for (int t = 0; t < mapWidth; t++)
             {
                 mapChips[i, t].ChangeLayer(i * 10 + 1);
+                if(mapNumbers[i,t]==5)
+                {
+                    mapChips[i, t].ChangeLayer(i * 10 + 2);
+                }
             }
         }
     }
