@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
         playerManager.SetPlayerMapPoint(mapManager.GetPlayerStartPoint());//マップ上でのプレイヤーの位置を渡す
         playerManager.ChangePlayerLayer();//プレイヤーのレイヤーを変更
         playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());//プレイヤーの移動距離を設定
+        playerManager.PlayerStartingDirectSet();
         IsClear = false;//まだクリアしてない
     }
 

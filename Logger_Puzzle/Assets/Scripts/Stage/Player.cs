@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
         Falled,//落ちた
         Goal,//ゴールした
         GoalEnd,//ゴールし終わった
+        Starting,//開始時
     }
     [SerializeField]
     private PlayerMode playerMode;
@@ -63,13 +64,7 @@ public class Player : MonoBehaviour
     private Vector3 offsetValue;
     [SerializeField]
     private Vector3 nowOffset;
-
-    //[SerializeField]
-    //private PlayerSpriteChanger spriteChanger;
-
-    //private float walkSpriteTimer;
-    [SerializeField]
-    //private float walkSpriteSpeed;
+    
 
     private Animator animator;
 
@@ -81,12 +76,14 @@ public class Player : MonoBehaviour
         direction = Direction.DirectionState.Down;
         animator = GetComponent<Animator>();
         animationMode = AnimationMode.Nomal;
+        playerMode = PlayerMode.Starting;
         walkStartTimer = walkStartTime;
     }
 
     // Update is called once per frame
     void Update()
     {
+        StartingUpdate();
         SetTargetPosition();
         FallingUpdate();
         Move();
@@ -344,6 +341,26 @@ public class Player : MonoBehaviour
             //this.gameObject.SetActive(false);
         }
 
+    }
+
+
+    public void StartDirectSetting()
+    {
+        transform.position = new Vector3(transform.position.x, 5, 0);
+        playerMode = PlayerMode.Starting;
+    }
+    private void StartingUpdate()
+    {
+        if (playerMode != PlayerMode.Starting)
+            return;
+
+        transform.position = Vector3.MoveTowards(transform.position, moveTargetPosition + nowOffset, 15 * Time.deltaTime);
+        if (transform.position == moveTargetPosition + nowOffset)
+        {
+            playerMode = PlayerMode.Nomal;
+            animationMode = AnimationMode.Nomal;
+            OffSetReset();
+        }
     }
 
     public void OffSetReset()

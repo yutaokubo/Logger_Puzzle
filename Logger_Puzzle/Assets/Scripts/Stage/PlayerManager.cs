@@ -172,4 +172,9 @@ public class PlayerManager : MonoBehaviour
     {
         player.SetPlayerMode(9);
     }
+
+    public void PlayerStartingDirectSet()
+    {
+        player.StartDirectSetting();
+    }
 }
