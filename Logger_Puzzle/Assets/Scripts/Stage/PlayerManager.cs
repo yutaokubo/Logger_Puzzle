@@ -21,6 +21,10 @@ public class PlayerManager : MonoBehaviour
     {
     }
 
+    public void PlayerUpdate()
+    {
+        player.PlayerUpdate();
+    }
 
     /// <summary>
     /// プレイヤーの位置を変更、現在の移動ターゲットもその位置へ
@@ -154,6 +158,15 @@ public class PlayerManager : MonoBehaviour
         player.ChangeLayer((int)(num * 10 + 5));
     }
 
+    public void PlayerAnimationStop()
+    {
+        player.AnimationStop();
+    }
+    public void PlayerAnimationRestart()
+    {
+        player.AnimationRestart();
+    }
+
 
     public void PlayerOffsetReset()
     {
@@ -176,5 +189,9 @@ public class PlayerManager : MonoBehaviour
     public void PlayerStartingDirectSet()
     {
         player.StartDirectSetting();
+    }
+    public void PlayerStartingDirectStart()
+    {
+        player.StartDirectStart();
     }
 }

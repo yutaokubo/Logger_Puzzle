@@ -12,6 +12,8 @@ public class WoodManager : MonoBehaviour
     [SerializeField]
     private BreakTree breakTree;
 
+    private List<BreakTree> breakTrees = new List<BreakTree>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +22,23 @@ public class WoodManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void WoodsUpdate()
+    {
+        foreach(Wood w in woods)
+        {
+            w.WoodUpdate();
+        }
         RemoveNoneWood();
+    }
+    public void BreakTreesUpdate()
+    {
+        foreach(BreakTree bt in breakTrees)
+        {
+            bt.BreakTreeUpdate();
+        }
+        RemoveNoneBreakTree();
     }
 
     public void WoodCreate(Vector2 Pos, Direction.DirectionState dir, int length)
@@ -44,6 +62,10 @@ public class WoodManager : MonoBehaviour
     private void RemoveNoneWood()
     {
         woods.RemoveAll(w => w.GetState() == 5);
+    }
+    private void RemoveNoneBreakTree()
+    {
+        breakTrees.RemoveAll(bt => bt.IsEnd());
     }
 
     public void SetWoodRootPoint(int num, Vector2 point)
@@ -93,6 +115,7 @@ public class WoodManager : MonoBehaviour
         bt.SetLenght(lenght);
         bt.SetSpinDirection(dir);
         bt.ChangeLayer((int)point.y+lenght);
+        breakTrees.Add(bt);
     }
 
     public void LastWoodsBornFromTree()

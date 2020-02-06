@@ -13,6 +13,7 @@ public class BreakTree : MonoBehaviour
     [SerializeField]
     private Sprite[] treeSprites;
 
+    private bool isEnd;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,10 @@ public class BreakTree : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+    }
+
+    public void BreakTreeUpdate()
     {
         Spin();
         EndCount();
@@ -61,8 +66,13 @@ public class BreakTree : MonoBehaviour
         endTimer += Time.deltaTime;
         if (endTimer > endTime)
         {
+            isEnd = true;
             Destroy(this.gameObject);
         }
+    }
+    public bool IsEnd()
+    {
+        return isEnd;
     }
 
     public void SetLenght(int lenght)

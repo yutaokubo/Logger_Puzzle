@@ -72,7 +72,11 @@ public class MapChip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RiverFlow();
+    }
+
+    public void MapchipAnimation()
+    {
+        RiverFlowAnimation();
         GoalAnimation();
     }
 
@@ -381,7 +385,7 @@ public class MapChip : MonoBehaviour
         return riverDirection;
     }
 
-    private void RiverFlow()
+    private void RiverFlowAnimation()
     {
         if (nowSprite != MapChipSprite.River)
             return;

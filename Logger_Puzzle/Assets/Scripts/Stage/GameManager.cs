@@ -14,12 +14,28 @@ public class GameManager : MonoBehaviour
 
     private bool IsClear;
 
+    private enum GameState
+    {
+        StartFadeIn,//フェードイン中
+        StartDirect,//開始演出中
+        Nomal,//通常時、プレイヤープレイ中
+        Pose,//ポーズ
+        Reset,//リセット
+        PlayerFalling,//プレイヤーが落ちた
+        EndFadeOut,//フェードアウト中
+        End,//シーン終了
+    }
+    [SerializeField]
+    private GameState gameState;
+    private GameState currentState;
+
     [SerializeField]
     private float cameraSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameState = GameState.StartFadeIn;
         //mapManager.SetPlayer(playerManager.GetPlayer());
         mapManager.MapCreate();
         playerManager.SetPlayerPosition(mapManager.GetPlayerStartPosition());//プレイヤーを初期位置に設定
@@ -33,17 +49,138 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        StartFadeInUpdate();
+        StartDirectUpdate();
+        StagePlayUpdate();
+        PoseUpdate();
+        StageResetUpdate();
+        PlayerFallingUpdate();
+        EndFadeOutUpdate();
+        EndUpdate();
+
+
+        currentState = gameState;
+    }
+
+    /// <summary>
+    /// フェードイン中
+    /// </summary>
+    private void StartFadeInUpdate()
+    {
+        if (gameState != GameState.StartFadeIn)
+            return;
+
+        gameState = GameState.StartDirect;
+        playerManager.PlayerStartingDirectStart();
+        mapManager.MapchipsAnimation();
+    }
+
+    /// <summary>
+    /// スタート演出中
+    /// </summary>
+    public void StartDirectUpdate()
+    {
+        if (gameState != GameState.StartDirect)
+            return;
+
+        playerManager.PlayerUpdate();
+        mapManager.MapchipsAnimation();
+
+        if (playerManager.GetPlayerMode() == 0)
+        {
+            gameState = GameState.Nomal;
+        }
+    }
+    /// <summary>
+    /// 通常プレイ中
+    /// </summary>
+    public void StagePlayUpdate()
+    {
+        if (gameState != GameState.Nomal)
+            return;
+
+        playerManager.PlayerUpdate();
+        woodManager.WoodsUpdate();
+        woodManager.BreakTreesUpdate();
+        mapManager.MapchipsAnimation();
+
         WoodsChack();
         PlayerFallChack();
         PlayerSlashUpdate();
         PlayerMoveUpdate();
         PlayerGoalChack();
         GameClear();
+        Pose();
+        StageResetStart();
         GridLineChange();
         DebugCameraMove();
-        DebugSceneReload();
+        //DebugSceneReload();
+    }
+    /// <summary>
+    /// ポーズ中
+    /// </summary>
+    private void PoseUpdate()
+    {
+        if (gameState != GameState.Pose)
+            return;
+        if (Input.GetKeyDown(KeyCode.P) && currentState == GameState.Pose)
+        {
+            gameState = GameState.Nomal;
+            playerManager.PlayerAnimationRestart();
+        }
+    }
+    /// <summary>
+    /// ステージリセット中
+    /// </summary>
+    private void StageResetUpdate()
+    {
+        if (gameState != GameState.Reset)
+            return;
 
-        //ChangeLayers();
+        playerManager.PlayerUpdate();
+        woodManager.WoodsUpdate();
+        woodManager.BreakTreesUpdate();
+        mapManager.MapchipsAnimation();
+
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    /// <summary>
+    /// プレイヤーが落ちた時
+    /// </summary>
+    private void PlayerFallingUpdate()
+    {
+        if (gameState != GameState.PlayerFalling)
+            return;
+
+        playerManager.PlayerUpdate();
+        woodManager.WoodsUpdate();
+        woodManager.BreakTreesUpdate();
+        mapManager.MapchipsAnimation();
+        if(playerManager.GetPlayerMode()==8)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+    /// <summary>
+    /// シーン終了時フェードアウト中
+    /// </summary>
+    private void EndFadeOutUpdate()
+    {
+        if (gameState != GameState.EndFadeOut)
+            return;
+
+        gameState = GameState.End;
+    }
+    /// <summary>
+    /// 終了中
+    /// </summary>
+    private void EndUpdate()
+    {
+        if (gameState != GameState.End)
+            return;
+
+        Invoke("LoadNextScene", 0.5f);
     }
 
     private void PlayerMoveUpdate()
@@ -102,26 +239,26 @@ public class GameManager : MonoBehaviour
 
                 //if (!mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//プレイヤーが川に乗っていないとき
                 //{
-                    if (mapManager.IsRiver(playerDestination))//移動先が川で
+                if (mapManager.IsRiver(playerDestination))//移動先が川で
+                {
+                    if (mapManager.IsOnWood(playerDestination))//丸太があるなら
                     {
-                        if (mapManager.IsOnWood(playerDestination))//丸太があるなら
+                        if (destinationPointWood != nowPointWood)//その丸太が今乗っている丸太と違うなら
                         {
-                            if (destinationPointWood != nowPointWood)//その丸太が今乗っている丸太と違うなら
+                            foreach (Vector2 dwp in destinationPointWood.GetMapPoints())//その丸太が一か所でも
                             {
-                                foreach (Vector2 dwp in destinationPointWood.GetMapPoints())//その丸太が一か所でも
+                                if (!mapManager.IsRiver(dwp))//川でないマスがあれば(全て川に入って無ければ)
                                 {
-                                    if (!mapManager.IsRiver(dwp))//川でないマスがあれば(全て川に入って無ければ)
+                                    if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), destinationPointWood.GetDirection()))//軸が違うなら
                                     {
-                                        if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), destinationPointWood.GetDirection()))//軸が違うなら
-                                        {
-                                            playerManager.PlayerStop();//プレイヤーを止めて
-                                            return;//移動しない
-                                        }
+                                        playerManager.PlayerStop();//プレイヤーを止めて
+                                        return;//移動しない
                                     }
                                 }
                             }
                         }
                     }
+                }
             }
 
             //ここから移動したいマスに侵入できるかの判断
@@ -499,12 +636,13 @@ public class GameManager : MonoBehaviour
         if (mapManager.IsHole(PlayerPoint) && !mapManager.IsOnWood(PlayerPoint))
         {
             playerManager.PlayerFall();
+            gameState = GameState.PlayerFalling;
         }
     }
 
     private void PlayerGoalChack()
     {
-        if(mapManager.IsGoal(playerManager.GetPlayerMapPoint()))
+        if (mapManager.IsGoal(playerManager.GetPlayerMapPoint()))
         {
             if (playerManager.GetPlayerMode() == 0)
             {
@@ -519,7 +657,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerManager.GetPlayerMode() == 10)
         {
-            Invoke("LoadNextScene", 0.5f);
+            gameState = GameState.EndFadeOut;
         }
     }
     private void LoadNextScene()
@@ -527,6 +665,28 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("TitleScene");
     }
 
+
+    private void Pose()
+    {
+        if (gameState != GameState.Nomal)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.P) && currentState == GameState.Nomal)
+        {
+            gameState = GameState.Pose;
+            playerManager.PlayerAnimationStop();
+        }
+    }
+
+    private void StageResetStart()
+    {
+        if (gameState != GameState.Nomal)
+            return;
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gameState = GameState.Reset;
+        }
+    }
 
     private void GridLineChange()
     {
@@ -562,11 +722,11 @@ public class GameManager : MonoBehaviour
             camera.orthographicSize += cameraSpeed * Time.deltaTime;
         }
     }
-    private void DebugSceneReload()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-    }
+    //private void DebugSceneReload()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.R))
+    //    {
+    //        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    //    }
+    //}
 }

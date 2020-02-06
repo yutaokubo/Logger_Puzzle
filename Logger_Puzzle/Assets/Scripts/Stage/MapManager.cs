@@ -44,7 +44,14 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
 
+    public void MapchipsAnimation()
+    {
+        foreach(MapChip m in mapChips)
+        {
+            m.MapchipAnimation();
+        }
     }
 
     /// <summary>

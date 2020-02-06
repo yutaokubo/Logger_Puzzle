@@ -57,6 +57,10 @@ public class Wood : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void WoodUpdate()
+    {
         AppearCount();
 
         if (isAppear)

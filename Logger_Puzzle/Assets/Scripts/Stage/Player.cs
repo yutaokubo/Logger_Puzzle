@@ -83,6 +83,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void PlayerUpdate()
+    {
         StartingUpdate();
         SetTargetPosition();
         FallingUpdate();
@@ -93,8 +97,8 @@ public class Player : MonoBehaviour
         GoalUpdate();
         Animation();
         PreviousModeUpdate();
-        //Debug.Log(playerMode);
     }
+
     /// <summary>
     /// 移動先設定
     /// </summary>
@@ -347,6 +351,9 @@ public class Player : MonoBehaviour
     public void StartDirectSetting()
     {
         transform.position = new Vector3(transform.position.x, 5, 0);
+    }
+    public void StartDirectStart()
+    {
         playerMode = PlayerMode.Starting;
     }
     private void StartingUpdate()
@@ -407,6 +414,14 @@ public class Player : MonoBehaviour
                 animator.SetBool("Goal", true);
             }
         }
+    }
+    public void AnimationStop()
+    {
+        animator.speed = 0.0f;
+    }
+    public void AnimationRestart()
+    {
+        animator.speed = 1.0f;
     }
 
     private void PreviousModeUpdate()
