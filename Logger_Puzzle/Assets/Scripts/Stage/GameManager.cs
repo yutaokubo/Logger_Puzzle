@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     private PlayerManager playerManager;
     [SerializeField]
     private WoodManager woodManager;
+    [SerializeField]
+    private FadeManager fadeManager;
 
     private bool IsClear;
 
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
         Pose,//ポーズ
         Reset,//リセット
         PlayerFalling,//プレイヤーが落ちた
+        PlayerFalledFadeOut,//プレイヤーが落ちた後のフェードアウト
         EndFadeOut,//フェードアウト中
         End,//シーン終了
     }
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
         playerManager.ChangePlayerLayer();//プレイヤーのレイヤーを変更
         playerManager.SetPlayerMoveDistance(mapManager.GetMapChipSize());//プレイヤーの移動距離を設定
         playerManager.PlayerStartingDirectSet();
+        fadeManager.FadeInStart();
         IsClear = false;//まだクリアしてない
     }
 
@@ -55,6 +59,7 @@ public class GameManager : MonoBehaviour
         PoseUpdate();
         StageResetUpdate();
         PlayerFallingUpdate();
+        PlayerFalledFadeOutUpdate();
         EndFadeOutUpdate();
         EndUpdate();
 
@@ -70,8 +75,11 @@ public class GameManager : MonoBehaviour
         if (gameState != GameState.StartFadeIn)
             return;
 
-        gameState = GameState.StartDirect;
-        playerManager.PlayerStartingDirectStart();
+        if(fadeManager.IsFadeEnd())
+        {
+            gameState = GameState.StartDirect;
+            playerManager.PlayerStartingDirectStart();
+        }
         mapManager.MapchipsAnimation();
     }
 
@@ -142,8 +150,10 @@ public class GameManager : MonoBehaviour
         woodManager.BreakTreesUpdate();
         mapManager.MapchipsAnimation();
 
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if(fadeManager.IsFadeEnd())
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
     /// <summary>
     /// プレイヤーが落ちた時
@@ -159,6 +169,19 @@ public class GameManager : MonoBehaviour
         mapManager.MapchipsAnimation();
         if(playerManager.GetPlayerMode()==8)
         {
+            fadeManager.FadeOutStart();
+            gameState = GameState.PlayerFalledFadeOut;
+        }
+    }
+    /// <summary>
+    /// プレイヤーが落ちた後のフェードアウト中
+    /// </summary>
+    private void PlayerFalledFadeOutUpdate()
+    {
+        if (gameState != GameState.PlayerFalledFadeOut)
+            return;
+        if(fadeManager.IsFadeEnd())
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
@@ -169,8 +192,10 @@ public class GameManager : MonoBehaviour
     {
         if (gameState != GameState.EndFadeOut)
             return;
-
-        gameState = GameState.End;
+        if(fadeManager.IsFadeEnd())
+        {
+            gameState = GameState.End;
+        }
     }
     /// <summary>
     /// 終了中
@@ -658,6 +683,7 @@ public class GameManager : MonoBehaviour
         if (playerManager.GetPlayerMode() == 10)
         {
             gameState = GameState.EndFadeOut;
+            fadeManager.FadeOutStart();
         }
     }
     private void LoadNextScene()
@@ -685,6 +711,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameState = GameState.Reset;
+            fadeManager.FadeOutStart();
         }
     }
 
