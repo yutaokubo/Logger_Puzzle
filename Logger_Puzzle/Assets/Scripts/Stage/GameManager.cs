@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     private WoodManager woodManager;
     [SerializeField]
     private FadeManager fadeManager;
+    [SerializeField]
+    private PoseManager poseManager;
 
     private bool IsClear;
 
@@ -25,12 +27,14 @@ public class GameManager : MonoBehaviour
         Reset,//リセット
         PlayerFalling,//プレイヤーが落ちた
         PlayerFalledFadeOut,//プレイヤーが落ちた後のフェードアウト
+        BackToStageSelectFadeOut,//ステージ選択へ戻るフェードアウト
         EndFadeOut,//フェードアウト中
         End,//シーン終了
     }
     [SerializeField]
     private GameState gameState;
     private GameState currentState;
+    
 
     [SerializeField]
     private float cameraSpeed;
@@ -60,6 +64,7 @@ public class GameManager : MonoBehaviour
         StageResetUpdate();
         PlayerFallingUpdate();
         PlayerFalledFadeOutUpdate();
+        BackToStageSelectUpdate();
         EndFadeOutUpdate();
         EndUpdate();
 
@@ -131,10 +136,34 @@ public class GameManager : MonoBehaviour
     {
         if (gameState != GameState.Pose)
             return;
+
+        poseManager.MenuSelect();
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            switch(poseManager.GetNowMenuNumber())
+            {
+                case 0:
+                    gameState = GameState.Nomal;
+                    playerManager.PlayerAnimationRestart();
+                    poseManager.DisappearPoseMenu();
+                    return;
+
+                case 1:
+                    gameState = GameState.BackToStageSelectFadeOut;
+                    fadeManager.FadeOutStart();
+                    break;
+                default:
+                    break;
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.P) && currentState == GameState.Pose)
         {
             gameState = GameState.Nomal;
             playerManager.PlayerAnimationRestart();
+            //poseMenu.SetActive(false);
+            poseManager.DisappearPoseMenu();
         }
     }
     /// <summary>
@@ -197,6 +226,15 @@ public class GameManager : MonoBehaviour
             gameState = GameState.End;
         }
     }
+    private void BackToStageSelectUpdate()
+    {
+        if (gameState != GameState.BackToStageSelectFadeOut)
+            return;
+        if(fadeManager.IsFadeEnd())
+        {
+            SceneManager.LoadScene("StageSelectScene");
+        }
+    }
     /// <summary>
     /// 終了中
     /// </summary>
@@ -235,6 +273,12 @@ public class GameManager : MonoBehaviour
             {
                 if (mapManager.IsOnWood(playerDestination) && mapManager.IsRiver(playerDestination))//移動先が丸太かつ川なら
                 {
+                    if(destinationPointWood.GetState()==3)//丸太が流れているなら
+                    {
+                        playerManager.PlayerStop();//プレイヤーを止めて
+                        return;//移動しない
+                    }
+
                     if (!Direction.IsSameAxis(playerManager.GetPlayerDirection(), destinationPointWood.GetDirection()))//方向軸が違うなら
                     {
                         foreach (Vector2 dwp in destinationPointWood.GetMapPoints())//その丸太が一か所でも
@@ -261,15 +305,18 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-
-                //if (!mapManager.IsRiver(playerManager.GetPlayerMapPoint()))//プレイヤーが川に乗っていないとき
-                //{
+                
                 if (mapManager.IsRiver(playerDestination))//移動先が川で
                 {
                     if (mapManager.IsOnWood(playerDestination))//丸太があるなら
                     {
                         if (destinationPointWood != nowPointWood)//その丸太が今乗っている丸太と違うなら
                         {
+                            if (destinationPointWood.GetState() == 3)//丸太が流れているなら
+                            {
+                                playerManager.PlayerStop();//プレイヤーを止めて
+                                return;//移動しない
+                            }
                             foreach (Vector2 dwp in destinationPointWood.GetMapPoints())//その丸太が一か所でも
                             {
                                 if (!mapManager.IsRiver(dwp))//川でないマスがあれば(全て川に入って無ければ)
@@ -701,6 +748,8 @@ public class GameManager : MonoBehaviour
         {
             gameState = GameState.Pose;
             playerManager.PlayerAnimationStop();
+            //poseMenu.SetActive(true);
+            poseManager.AppearPoseMenu();
         }
     }
 
