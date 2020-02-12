@@ -23,7 +23,6 @@ public class FadeManager : MonoBehaviour
     private float fadeTimer;
 
     private float r, b, g;
-    [SerializeField]
     private float a;
 
     // Start is called before the first frame update
@@ -34,7 +33,6 @@ public class FadeManager : MonoBehaviour
         b = fadeImage.color.b;
         g = fadeImage.color.g;
         a = fadeImage.color.a;
-        state = FadeState.End;
     }
 
     // Update is called once per frame
@@ -50,6 +48,7 @@ public class FadeManager : MonoBehaviour
         fadeTimer = 0;
         state = FadeState.In;
         fadeImage.color = new Color(r, g, b, a);
+        Debug.Log("FadeIn");
     }
 
     private void FadeInUpdate()

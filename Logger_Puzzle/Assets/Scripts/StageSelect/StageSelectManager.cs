@@ -16,6 +16,9 @@ public class StageSelectManager : MonoBehaviour
     private int maxStageNumber;
 
     [SerializeField]
+    FadeManager fadeManager;
+
+    [SerializeField]
     private StageSelectPlayerIcon playerIcon;
 
     [SerializeField]
@@ -43,20 +46,26 @@ public class StageSelectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = SceneState.CanSelect;
-        GetMaxStageNumber();
+        state = SceneState.FadeIn;
+        MaxStageNumberSet();
         StageNumberTextChange();
         StageSelectPointsSet();
+        fadeManager.FadeInStart();
     }
 
     // Update is called once per frame
     void Update()
     {
+        FadeInUpdate();
         StageNumberChange();
         StageSelectMoveUpdate();
         SceneChangeChack();
+        FadeOutUpdate();
     }
 
+    /// <summary>
+    /// ステージ番号を変更
+    /// </summary>
     private void StageNumberChange()
     {
         if (state != SceneState.CanSelect)
@@ -85,6 +94,9 @@ public class StageSelectManager : MonoBehaviour
             StageSelectMoveStart();
         }
     }
+    /// <summary>
+    /// ステージ番号が制限を超えていたら修正
+    /// </summary>
     private void StageNumberLimiter()
     {
         if (MapManager.nowStageNumber <= 0)
@@ -97,18 +109,27 @@ public class StageSelectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ステージ番号を表示するテキストを変更
+    /// </summary>
     private void StageNumberTextChange()
     {
         StageNumberLimiter();
         stageNumText.text = "Stage:" + MapManager.nowStageNumber;
     }
 
-    private void GetMaxStageNumber()
+    /// <summary>
+    /// ステージファイルからステージ番号の最大値を取得
+    /// </summary>
+    private void MaxStageNumberSet()
     {
         string stageFilePath = Application.dataPath + "/Stage";
         maxStageNumber = Directory.GetFiles(stageFilePath, "*.csv").Length;
     }
 
+    /// <summary>
+    /// ステージ数に応じてステージのアイコンを作成
+    /// </summary>
     private void StageSelectPointsSet()
     {
         selectPoints = new StageSelectPoint[maxStageNumber];
@@ -123,6 +144,11 @@ public class StageSelectManager : MonoBehaviour
         selectPoints[maxStageNumber - 1] = esp;
     }
 
+    /// <summary>
+    /// ステージアイコン番号と現在のステージ番号からステージアイコンの目的地を取得
+    /// </summary>
+    /// <param name="num">ステージアイコン番号</param>
+    /// <returns></returns>
     private Vector3 GetSelectPointPositionFromNum(int num)
     {
         Vector3 selectPointPosition;
@@ -130,6 +156,9 @@ public class StageSelectManager : MonoBehaviour
         return selectPointPosition;
     }
 
+    /// <summary>
+    /// ステージ選択移動開始
+    /// </summary>
     private void StageSelectMoveStart()
     {
         int num = 0;
@@ -139,7 +168,9 @@ public class StageSelectManager : MonoBehaviour
             sp.MoveStart(GetSelectPointPositionFromNum(num), selectTime);
         }
     }
-
+    /// <summary>
+    /// ステージ選択移動中
+    /// </summary>
     private void StageSelectMoveUpdate()
     {
         if (state != SceneState.Selecting)
@@ -155,11 +186,36 @@ public class StageSelectManager : MonoBehaviour
         playerIcon.Stop();
     }
 
-    private void SceneChangeChack()
+    private void FadeInUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (state != SceneState.FadeIn)
+            return;
+
+        if(fadeManager.IsFadeEnd())
+        {
+            state = SceneState.CanSelect;
+        }
+    }
+    private void FadeOutUpdate()
+    {
+        if (state != SceneState.FadeOut)
+            return;
+
+        if(fadeManager.IsFadeEnd())
         {
             LoadNextScene();
+        }
+    }
+
+    private void SceneChangeChack()
+    {
+        if (state != SceneState.CanSelect)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            state = SceneState.FadeOut;
+            fadeManager.FadeOutStart();
         }
     }
 
